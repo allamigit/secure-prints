@@ -1,8 +1,9 @@
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { ServiceType } from '@models/ServiceType';
 import { Reason } from '@models/Reason';
 import { AppointmentTime } from '@models/AppointmentTime';
 import { AppointmentRequest } from '@models/AppointmentRequest';
@@ -21,7 +22,14 @@ import { AppointmentInformationService } from '@services/appointment-information
 export class ScheduleComponent {
   
   formattedPhone = '';
-  serviceType: string = '';
+  serviceType: ServiceType[] = [
+    {serviceCode: '', serviceName: ''},
+    {serviceCode: 'BCI', serviceName: 'BCI Background Check'},
+    {serviceCode: 'FBI', serviceName: 'FBI Background Check'},
+    {serviceCode: 'BCI_FBI', serviceName: 'BCI and FBI Background Check'}
+  ];
+  serviceCode: string = '';
+  serviceName: string | undefined= '';
   bciReasonList: Reason[] = [];
   fbiReasonList: Reason[] = [];
   timeList: AppointmentTime[] = [];
@@ -49,6 +57,9 @@ export class ScheduleComponent {
 
   constructor(private router: Router, private reasonService: ReasonService, private appointmentInformationService: AppointmentInformationService) { }
   
+  ngOnInit(): void {
+  }
+
   allowOnlyNumbers(event: KeyboardEvent) {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
@@ -111,12 +122,13 @@ export class ScheduleComponent {
   /**
    * Step #1: Select Service Type
    */
-  selectServiceType() {
-    this.serviceType = (document.getElementById('select-service') as HTMLInputElement).value;
-    if(this.serviceType != '') {
+  selectServiceCode(event: Event) {
+    this.serviceCode = (event.target as HTMLSelectElement).value;
+    this.serviceName = this.serviceType.find(item => item.serviceCode == this.serviceCode)?.serviceName;
+    if(this.serviceCode != '') {
       this.step2 = true;
-      this.reasonService.getReasonList('BCI').subscribe(data => this.bciReasonList = data);
-      this.reasonService.getReasonList('FBI').subscribe(data => this.fbiReasonList = data);
+      if(this.serviceCode == "BCI" || this.serviceCode == "BCI_FBI") this.reasonService.getReasonList('BCI').subscribe(data => this.bciReasonList = data);
+      if(this.serviceCode == "FBI" || this.serviceCode == "BCI_FBI") this.reasonService.getReasonList('FBI').subscribe(data => this.fbiReasonList = data);
     }
   }
 
@@ -127,8 +139,8 @@ export class ScheduleComponent {
     this.step3 = false;
     this.bciReasonCode = item.reasonCode;
     this.bciReasonDescription = item.reasonDescription;
-    if((this.serviceType == 'BCI Background Check' && this.bciReasonCode != '' && this.bciReasonCode != 'NO ORC') 
-      || (this.serviceType == 'BCI and FBI Background Check' && this.fbiReasonCode != '' && this.fbiReasonCode != 'NO ORC')
+    if((this.serviceCode == 'BCI' && this.bciReasonCode != '' && this.bciReasonCode != 'NO ORC') 
+      || (this.serviceCode == 'BCI_FBI' && this.fbiReasonCode != '' && this.fbiReasonCode != 'NO ORC')
       || (this.bciReasonCode == 'NO ORC' && this.bciReasonDescription != ' ')) {
         this.step3 = true;
         this.searchText = '';
@@ -142,8 +154,8 @@ export class ScheduleComponent {
     this.step3 = false;
     this.fbiReasonCode = item.reasonCode;
     this.fbiReasonDescription = item.reasonDescription;
-    if((this.serviceType == 'FBI Background Check' && this.fbiReasonCode != '' && this.fbiReasonCode != 'NO ORC') 
-      || (this.serviceType == 'BCI and FBI Background Check' && this.bciReasonCode != '' && this.bciReasonCode != 'NO ORC')
+    if((this.serviceCode == 'FBI' && this.fbiReasonCode != '' && this.fbiReasonCode != 'NO ORC') 
+      || (this.serviceCode == 'BCI_FBI' && this.bciReasonCode != '' && this.bciReasonCode != 'NO ORC')
       || (this.fbiReasonCode == 'NO ORC' && this.fbiReasonDescription != ' ')) {
         this.step3 = true;
         this.searchText = '';
@@ -154,6 +166,7 @@ export class ScheduleComponent {
    * Step #3: Select Appointment Date
    */
   selectAppointmentDate() {
+    this.appointmentTimestamp = '';
     this.appointmentDate = (document.getElementById('appointment-date') as HTMLInputElement).value;
     if(this.appointmentDate != '') {
       this.appointmentInformationService.generateAppointmentTimes(this.appointmentDate).subscribe(data => this.timeList = data);
@@ -195,7 +208,7 @@ export class ScheduleComponent {
       this.appointmentRequest.customerLastName = this.lastName;
       this.appointmentRequest.customerEmail = this.email;
       this.appointmentRequest.customerPhone = this.phone;
-      this.appointmentRequest.serviceName = this.serviceType;
+      this.appointmentRequest.serviceName = this.serviceName;
       this.appointmentRequest.bciReasonCode = this.bciReasonCode;
       this.appointmentRequest.bciReasonDescription = this.bciReasonDescription;
       this.appointmentRequest.fbiReasonCode = this.fbiReasonCode;
@@ -220,7 +233,8 @@ export class ScheduleComponent {
    * Click Schedule Another Appointment Button
    */
   clickScheduleAnotherAppointment() {
-    this.serviceType = '';
+    this.serviceCode = '';
+    this.serviceName = '';
     this.appointmentDate = '';
     this.appointmentTimestamp = '';
     this.bciReasonCode = '';

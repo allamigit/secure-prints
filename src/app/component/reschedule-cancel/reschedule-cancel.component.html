@@ -1,4 +1,97 @@
 
 <div class="container text-md-start">
     <p class="title-top-md-1">Reschedule/Cancel Appointment</p>
+
+    <div class="container">
+        <!-- Enter Appointment ID -->
+        <div class="form-div">
+            <label class="form-label">Please eneter Appointment ID:</label>
+            <div class="row g-3">
+                <div class="col-auto">
+                    <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
+                           [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" (input)="onIdInput()">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-danger mb-3" *ngIf="notFound">❌ Appointment ID Not Found</button>
+                </div>
+            </div>
+            
+            <div class="row g-3" *ngIf="showAction">
+                <div class="col-auto">
+                    <label class="info-color-1"><b>Action:</b></label>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="clickReschedule()">Reschedule Appointment</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="clickCancel()">Cancel Appointment</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reschedule Appointment -->
+        <div class="rounded-div" *ngIf="showReschedule">
+            <div class="col-sm-3">
+                <label class="form-label">Appointment Date</label>
+                <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" (change)="selectAppointmentDate()">
+            </div>
+            <p></p>
+            <label class="form-label" *ngIf="appointmentDate != ''">Appointment Time</label>
+            <div class="row" *ngIf="appointmentDate != ''">
+                <div class="col-7">
+                    <div class="d-flex flex-wrap gap-2 justify-content-start" style="width: 150%">
+                        <button class="btn btn-outline-primary" style="width: 100px;" *ngFor="let item of timeList" 
+                        [ngClass]="{
+                                    'btn-outline-primary': appointmentTimestamp != item.appointmentTimestamp,
+                                    'btn-primary': appointmentTimestamp == item.appointmentTimestamp
+                                    }"
+                                (click)="selectAppointmentTime(item)">{{item.appointmentTimeLabel}}
+                        </button>
+                    </div>
+                </div>
+                <small class="text-danger" *ngIf="appointmentDate != '' && timeList.length == 0">No Appointments Available</small>
+                <p></p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center" *ngIf="showConfirm">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="reload()">Keep old appointment time</button>
+                    <button type="button" class="btn btn-success btn-sm rounded-text" (click)="clickConfirm()">Confirm new appointment time</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancel Appointment -->
+        <div class="rounded-div" *ngIf="showCancel">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <label class="info-color-1">Are you sure that you want to cancel your appointment?</label>
+                <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="reload()">No, keep it</button>
+                <button type="button" class="btn btn-success btn-sm rounded-text" (click)="clickYes()">Yes, cancel it</button>
+            </div>
+        </div>
+
+        <!-- Appointment Confirmation -->
+        <div class="form-div" *ngIf="showConfirmation">
+            <p class="title-top-md-2-1">{{confirmation}} Appointment Confirmation</p>
+            <div class="card">
+                <div class="card-header">
+                    <h6>{{apiResponse.apiStatus.responseCode == 200 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
+                </div>
+                    <div class="card-body">
+                        <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>
+                        <p class="info-color-1">Service Type: <span class="info-color-2">{{apiResponse.apiResponseEntity.serviceName}}</span></p>
+                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonCode != ''">BCI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonCode}}</span></p>
+                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonDescription != null">BCI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonDescription}}</span></p>
+                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonCode != ''">FBI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonCode}}</span></p>
+                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonDescription != null">FBI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonDescription}}</span></p>
+                        <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentTimestamp}}</span></p>
+                        <p class="info-color-1">Appointment Status: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
+                        <!--<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-outline-primary" routerLink="/home">Home</button>
+                            <button type="submit" class="btn btn-success" (click)="clickScheduleAnotherAppointment()">Schedule Another Appointment</button>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>

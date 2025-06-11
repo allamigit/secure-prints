@@ -7,17 +7,14 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                    Service Type
+                    {{step2 ? '✅' : '❌'}} <b>Service Type</b>
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show">
                 <div class="accordion-body">
                     <div class="select-div">
-                        <select id="select-service" class="form-select" style="width: 65%" (change)="selectServiceType()">
-                            <option></option>
-                            <option>BCI Background Check</option>
-                            <option>FBI Background Check</option>
-                            <option>BCI and FBI Background Check</option>
+                        <select id="select-service" class="form-select" style="width: 60%" (change)="selectServiceCode($event)">
+                            <option id="service-name" *ngFor="let item of serviceType" [value]="item.serviceCode">{{item.serviceName}}</option>
                         </select>
                     </div>
                 </div>
@@ -27,17 +24,17 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                    Reason Code and Description
+                    {{step3 ? '✅' : '❌'}} <b>Reason Code and Description</b>
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show">
                 <div class="accordion-body">
-                    <div class="col-sm-3" *ngIf="serviceType == 'BCI Background Check' || serviceType == 'BCI and FBI Background Check'">
+                    <div class="col-sm-3" *ngIf="serviceCode == 'BCI' || serviceCode == 'BCI_FBI'">
                         <label class="form-label" >BCI Reasons List</label>
                         <input type="search" class="form-control mb-3" style="background-color: rgb(243, 243, 216)" placeholder="Search..." [(ngModel)]="searchText">
                     </div>
                     <div style="max-height: 240px; overflow-y: auto">
-                        <table class="table table-hover" *ngIf="serviceType == 'BCI Background Check' || serviceType == 'BCI and FBI Background Check'">
+                        <table class="table table-hover" *ngIf="serviceCode == 'BCI' || serviceCode == 'BCI_FBI'">
                             <colgroup>
                                 <col style="width: 15%">
                                 <col style="width: 85%">
@@ -62,12 +59,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-sm-3" *ngIf="serviceType == 'FBI Background Check' || serviceType == 'BCI and FBI Background Check'">
+                    <div class="col-sm-3" *ngIf="serviceCode == 'FBI' || serviceCode == 'BCI_FBI'">
                         <label class="form-label">FBI Reasons List</label>
                         <input type="search" class="form-control mb-3" style="background-color: rgb(243, 243, 216)" placeholder="Search..." [(ngModel)]="searchText">
                     </div>
                     <div style="max-height: 240px; overflow-y: auto">
-                        <table class="table table-hover" *ngIf="serviceType == 'FBI Background Check' || serviceType == 'BCI and FBI Background Check'">
+                        <table class="table table-hover" *ngIf="serviceCode == 'FBI' || serviceCode == 'BCI_FBI'">
                             <colgroup>
                                 <col style="width: 15%">
                                 <col style="width: 85%">
@@ -99,7 +96,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                    Appointment Date and Time
+                    {{step4 ? '✅' : '❌'}} <b>Appointment Date and Time</b>
                 </button>
             </h2>
             <div class="accordion-collapse collapse show">
@@ -108,6 +105,7 @@
                         <label class="form-label">Appointment Date</label>
                         <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" (change)="selectAppointmentDate()">
                     </div>
+                    <p></p>
                     <label class="form-label" *ngIf="appointmentDate != ''">Appointment Time</label>
                     <div class="row" *ngIf="appointmentDate != ''">
                         <div class="col-7">
@@ -130,7 +128,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                    Personal Information
+                    {{firstName != '' && lastName != '' ? '✅' : '❌'}} <b>Personal Information</b>
                 </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show">
@@ -166,8 +164,8 @@
                             <small class="text-danger" *ngIf="cphone">Phone Number must be 10 digits</small>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <button type="button" class="btn btn-outline-primary" routerLink="/home">❌ Cancel</button>
-                            <button type="button" class="btn btn-primary" (click)="clickSchedule()">📤 Schedule</button>
+                            <button type="button" class="btn btn-outline-primary" routerLink="/home">Cancel</button>
+                            <button type="button" class="btn btn-primary" (click)="clickSchedule()">Schedule Appointment</button>
                         </div>
                     </form>
                 </div>
@@ -177,23 +175,23 @@
 
     <!-- Appointment Confirmation -->
     <div class="form-div" *ngIf="step5">
-        <p class="title-top-md-2">Appointment Confirmation</p>
+        <p class="title-top-md-2-1">Appointment Confirmation</p>
         <div class="card">
             <div class="card-header">
-                <h6>{{apiResponse.apiStatus.responseMessage}}</h6>
+                <h6>{{apiResponse.apiStatus.responseCode == 201 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
             </div>
                 <div class="card-body">
                     <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>
                     <small class="text-danger"> 👈 Please keep this ID for your fingerprints visit and you can use it for reschedule or cancel your appointment</small>
-                    <p class="card-text">Service Type: <span class="info-color">{{apiResponse.apiResponseEntity.serviceName}}</span></p>
-                    <p class="card-text" *ngIf="bciReasonCode != ''">BCI Reason Code: <span class="info-color">{{apiResponse.apiResponseEntity.bciReasonCode}}</span></p>
-                    <p class="card-text" *ngIf="bciReasonDescription != ''">BCI Reason Description: <span class="info-color">{{apiResponse.apiResponseEntity.bciReasonDescription}}</span></p>
-                    <p class="card-text" *ngIf="fbiReasonCode != ''">FBI Reason Code: <span class="info-color">{{apiResponse.apiResponseEntity.fbiReasonCode}}</span></p>
-                    <p class="card-text" *ngIf="fbiReasonDescription != ''">FBI Reason Description: <span class="info-color">{{apiResponse.apiResponseEntity.fbiReasonDescription}}</span></p>
-                    <p class="card-text">Appointment Date and Time: <span class="info-color">{{apiResponse.apiResponseEntity.appointmentTimestamp}}</span></p>
-                    <p class="card-text">Appointment Status: <span class="info-color">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
+                    <p class="info-color-1">Service Type: <span class="info-color-2">{{apiResponse.apiResponseEntity.serviceName}}</span></p>
+                    <p class="info-color-1" *ngIf="bciReasonCode != ''">BCI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonCode}}</span></p>
+                    <p class="info-color-1" *ngIf="bciReasonDescription != ''">BCI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonDescription}}</span></p>
+                    <p class="info-color-1" *ngIf="fbiReasonCode != ''">FBI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonCode}}</span></p>
+                    <p class="info-color-1" *ngIf="fbiReasonDescription != ''">FBI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonDescription}}</span></p>
+                    <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentTimestamp}}</span></p>
+                    <p class="info-color-1">Appointment Status: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                        <button type="submit" class="btn btn-outline-primary" routerLink="/home">🏠 Home</button>
+                        <button type="submit" class="btn btn-outline-primary" routerLink="/home">Home</button>
                         <button type="submit" class="btn btn-success" (click)="clickScheduleAnotherAppointment()">Schedule Another Appointment</button>
                     </div>
                 </div>

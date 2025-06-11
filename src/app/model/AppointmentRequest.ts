@@ -5,7 +5,7 @@ export class AppointmentRequest {
    customerLastName: string;
    customerEmail?: string;
    customerPhone?: string;
-   serviceName: string;
+   serviceName: string | undefined;
    bciReasonCode: string;
    bciReasonDescription?: string;
    fbiReasonCode: string;

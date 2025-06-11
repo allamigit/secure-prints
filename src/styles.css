@@ -3,9 +3,10 @@
 .logo-text {
   font-size: 16.5px;
   font-family: 'Arial Narrow';
-  margin-top: 0px;
-  margin-left: 95px;
-  color: #004A80;
+  font-style: italic;
+  margin-top: -5px;
+  margin-left: 88px;
+  color: rgb(126, 124, 124);
 }
 
 .msg-success {
@@ -43,9 +44,16 @@
   margin-left: 5px;
 }
 
-.info-color {
-    color: rgb(59, 59, 214);
-    font-weight: 380;
+.info-color-1 {
+    font-family: 'Arial';
+    color: rgb(126, 124, 124);
+    font-weight: 540;
+}
+
+.info-color-2 {
+    font-family: 'Arial';
+    color: #075892;
+    font-weight: 500;
 }
 
 html, body {
@@ -68,7 +76,7 @@ html, body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: auto;
   background-color: #004A80;
   color: rgb(227, 229, 233);
   text-align: center;
@@ -133,6 +141,16 @@ html, body {
     font-weight: 550;
     color: #86b943;
     text-shadow: 0px 0px 1px darkgreen;
+}
+
+.title-top-md-2-1 {
+    display: block;
+    margin: 0% auto 2% auto;
+    font-family: 'Arial';
+    font-size: 1.6rem;
+    text-align: center;
+    font-weight: 500;
+    color: rgb(126, 124, 124);
 }
 
 .text-div {
@@ -200,7 +218,13 @@ html, body {
 
 .rounded-div {
     border: thin solid lightgrey;
-    border-radius: 20px; 
+    border-radius: 15px;
+    width: 650px;
+    margin-top: 20px;
+    margin-left: 40px;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-bottom: 20px;
 }
 
 .rounded-div-shade {
