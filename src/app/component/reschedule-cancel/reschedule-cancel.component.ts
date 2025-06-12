@@ -61,8 +61,8 @@ export class RescheduleCancelComponent {
     if(this.appointmentId != '') {
       this.appointmentInformationService.findAppointment(this.appointmentId)
         .subscribe(data => {
-            this.notFound = data; 
-            this.showAction = !this.notFound;
+            this.notFound = !data; 
+            this.showAction = data;
         });
     }
   }
