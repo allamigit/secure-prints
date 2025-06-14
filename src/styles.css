@@ -222,6 +222,26 @@ html, body {
     margin-bottom: 20px;
 }
 
+.login-div {
+    border: thin solid rgb(197, 194, 194);
+    border-radius: 15px;   
+    width: 35%;
+    margin-top: 1%;
+    margin-left: 33%;
+    padding-top: 2%;
+    padding-left: 1%;
+    padding-bottom: 2%;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-login-div {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 8%;
+    justify-content: center;
+}
+
 .rounded-div {
     border: thin solid lightgrey;
     border-radius: 15px;

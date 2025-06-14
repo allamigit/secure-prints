@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { PrivacyPolicyComponent } from './component/privacy-policy/privacy-policy.component';
 import { HomeComponent } from './component/home/home.component';
 import { AboutUsComponent } from './component/about-us/about-us.component';
 import { BciBackgroundComponent } from './component/bci-background/bci-background.component';
 import { FbiBackgroundComponent } from './component/fbi-background/fbi-background.component';
 import { ScheduleComponent } from './component/schedule/schedule.component';
 import { RescheduleCancelComponent } from './component/reschedule-cancel/reschedule-cancel.component';
-import { PrivacyPolicyComponent } from './component/privacy-policy/privacy-policy.component';
+import { LoginComponent } from './component/login/login.component';
+import { AdminComponent } from './component/admin/admin.component';
 
 export const routes: Routes = [
     { 
@@ -46,5 +48,13 @@ export const routes: Routes = [
     { 
         path: 'reschedule-cancel', 
         component: RescheduleCancelComponent 
+    },
+    { 
+        path: 'admin', 
+        component: LoginComponent 
+    },
+    { 
+        path: 'admin-page', 
+        component: AdminComponent 
     }
 ];

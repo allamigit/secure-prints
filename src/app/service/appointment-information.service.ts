@@ -10,6 +10,7 @@ import { ApiStatus } from '@models/ApiStatus';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AppointmentInformationService {
 
   private requestUrl = '';

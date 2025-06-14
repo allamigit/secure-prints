@@ -1,8 +1,8 @@
 
-<div class="container text-md-start">
+<div class="page-wrapper">
     <p class="title-top-md-1">Reschedule/Cancel Appointment</p>
 
-    <div class="page-wrapper">
+    <div class="container text-md-start">
         <!-- Enter Appointment ID -->
         <div class="form-div">
             <label class="form-label">Please eneter Appointment ID:</label>
@@ -77,21 +77,21 @@
                 <div class="card-header">
                     <h6>{{apiResponse.apiStatus.responseCode == 200 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
                 </div>
-                    <div class="card-body">
-                        <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>
-                        <p class="info-color-1">Service Type: <span class="info-color-2">{{apiResponse.apiResponseEntity.serviceName}}</span></p>
-                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonCode != ''">BCI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonCode}}</span></p>
-                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonDescription != null">BCI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonDescription}}</span></p>
-                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonCode != ''">FBI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonCode}}</span></p>
-                        <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonDescription != null">FBI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonDescription}}</span></p>
-                        <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentTimestamp}}</span></p>
-                        <p class="info-color-1">Appointment Status: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
-                        <!--<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <button type="submit" class="btn btn-outline-primary" routerLink="/home">Home</button>
-                            <button type="submit" class="btn btn-success" (click)="clickScheduleAnotherAppointment()">Schedule Another Appointment</button>
-                        </div>-->
-                    </div>
+                <div class="card-body">
+                    <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>
+                    <p class="info-color-1">Service Type: <span class="info-color-2">{{apiResponse.apiResponseEntity.serviceName}}</span></p>
+                    <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonCode != ''">BCI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonCode}}</span></p>
+                    <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.bciReasonDescription != null">BCI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.bciReasonDescription}}</span></p>
+                    <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonCode != ''">FBI Reason Code: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonCode}}</span></p>
+                    <p class="info-color-1" *ngIf="apiResponse.apiResponseEntity.fbiReasonDescription != null">FBI Reason Description: <span class="info-color-2">{{apiResponse.apiResponseEntity.fbiReasonDescription}}</span></p>
+                    <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentTimestamp}}</span></p>
+                    <p class="info-color-1">Appointment Status: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
+                    <!--<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="submit" class="btn btn-outline-primary" routerLink="/home">Home</button>
+                        <button type="submit" class="btn btn-success" (click)="clickScheduleAnotherAppointment()">Schedule Another Appointment</button>
+                    </div>-->
                 </div>
             </div>
         </div>
+    </div>
 </div>

@@ -1,0 +1,29 @@
+
+<div class="page-wrapper">
+    <p class="title-top-md-1">Administrator Login</p>
+    <div class="login-div">
+        <form class="form-login-div">
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-7">
+                    <input type="search" class="form-control" id="user-name" autocomplete="off" 
+                            (input)="onUsernameEntry()">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-7">
+                    <input type="password" class="form-control" id="user-password" autocomplete="off" 
+                            (input)="onUserPasswordEntry()">
+                </div>
+            </div>
+            <small class="text-danger" *ngIf="errorMessage != ''">{{apiStatus?.responseMessage}}</small>
+        </form>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button type="button" class="btn btn-outline-primary" routerLink="/home">Cancel</button>
+            <button type="button" class="btn btn-primary" (disable)="disableLoginButton" (click)="clickLogin()">Login</button>
+        </div>
+    </div>   
+</div>
+
+
