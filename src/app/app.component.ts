@@ -1,10 +1,13 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Company } from '@models/Company';
 import { CompanyService } from '@services/company.service';
-import { FormsModule } from '@angular/forms';
+import { UserService } from '@services/user.service';
+import { ApiStatus } from '@models/ApiStatus';
 
 @Component({
   selector: 'app-root',
@@ -19,11 +22,31 @@ export class AppComponent implements OnInit {
 
   company!: Company;
   currentYear: number = new Date().getFullYear();
+  apiStatus?: ApiStatus;
+  isLoggedIn: boolean = false;
 
-  constructor(private router: Router, private companyService: CompanyService) { }
+  constructor(private router: Router, private companyService: CompanyService, private userService: UserService) { }
   
   ngOnInit(): void {
     this.companyService.getCompanyDetails().subscribe(data => this.company = data);
+    //this.isUserLoggedIn();
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects == '/home') {
+          this.isUserLoggedIn();
+        }
+      });
   }
+
+  isUserLoggedIn() {
+    this.userService.isUserLoggedIn().subscribe(data => this.isLoggedIn = data);
+  }
+
+  clickLogout() {
+    this.userService.userLogout().subscribe(data => this.apiStatus = data);
+    this.isLoggedIn = false;
+  }
+
 
 }

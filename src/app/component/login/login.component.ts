@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { LoginService } from '@services/login.service';
+import { UserService } from '@services/user.service';
 import { ApiStatus } from '@models/ApiStatus';
 
 @Component({
@@ -21,7 +21,7 @@ export class LoginComponent {
   errorMessage: string | undefined = '';
   disableLoginButton: boolean = false;
 
-  constructor(private router: Router, private loginService: LoginService) { }
+  constructor(private router: Router, private userService: UserService) { }
 
   onUsernameEntry() {
     this.errorMessage = '';
@@ -36,12 +36,12 @@ export class LoginComponent {
   }
 
   clickLogin() {
-    this.loginService.userLogin(this.userName, this.userPassword)
+    this.userService.userLogin(this.userName, this.userPassword)
       .subscribe(
         data => {
           this.apiStatus = data;
           this.errorMessage = '';
-          this.router.navigate(['/admin-page']);
+          this.router.navigate(['/home']);
         }, 
         error => {
           this.apiStatus = error.error;

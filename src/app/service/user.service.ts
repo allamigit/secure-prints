@@ -9,7 +9,7 @@ import { ApiStatus } from '@models/ApiStatus';
   providedIn: 'root'
 })
 
-export class LoginService {
+export class UserService {
 
   private requestUrl = '';
   private apiStatus?: ApiStatus;
@@ -18,12 +18,17 @@ export class LoginService {
 
   userLogin(userName: string, userPassword: string): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'user/login?userName=' + userName + '&userPassword=' + userPassword;
-    return this.http.post<ApiStatus>(this.requestUrl, ApiStatus);
+    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
   }
 
   userLogout(): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'user/logout';
-    return this.http.post<ApiStatus>(this.requestUrl, ApiStatus);
+    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
+  }
+
+  isUserLoggedIn(): Observable<boolean> {
+    this.requestUrl = environment.apiUrl + 'user/logged-in';
+    return this.http.get<boolean>(this.requestUrl, { withCredentials: true });
   }
 
   changeUserPassword(oldPassword: string, newPassword: string): Observable<ApiStatus> {
