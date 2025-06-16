@@ -9,7 +9,7 @@ import { FbiBackgroundComponent } from './component/fbi-background/fbi-backgroun
 import { ScheduleComponent } from './component/schedule/schedule.component';
 import { RescheduleCancelComponent } from './component/reschedule-cancel/reschedule-cancel.component';
 import { LoginComponent } from './component/login/login.component';
-import { AdminComponent } from './component/admin/admin.component';
+import { AppointmentComponent } from './component/appointment/appointment.component';
 
 export const routes: Routes = [
     { 
@@ -54,7 +54,7 @@ export const routes: Routes = [
         component: LoginComponent 
     },
     { 
-        path: 'admin-page', 
-        component: AdminComponent 
+        path: 'appointment', 
+        component: AppointmentComponent 
     }
 ];

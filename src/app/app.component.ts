@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
   
   ngOnInit(): void {
     this.companyService.getCompanyDetails().subscribe(data => this.company = data);
-    //this.isUserLoggedIn();
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
