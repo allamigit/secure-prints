@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -26,7 +27,7 @@ export class AppointmentInformationService {
 
     generateAppointmentTimes(selectedDate: any): Observable<AppointmentTime[]> {
       this.requestUrl = environment.apiUrl + 'times-list?selectedDate=' + selectedDate;
-      return this.http.get<AppointmentTime[]>(this.requestUrl);
+      return this.http.get<AppointmentTime[]>(this.requestUrl, { withCredentials: true });
     }
   
     findAppointment(appointmentId: string): Observable<boolean> {
@@ -54,8 +55,8 @@ export class AppointmentInformationService {
       return this.http.get<ApiResponse>(this.requestUrl, { withCredentials: true });
     }
 
-    getAllAppointments(startDate: string, endDate: string, showByAppointmentDate: boolean): Observable<AppointmentInformation[]> {
-      this.requestUrl = environment.apiUrl + 'all-appointments?startDate=' + startDate + '&endDate=' + endDate + '&showByAppointmentDate=' + showByAppointmentDate;
+    getAllAppointments(startDate: string, endDate: string): Observable<AppointmentInformation[]> {
+      this.requestUrl = environment.apiUrl + 'all-appointments?startDate=' + startDate + '&endDate=' + endDate;
       return this.http.get<AppointmentInformation[]>(this.requestUrl, { withCredentials: true });
     }
 
