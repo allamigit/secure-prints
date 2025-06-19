@@ -10,6 +10,7 @@ import { ScheduleComponent } from './component/schedule/schedule.component';
 import { RescheduleCancelComponent } from './component/reschedule-cancel/reschedule-cancel.component';
 import { LoginComponent } from './component/login/login.component';
 import { AppointmentComponent } from './component/appointment/appointment.component';
+import { AppointmentGuard } from './guard/appointment.guard';
 
 export const routes: Routes = [
     { 
@@ -59,6 +60,7 @@ export const routes: Routes = [
     },
     { 
         path: 'appointment', 
-        component: AppointmentComponent 
+        component: AppointmentComponent,
+        canActivate: [AppointmentGuard]
     }
 ];

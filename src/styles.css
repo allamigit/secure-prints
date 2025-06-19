@@ -167,6 +167,13 @@ html, body {
     color: rgb(126, 124, 124);
 }
 
+.text-center {
+    font-family: 'Arial';
+    font-size: 18px;
+    text-align: center;
+    color: rgb(126, 124, 124);
+}
+
 .text-div {
     margin-left: 60px;
     margin-right: 60px;

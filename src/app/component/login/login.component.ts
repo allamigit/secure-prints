@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,8 +10,7 @@ import { ApiStatus } from '@models/ApiStatus';
   selector: 'app-login',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
 
 export class LoginComponent {

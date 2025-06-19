@@ -6,21 +6,26 @@
             <div class="col-12">
                 <div class="input-group">
                     <div class="input-group-text">Start Date</div>
-                    <input type="date" id="start-date" class="form-control">
+                    <input type="date" id="start-date" class="form-control" [value]="startDate" 
+                            [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
                 </div>
             </div>
             <div class="col-12">
                 <div class="input-group">
                     <div class="input-group-text">End Date</div>
-                    <input type="date" id="end-date" class="form-control">
+                    <input type="date" id="end-date" class="form-control" [value]="endDate" 
+                            [style]="endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
                 </div>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-primary" (click)="clickView()">View Report</button>
             </div>
             <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
+            </div>
+            <div class="col-12">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickSwitch()">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()" checked>
                     <label class="form-check-label">Show active appointments</label>
                 </div>
             </div>
@@ -45,7 +50,7 @@
                         <td (click)="reset()"><small>{{item.appointmentResponse.serviceName}}</small></td>
                         <td (click)="reset()"><small>{{item.appointmentResponse.appointmentTimestamp}}</small></td>
                         <td (click)="reset()"><small>{{item.appointmentResponse.appointmentStatus}}</small></td>
-                        <td (click)="reset()"><small>{{item.appointmentResponse.statusTimestamp}}</small></td>
+                        <td (click)="reset()"><small>{{getStatusDate(item.appointmentResponse.statusTimestamp)}}</small></td>
                         <td>
                             <div class="dropdown" role="group">
                                 <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" 
@@ -115,6 +120,13 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot *ngIf="appointmentList.length == 0">
+                    <tr>
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="7">
+                            There is no report data to view
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </form>
     </div>

@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -5,14 +6,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AppointmentInformationService } from '@services/appointment-information.service';
 import { Appointment } from '@models/Appointment';
 import { ApiResponse } from '@models/ApiResponse';
-import { ApiStatus } from '@models/ApiStatus';
 
 @Component({
   selector: 'app-appointment',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './appointment.component.html',
-  styleUrls: ['./appointment.component.css']
+  templateUrl: './appointment.component.html'
 })
 
 export class AppointmentComponent {
@@ -31,20 +30,32 @@ export class AppointmentComponent {
 
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
 
+  onStartDateEntry() {
+    this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
+    console.log(this.startDate);
+  }
+
+  onEndDateEntry() {
+    this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
+    console.log(this.endDate);
+  }
+
   getDate(strTimestamp: string): Date {
     return new Date(strTimestamp);
   }
 
+  getStatusDate(strTimestamp: string): string {
+    return strTimestamp.substring(0, 10);
+  }
+
   applyFilter(): any[] {
-    this.originalAppointmentList = this.appointmentList;
     return this.appointmentList.filter(item =>
       item.appointmentResponse.appointmentStatus == "Scheduled" ||
       item.appointmentResponse.appointmentStatus == "Rescheduled"
       );
   }
 
-  clickSwitch() {
-    console.log((document.getElementById('switch-check') as HTMLInputElement).value);
+  clickFilterSwitch() {
     if((document.getElementById('switch-check') as HTMLInputElement).checked) {
       this.appointmentList = this.applyFilter();
     } else {
@@ -53,8 +64,6 @@ export class AppointmentComponent {
   }
 
   clickView() {
-    this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
-    this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
     this.appointmentInformationService.getAllAppointments(this.startDate, this.endDate)
       .subscribe(data => {
         this.appointmentList = [];
@@ -65,8 +74,16 @@ export class AppointmentComponent {
             appointmentInformation: infoArray[i],
             appointmentResponse: responseArray[i]
           });
-        }        
+        }
+        this.originalAppointmentList = this.appointmentList;
+        this.clickFilterSwitch();      
       });    
+  }
+
+  clickReset() {
+    this.startDate = '';
+    this.endDate = '';
+    this.clickView();
   }
 
   selectComplete(item: any) {
@@ -100,7 +117,6 @@ export class AppointmentComponent {
           this.apiResponse = data;
           this.showPaymentMethod = false;
           this.showConfirmation = true;
-          this.clickView();
         }, 
         error => {
           this.apiResponse = error.error;
@@ -119,6 +135,7 @@ export class AppointmentComponent {
     this.showConfirmation = false;
     this.showDetails = false;
     this.selectedAppointmentId = '';
+    this.clickView();
   }
 
 }

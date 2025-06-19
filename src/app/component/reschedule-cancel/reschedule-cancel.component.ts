@@ -12,8 +12,7 @@ import { ApiStatus } from '@models/ApiStatus';
   selector: 'app-reschedule-cancel',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './reschedule-cancel.component.html',
-  styleUrls: ['./reschedule-cancel.component.css']
+  templateUrl: './reschedule-cancel.component.html'
 })
 
 export class RescheduleCancelComponent implements OnInit {

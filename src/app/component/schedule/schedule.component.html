@@ -104,7 +104,8 @@
                     <div class="accordion-body">
                         <div class="col-sm-2" *ngIf="step3">
                             <label class="form-label">Appointment Date</label>
-                            <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" (change)="selectAppointmentDate()">
+                            <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" 
+                                    [style]="appointmentDate == '' ? 'color: white' : 'color: black'" (change)="selectAppointmentDate()">
                         </div>
                         <p></p>
                         <label class="form-label" *ngIf="appointmentDate != ''">Appointment Time</label>

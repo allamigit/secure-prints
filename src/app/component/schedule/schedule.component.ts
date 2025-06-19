@@ -15,8 +15,7 @@ import { AppointmentInformationService } from '@services/appointment-information
   selector: 'app-schedule',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.css']
+  templateUrl: './schedule.component.html'
 })
 
 export class ScheduleComponent {

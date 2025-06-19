@@ -13,8 +13,7 @@ import { ApiStatus } from '@models/ApiStatus';
   selector: 'app-root',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
 
 export class AppComponent implements OnInit {
