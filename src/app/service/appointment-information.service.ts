@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 import { AppointmentInformation } from '@models/AppointmentInformation';
+import { Appointment } from '@models/Appointment';
 import { AppointmentTime } from '@models/AppointmentTime';
 import { AppointmentRequest } from '@models/AppointmentRequest';
 import { ApiResponse } from '@models/ApiResponse';
@@ -55,9 +56,9 @@ export class AppointmentInformationService {
       return this.http.get<ApiResponse>(this.requestUrl, { withCredentials: true });
     }
 
-    getAllAppointments(startDate: string, endDate: string): Observable<AppointmentInformation[]> {
+    getAllAppointments(startDate: string, endDate: string): Observable<Appointment> {
       this.requestUrl = environment.apiUrl + 'all-appointments?startDate=' + startDate + '&endDate=' + endDate;
-      return this.http.get<AppointmentInformation[]>(this.requestUrl, { withCredentials: true });
+      return this.http.get<Appointment>(this.requestUrl, { withCredentials: true });
     }
 
   }

@@ -1,6 +1,6 @@
 
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AppointmentInformationService } from '@services/appointment-information.service';
@@ -16,9 +16,10 @@ import { ApiStatus } from '@models/ApiStatus';
   styleUrls: ['./reschedule-cancel.component.css']
 })
 
-export class RescheduleCancelComponent {
+export class RescheduleCancelComponent implements OnInit {
 
   appointmentId: string = '';
+  action: string = '';
   timeList: AppointmentTime[] = [];
   apiResponse!: ApiResponse;
   apiStatus!: ApiStatus;
@@ -30,6 +31,7 @@ export class RescheduleCancelComponent {
   fbiReasonDescription: string = '';
   confirmation: string = '';
 
+  admin: boolean = false;
   notFound: boolean = false;
   showAction: boolean = false;
   showReschedule: boolean = false;
@@ -37,7 +39,21 @@ export class RescheduleCancelComponent {
   showCancel: boolean = false;
   showConfirmation: boolean = false;
 
-  constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private appointmentInformationService: AppointmentInformationService) { }
+
+  ngOnInit(): void {
+    this.appointmentId = this.activatedRoute.snapshot.params['appointmentId'];
+    this.action = this.activatedRoute.snapshot.params['action'];
+    if(this.appointmentId) {
+      this.clickSearch();
+      this.admin = true;
+    }
+    if(this.action == 'R') {
+       this.clickReschedule();
+    } else if(this.action == 'C') {
+      this.clickCancel();
+    }
+  }
 
   allowOnlyNumbers(event: KeyboardEvent) {
     if (!/[0-9]/.test(event.key)) {
@@ -141,6 +157,7 @@ export class RescheduleCancelComponent {
   }
 
   reload() {
+    if(this.admin) window.close();
     this.reset();
     this.showConfirmation = false;
     this.appointmentId = '';

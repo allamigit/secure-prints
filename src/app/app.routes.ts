@@ -50,6 +50,10 @@ export const routes: Routes = [
         component: RescheduleCancelComponent 
     },
     { 
+        path: 'reschedule-cancel/:appointmentId/:action', 
+        component: RescheduleCancelComponent 
+    },
+    { 
         path: 'admin', 
         component: LoginComponent 
     },

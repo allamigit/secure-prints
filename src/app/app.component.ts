@@ -32,9 +32,9 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        if (event.urlAfterRedirects == '/home') {
+        //if(event.urlAfterRedirects == '/home') {
           this.isUserLoggedIn();
-        }
+        //}
       });
   }
 
