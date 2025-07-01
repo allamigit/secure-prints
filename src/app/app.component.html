@@ -1,5 +1,5 @@
 
-<main class="main-content">
+<main class="main-content" style="background-image: url('assets/bg-4.jpg'); background-size: cover">
   <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgb(243, 251, 243);" data-bs-theme="light">
     <div class="container-fluid">
       <a class="navbar-brand" routerLink="/home">
@@ -18,11 +18,11 @@
             <a class="nav-link" aria-current="page" routerLink="/about-us">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/bci-background">BCI Background</a>
+            <a class="nav-link" aria-current="page" routerLink="/bci-background">BCI & FBI Background Checks</a>
           </li>
-          <li class="nav-item">
+          <!--<li class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/fbi-background">FBI Background</a>
-          </li>
+          </li>-->
         </ul>
       </div>
 
@@ -31,7 +31,8 @@
           <button type="submit" class="btn btn-success btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
           <button type="submit" class="btn btn-warning btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule/Cancel Appointment</button>
             <div class="dropdown" role="group" *ngIf="isLoggedIn">
-                <button type="button" class="btn btn-secondary btn-sm rounded-text dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-secondary btn-sm rounded-text dropdown-toggle" style="background-color: #004A80; color: rgb(227, 229, 233)"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                   Administrator Options
                 </button>
                 <ul class="dropdown-menu">
@@ -54,22 +55,22 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
-        <p class="mb-1">{{company?.companyAddress1}}</p>
-        <p class="mb-1">{{company?.companyAddress2}}</p>
-        <p class="mb-1">☏ {{company?.companyPhone}}</p>
-        <p class="mb-1">✉︎ {{company?.companyEmail}}</p>
+        <p class="mb-1" style="color: rgb(227, 229, 233)">{{company.companyAddress1}}</p>
+        <p class="mb-1" style="color: rgb(227, 229, 233)">{{company.companyAddress2}}</p>
+        <p class="mb-1" style="color: rgb(227, 229, 233)">☏ {{company.companyPhone}}</p>
+        <p class="mb-1" style="color: rgb(227, 229, 233)">✉︎ {{company.companyEmail}}</p>
       </div>
 
       <div class="col-md-4 text-center mb-2 mb-md-0">
         <a class="mb-1" style="color: rgb(227, 229, 233)" routerLink="/privacy-policy">Privacy Policy</a>
         <p></p>
-        <p class="mb-1">© {{currentYear}} {{company?.companyName}}. All Rights Reserved.</p>
+        <p class="mb-1" style="color: rgb(227, 229, 233)">© {{currentYear}} {{company.companyName}}. All Rights Reserved.</p>
       </div>
 
       <div class="col-md-5 text-center text-md-end">
         <div class="d-grid gap-2 col-6 mx-auto">
-          <button type="submit" class="btn btn-outline-light btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
-          <button type="submit" class="btn btn-outline-light btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule/Cancel Appointment</button>
+          <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
+          <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule/Cancel Appointment</button>
         </div>
       </div>
     </div>

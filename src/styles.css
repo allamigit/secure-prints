@@ -10,7 +10,7 @@
 
 .logo-text-2 {
   font-size: 18px;
-  font-family: 'Arial Black';
+  font-family: 'Arial Black', 'Anton';
   margin-top: 0px;
   margin-left: 80px;
   margin-right: 58px;
@@ -130,7 +130,7 @@ html, body {
 .title-top-md-1 {
     display: block;
     margin: 0% auto 2% auto;
-    font-family: 'Arial Black';
+    font-family: 'Arial Black', 'Anton';
     font-size: 1.4rem;
     text-align: center;
     color: #004A80;
@@ -149,12 +149,12 @@ html, body {
 .title-top-md-2 {
     display: block;
     margin: 0% auto 2% auto;
-    font-family: 'Arial Narrow';
+    font-family: 'Arial';
     font-size: 1.6rem;
     text-align: center;
     font-weight: 550;
     color: #86b943;
-    text-shadow: 0px 0px 1px darkgreen;
+    text-shadow: 1px 1px 1px #004A80;
 }
 
 .title-top-md-2-1 {
@@ -165,6 +165,37 @@ html, body {
     text-align: center;
     font-weight: 500;
     color: rgb(126, 124, 124);
+}
+
+.title-top-md-2-2 {
+    display: block;
+    margin: 0% auto -1% auto;
+    margin-left: 55px;
+    font-family: 'Arial';
+    font-size: 1.4rem;
+    text-align: left;
+    font-weight: 550;
+    color: #004A80;
+}
+
+.title-home {
+    display: block;
+    font-family: 'Arial';
+    padding: 0.6rem;
+    font-size: 18px;
+    font-weight: 550;
+    text-align: center;
+    justify-content: center;
+    color: #004A80;
+    border: 2px solid rgb(189, 188, 188); 
+    border-radius: 30px; 
+    background-image: url('assets/title-3.jpg');
+    background-size: cover;
+    flex-wrap: wrap;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
 }
 
 .text-center {
@@ -180,7 +211,7 @@ html, body {
     margin-top: 20px;
     margin-bottom: 20px;
     border: none;
-    text-align: justify;
+    /*text-align: center;*/
     text-wrap-mode: wrap;
     text-wrap-style: pretty;
     font-size: medium;
@@ -190,13 +221,32 @@ html, body {
     margin-left: 60px;
     margin-right: 60px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: -15px;
     border: none;
     text-align: justify;
     text-wrap-mode: wrap;
     text-wrap-style: pretty;
-    font-size: medium;
-    font-weight: 700;
+    font-size: large;
+    font-weight: 620;
+    color: #004A80;
+}
+
+.text-div-title-1 {
+    padding: 6px;
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 20px;
+    margin-bottom: -15px;
+    border: thin solid lightgrey;
+    border-radius: 20px;
+    text-align: center;
+    text-wrap-mode: wrap;
+    text-wrap-style: pretty;
+    font-size: large;
+    font-weight: 620;
+    color: rgb(227, 229, 233);
+    background-color: #004A80;
+    height: 40px;
 }
 
 .rounded-text {
@@ -239,15 +289,17 @@ html, body {
 
 .login-div {
     border: thin solid rgb(197, 194, 194);
-    border-radius: 15px;   
-    width: 35%;
+    border-radius: 15px; 
+    align-self: center;
+    display:block; 
+    width: fit-content;
     margin-top: -1%;
-    margin-left: 33%;
-    padding-top: 2%;
-    padding-left: 1%;
-    padding-bottom: 2%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: -1%;
+    padding-right: -1%;
     background-color: #f9f9f9;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
 }
 
 .form-login-div {
@@ -260,12 +312,13 @@ html, body {
 .rounded-div {
     border: thin solid lightgrey;
     border-radius: 15px;
-    width: 650px;
+    width: auto;
     margin-top: 20px;
     margin-left: 40px;
     padding-top: 20px;
     padding-left: 15px;
     padding-bottom: 20px;
+    box-shadow: 3px 3px 8px lightgrey;
 }
 
 .rounded-div-shade {
@@ -295,4 +348,28 @@ html, body {
     border: thin solid lightgrey;
     border-radius: 0px 0px 20px 20px; 
     box-shadow: 8px 8px 5px lightgrey;
+}
+
+.carousel-indicators,
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1); /* white -> black, or adjust as needed */
+}
+
+.navbar-nav .nav-link {
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  font-size: 18px;
+  color: #004A80;
+  text-decoration: underline;
+}
+
+.navbar-nav .nav-link:active {
+  font-size: 18px;
+  font-weight: bold;
+  color: #004A80;
+  text-decoration: underline;
 }

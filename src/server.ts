@@ -1,4 +1,4 @@
-import {
+/*import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
   isMainModule,
@@ -29,7 +29,7 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
-app.use(
+/*app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
     index: false,
@@ -40,7 +40,7 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', (req, res, next) => {
+/*app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
@@ -53,7 +53,7 @@ app.use('/**', (req, res, next) => {
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
-if (isMainModule(import.meta.url)) {
+/*if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
@@ -63,4 +63,4 @@ if (isMainModule(import.meta.url)) {
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */
-export const reqHandler = createNodeRequestHandler(app);
+//export const reqHandler = createNodeRequestHandler(app);

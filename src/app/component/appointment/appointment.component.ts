@@ -6,6 +6,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AppointmentInformationService } from '@services/appointment-information.service';
 import { Appointment } from '@models/Appointment';
 import { ApiResponse } from '@models/ApiResponse';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appointment',
@@ -27,17 +28,26 @@ export class AppointmentComponent {
   showPaymentMethod: boolean = false;
   showConfirmation: boolean = false;
   showDetails: boolean = false;
+  pollSub!: Subscription;
 
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
 
+  ngOnInit(): void {
+    this.pollSub = interval(6000).subscribe(() => {
+      if(this.appointmentList.length != 0) this.clickView();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollSub) this.pollSub.unsubscribe();
+  }
+
   onStartDateEntry() {
     this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
-    console.log(this.startDate);
   }
 
   onEndDateEntry() {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
-    console.log(this.endDate);
   }
 
   getDate(strTimestamp: string): Date {
@@ -64,6 +74,11 @@ export class AppointmentComponent {
   }
 
   clickView() {
+    if(this.startDate != '' && this.endDate == '') {
+      this.endDate = this.startDate;
+    } else if(this.startDate == '' && this.endDate != '') {
+      this.startDate = this.endDate;
+    }
     this.appointmentInformationService.getAllAppointments(this.startDate, this.endDate)
       .subscribe(data => {
         this.appointmentList = [];

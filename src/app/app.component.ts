@@ -30,11 +30,7 @@ export class AppComponent implements OnInit {
     this.companyService.getCompanyDetails().subscribe(data => this.company = data);
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        //if(event.urlAfterRedirects == '/home') {
-          this.isUserLoggedIn();
-        //}
-      });
+      .subscribe((event: NavigationEnd) => this.isUserLoggedIn());
   }
 
   isUserLoggedIn() {
@@ -44,7 +40,7 @@ export class AppComponent implements OnInit {
   clickLogout() {
     this.userService.userLogout().subscribe(data => this.apiStatus = data);
     this.isLoggedIn = false;
+    this.router.navigate(['/home']);
   }
-
 
 }

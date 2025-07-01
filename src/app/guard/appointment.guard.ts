@@ -19,7 +19,7 @@ export class AppointmentGuard implements CanActivate {
         this.router.navigate(['/admin']);
       }
     });
-    return this.isLoggedIn;    
+    return this.isLoggedIn; 
   }
   
-};
+}

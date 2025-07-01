@@ -4,12 +4,12 @@
 
     <div class="container text-md-start">
         <!-- Enter Appointment ID -->
-        <div class="form-div">
+        <div class="form-div" *ngIf="!admin">
             <label class="form-label">Please eneter Appointment ID:</label>
             <div class="row g-3">
                 <div class="col-auto">
                     <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
-                           [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" (input)="onIdInput()">
+                           inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" (input)="onIdInput()">
                 </div>
                 <div class="col-auto">
                     <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>
@@ -19,7 +19,7 @@
                 </div>
             </div>
             
-            <div class="row g-3" *ngIf="showAction">
+            <div class="row g-2" style="width: auto" *ngIf="showAction">
                 <div class="col-auto">
                     <label class="info-color-1"><b>Action:</b></label>
                 </div>
@@ -36,7 +36,7 @@
         <div class="rounded-div" *ngIf="showReschedule">
             <div class="col-sm-3">
                 <label class="form-label">Appointment Date</label>
-                <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" 
+                <input type="date" id="appointment-date" class="form-control" [(ngModel)]="appointmentDate" style="width: auto"
                         [style]="appointmentDate == '' ? 'color: white' : 'color: black'" (change)="selectAppointmentDate()">
             </div>
             <p></p>

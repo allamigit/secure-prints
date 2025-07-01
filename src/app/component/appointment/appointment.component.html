@@ -18,7 +18,13 @@
                 </div>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-primary" (click)="clickView()">View Report</button>
+                <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
+                    View Report
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{appointmentList.length}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
@@ -32,16 +38,16 @@
         </form>
 
         <p></p>
-        <form class="g-3">
+        <form class="g- table-responsive" style="height: 500px; overflow-y: auto;">
             <table class="table table-hover">
                 <thead>
-                    <th>Appointment ID</th>
-                    <th>Customer Full Name</th>
-                    <th>Service Type</th>
-                    <th>Appointment Time</th>
-                    <th>Appointment Status</th>
-                    <th>Status Date</th>
-                    <th>Actions</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment ID</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Customer Full Name</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Service Type</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment Time</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment Status</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Status Date</th>
+                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Actions</th>
                 </thead>
                 <tbody *ngFor="let item of appointmentList">
                     <tr>
