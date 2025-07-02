@@ -11,6 +11,7 @@ export class AppointmentResponse {
     appointmentTimestamp: string;
     appointmentStatus: string;
     statusTimestamp: string;
+    canComplete: boolean;
 
     constructor() {
         this.appointmentId = '';
@@ -23,6 +24,7 @@ export class AppointmentResponse {
         this.appointmentTimestamp = '';
         this.appointmentStatus = '';
         this.statusTimestamp = '';
+        this.canComplete = false;
     }
 
 }

@@ -19,20 +19,17 @@ export class LoginComponent {
   userName: string = '';
   userPassword: string = '';
   errorMessage: string | undefined = '';
-  disableLoginButton: boolean = false;
 
   constructor(private router: Router, private userService: UserService) { }
 
   onUsernameEntry() {
     this.errorMessage = '';
     this.userName = (document.getElementById('user-name') as HTMLInputElement).value;
-    if(this.userName == '') this.disableLoginButton = false;
   }
 
   onUserPasswordEntry() {
     this.errorMessage = '';
     this.userPassword = (document.getElementById('user-password') as HTMLInputElement).value;
-    if(this.userName == '' && this.userPassword == '') this.disableLoginButton = true; else this.disableLoginButton = false;
   }
 
   clickLogin() {
@@ -45,7 +42,6 @@ export class LoginComponent {
         }, 
         error => {
           this.apiStatus = error.error;
-          this.disableLoginButton = false;
           this.errorMessage = this.apiStatus?.responseMessage;
         });
   }

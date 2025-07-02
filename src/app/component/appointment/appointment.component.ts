@@ -18,7 +18,6 @@ import { interval, Subscription } from 'rxjs';
 export class AppointmentComponent {
 
   selectedAppointmentId: string = '';
-  currentTimestamp: Date = new Date();
   originalAppointmentList: Appointment[] = [];
   appointmentList: Appointment[] = [];
   apiResponse!: ApiResponse; 
@@ -33,9 +32,9 @@ export class AppointmentComponent {
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
 
   ngOnInit(): void {
-    this.pollSub = interval(6000).subscribe(() => {
+    /*this.pollSub = interval(6000).subscribe(() => {
       if(this.appointmentList.length != 0) this.clickView();
-    });
+    });*/
   }
 
   ngOnDestroy(): void {
@@ -48,10 +47,6 @@ export class AppointmentComponent {
 
   onEndDateEntry() {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
-  }
-
-  getDate(strTimestamp: string): Date {
-    return new Date(strTimestamp);
   }
 
   getStatusDate(strTimestamp: string): string {

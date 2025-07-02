@@ -8,7 +8,7 @@
                 <label for="colFormLabel" class="col-3 col-form-label">Username</label>
                 <div class="col-7">
                     <input type="search" class="form-control" id="user-name" autocomplete="off" maxlength="20"
-                            (input)="onUsernameEntry()">
+                            style="text-transform: lowercase" (input)="onUsernameEntry()">
                 </div>
             </div>
             <div class="row mb-3">
@@ -22,7 +22,7 @@
         </form>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
             <button type="button" class="btn btn-outline-secondary" routerLink="/home">Cancel</button>
-            <button type="button" class="btn btn-secondary" (click)="clickLogin()">Login</button>
+            <button type="button" class="btn btn-secondary" [disabled]="!userName || !userPassword" (click)="clickLogin()">Login</button>
         </div>
         <p></p>
     </div>   

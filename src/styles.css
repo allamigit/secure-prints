@@ -129,7 +129,7 @@ html, body {
 
 .title-top-md-1 {
     display: block;
-    margin: 0% auto 2% auto;
+    margin: 0.5% auto 2% auto;
     font-family: 'Arial Black', 'Anton';
     font-size: 1.4rem;
     text-align: center;
@@ -148,9 +148,9 @@ html, body {
 
 .title-top-md-2 {
     display: block;
-    margin: 0% auto 2% auto;
+    margin: 0.5% auto 2% auto;
     font-family: 'Arial';
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     text-align: center;
     font-weight: 550;
     color: #86b943;
@@ -159,7 +159,7 @@ html, body {
 
 .title-top-md-2-1 {
     display: block;
-    margin: 0% auto 2% auto;
+    margin: 0.5% auto 2% auto;
     font-family: 'Arial';
     font-size: 1.6rem;
     text-align: center;
@@ -181,16 +181,18 @@ html, body {
 .title-home {
     display: block;
     font-family: 'Arial';
-    padding: 0.6rem;
-    font-size: 18px;
-    font-weight: 550;
+    padding: 1rem;
+    font-size: 20px;
+    font-weight: 500;
     text-align: center;
     justify-content: center;
-    color: #004A80;
+    color: rgb(240, 240, 240);
     border: 2px solid rgb(189, 188, 188); 
     border-radius: 30px; 
-    background-image: url('assets/title-3.jpg');
+    background-image: url('assets/title-5.jpg');
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     flex-wrap: wrap;
     word-break: break-word;
     max-width: 100%;
@@ -318,6 +320,11 @@ html, body {
     padding-top: 20px;
     padding-left: 15px;
     padding-bottom: 20px;
+    /*color: lightgrey;
+    background-image: url('assets/title-5.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;*/
     box-shadow: 3px 3px 8px lightgrey;
 }
 
