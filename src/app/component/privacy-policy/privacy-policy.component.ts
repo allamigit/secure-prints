@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,5 +11,13 @@ import { CommonModule } from '@angular/common';
 })
 
 export class PrivacyPolicyComponent {
+
+  constructor(private router: Router) {
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationEnd) {
+        window.scrollTo(0, 0); // Scroll to top
+      }
+    });
+  }
 
 }

@@ -40,14 +40,14 @@
         <p></p>
         <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
             <table class="table table-hover">
-                <thead>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment ID</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Customer Full Name</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Service Type</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment Time</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Appointment Status</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Status Date</th>
-                    <th style="position: sticky; top: 0; background: white; z-index: 10;">Actions</th>
+                <thead style="position: sticky; top: 0; background: white; z-index: 10">
+                    <th>Appointment ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Service Type</th>
+                    <th>Appointment Time</th>
+                    <th>Appointment Status</th>
+                    <th>Status Date</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody *ngFor="let item of appointmentList">
                     <tr>
@@ -63,7 +63,7 @@
                                         [hidden]="item.appointmentInformation.appointmentStatusCode == 103 || item.appointmentInformation.appointmentStatusCode == 104">
                                     Choose...
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" style="cursor: pointer">
                                     <li><a class="dropdown-item" [hidden]="!item.appointmentResponse.canComplete" 
                                             (click)="selectComplete(item)">Complete</a></li>
                                     <li><a class="dropdown-item" (click)="selectReschedule(item)">Reschedule</a></li>

@@ -4,8 +4,7 @@ import { AppComponent } from './app.component';
 import { PrivacyPolicyComponent } from './component/privacy-policy/privacy-policy.component';
 import { HomeComponent } from './component/home/home.component';
 import { AboutUsComponent } from './component/about-us/about-us.component';
-import { BciBackgroundComponent } from './component/bci-background/bci-background.component';
-import { FbiBackgroundComponent } from './component/fbi-background/fbi-background.component';
+import { BciFbiBackgroundComponent } from './component/bci-fbi-background/bci-fbi-background.component';
 import { ScheduleComponent } from './component/schedule/schedule.component';
 import { RescheduleCancelComponent } from './component/reschedule-cancel/reschedule-cancel.component';
 import { LoginComponent } from './component/login/login.component';
@@ -23,10 +22,6 @@ export const routes: Routes = [
         component: AppComponent 
     },
     { 
-        path: 'privacy-policy', 
-        component: PrivacyPolicyComponent 
-    },
-    { 
         path: 'home', 
         component: HomeComponent 
     },
@@ -35,12 +30,12 @@ export const routes: Routes = [
         component: AboutUsComponent 
     },
     { 
-        path: 'bci-background', 
-        component: BciBackgroundComponent 
+        path: 'bci-fbi-background', 
+        component: BciFbiBackgroundComponent 
     },
     { 
-        path: 'fbi-background', 
-        component: FbiBackgroundComponent 
+        path: 'privacy-policy', 
+        component: PrivacyPolicyComponent 
     },
     { 
         path: 'schedule', 

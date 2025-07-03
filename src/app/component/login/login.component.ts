@@ -22,9 +22,14 @@ export class LoginComponent {
 
   constructor(private router: Router, private userService: UserService) { }
 
+  onKeyDown(event: KeyboardEvent) {
+  if (event.key == 'Escape') {
+    this.router.navigate(['/home']);
+  }
+}
   onUsernameEntry() {
     this.errorMessage = '';
-    this.userName = (document.getElementById('user-name') as HTMLInputElement).value;
+    this.userName = (document.getElementById('user-name') as HTMLInputElement).value.toLocaleLowerCase();
   }
 
   onUserPasswordEntry() {

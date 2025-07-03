@@ -128,6 +128,8 @@ export class ScheduleComponent {
       this.step2 = true;
       if(this.serviceCode == "BCI" || this.serviceCode == "BCI_FBI") this.reasonService.getReasonList('BCI').subscribe(data => this.bciReasonList = data);
       if(this.serviceCode == "FBI" || this.serviceCode == "BCI_FBI") this.reasonService.getReasonList('FBI').subscribe(data => this.fbiReasonList = data);
+    } else {
+      window.location.reload();
     }
   }
 

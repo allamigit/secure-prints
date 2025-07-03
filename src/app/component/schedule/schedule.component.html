@@ -8,7 +8,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                        {{step2 ? '✅' : '❌'}} <b>Service Type</b>
+                        {{step2 ? '🟢' : '🔴'}} Service Type
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show">
@@ -25,7 +25,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                        {{step3 ? '✅' : '❌'}} <b>Reason Code and Description</b>
+                        {{step3 ? '🟢' : '🔴'}} Reason Code and Description
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show">
@@ -40,7 +40,7 @@
                                     <col style="width: 15%">
                                     <col style="width: 85%">
                                 </colgroup>
-                                <thead>
+                                <thead style="position: sticky; top: 0; background: white; z-index: 10">
                                     <th>Reason Code</th>
                                     <th>Reason Description</th>
                                 </thead>
@@ -70,7 +70,7 @@
                                     <col style="width: 15%">
                                     <col style="width: 85%">
                                 </colgroup>
-                                <thead>
+                                <thead style="position: sticky; top: 0; background: white; z-index: 10">
                                     <th>Reason Code</th>
                                     <th>Reason Description</th>
                                 </thead>
@@ -97,7 +97,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                        {{step4 ? '✅' : '❌'}} <b>Appointment Date and Time</b>
+                        {{step4 ? '🟢' : '🔴'}} Appointment Date and Time
                     </button>
                 </h2>
                 <div class="accordion-collapse collapse show">
@@ -108,8 +108,8 @@
                                     [style]="appointmentDate == '' ? 'color: white' : 'color: black'" (change)="selectAppointmentDate()">
                         </div>
                         <p></p>
-                        <label class="form-label" *ngIf="appointmentDate != ''">Appointment Time</label>
-                        <div class="row" *ngIf="appointmentDate != ''">
+                        <label class="form-label" *ngIf="appointmentDate != '' && step3">Appointment Time</label>
+                        <div class="row" *ngIf="appointmentDate != '' && step3">
                             <div class="col-10">
                                 <div class="d-flex flex-wrap gap-2 justify-content-start">
                                     <button class="btn btn-outline-primary" style="width: 100px;" *ngFor="let item of timeList" 
@@ -130,7 +130,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" aria-expanded="false">
-                        {{firstName != '' && lastName != '' ? '✅' : '❌'}} <b>Personal Information</b>
+                        {{firstName != '' && lastName != '' ? '🟢' : '🔴'}} Personal Information
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show">

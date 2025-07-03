@@ -94,9 +94,11 @@ html, body {
   background-color: #004A80;
   color: rgb(227, 229, 233);
   text-align: center;
+  font-size: 17.5px;
   line-height: 18px;
   box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
   z-index: 1000;
+  overflow-x: hidden;
 }
 
 .sticky-footer {
@@ -257,7 +259,7 @@ html, body {
 
 .rounded-text-shade {
     border-radius: 20px; 
-    box-shadow: 8px 8px 5px grey
+    box-shadow: 4px 4px 4px rgb(192, 191, 191)
 }
 
 .select-div {
@@ -380,3 +382,16 @@ html, body {
   color: #004A80;
   text-decoration: underline;
 }
+
+.accordion-button {
+  background-color: #004A80;  /* Change background */
+  color: rgb(227, 229, 233);  /* Change text color */
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #004A80;  /* When expanded */
+  color: rgb(227, 229, 233);
+  font-size: 18px;
+  font-weight: 500;
+}
+

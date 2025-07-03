@@ -1,6 +1,6 @@
 
 <div class="page-wrapper">
-    <p class="title-top-md-1">Reschedule/Cancel Appointment</p>
+    <p class="title-top-md-1">Reschedule / Cancel Appointment</p>
 
     <div class="container text-md-start">
         <!-- Enter Appointment ID -->
@@ -9,7 +9,8 @@
             <div class="row g-3">
                 <div class="col-auto">
                     <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
-                           inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" (input)="onIdInput()">
+                           inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" 
+                           (input)="onIdInput()" (keydown.enter)="clickSearch()">
                 </div>
                 <div class="col-auto">
                     <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>
@@ -24,10 +25,10 @@
                     <label class="info-color-1"><b>Action:</b></label>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="clickReschedule()">Reschedule Appointment</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text-shade" (click)="clickReschedule()">Reschedule Appointment</button>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text" (click)="clickCancel()">Cancel Appointment</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-text-shade" (click)="clickCancel()">Cancel Appointment</button>
                 </div>
             </div>
         </div>

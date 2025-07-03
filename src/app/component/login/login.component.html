@@ -1,7 +1,7 @@
 
 <div class="page-wrapper">
     <p class="title-top-md-2-1">Administrator Login</p>
-    <div class="login-div">
+    <div class="login-div" (window:keydown)="onKeyDown($event)">
         <p></p>
         <form class="form-login-div">
             <div class="row mb-3">
@@ -15,7 +15,7 @@
                 <label for="colFormLabel" class="col-3 col-form-label">Password</label>
                 <div class="col-7">
                     <input type="password" class="form-control" id="user-password" autocomplete="off" maxlength="20"
-                            (input)="onUserPasswordEntry()">
+                            (input)="onUserPasswordEntry()" (keydown.enter)="clickLogin()">
                 </div>
             </div>
             <small class="text-danger" *ngIf="errorMessage != ''">{{apiStatus?.responseMessage}}</small>

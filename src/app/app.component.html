@@ -18,7 +18,7 @@
             <a class="nav-link" aria-current="page" routerLink="/about-us">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/bci-background">BCI & FBI Background Checks</a>
+            <a class="nav-link" aria-current="page" routerLink="/bci-fbi-background">BCI & FBI Background Checks</a>
           </li>
           <!--<li class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/fbi-background">FBI Background</a>
@@ -52,23 +52,23 @@
 </main>
 
 <footer class="footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
-        <p class="mb-1" style="color: rgb(227, 229, 233)">{{company.companyAddress1}}</p>
-        <p class="mb-1" style="color: rgb(227, 229, 233)">{{company.companyAddress2}}</p>
-        <p class="mb-1" style="color: rgb(227, 229, 233)">☏ {{company.companyPhone}}</p>
-        <p class="mb-1" style="color: rgb(227, 229, 233)">✉︎ {{company.companyEmail}}</p>
+  <div class="container-fluid">
+    <div class="row g-0">
+      <div class="col-md-4 text-md-start mb-3 mb-md-0">
+        <p class="mb-1">{{company.companyAddress1}}</p>
+        <p class="mb-1">{{company.companyAddress2}}</p>
+        <p class="mb-1">☏ {{company.companyPhone}}</p>
+        <p class="mb-1">✉︎ {{company.companyEmail}}</p>
       </div>
 
-      <div class="col-md-4 text-center mb-2 mb-md-0">
+      <div class="col-md-4 mb-2 mb-md-0">
         <a class="mb-1" style="color: rgb(227, 229, 233)" routerLink="/privacy-policy">Privacy Policy</a>
         <p></p>
-        <p class="mb-1" style="color: rgb(227, 229, 233)">© {{currentYear}} {{company.companyName}}. All Rights Reserved.</p>
+        <p class="mb-1">© {{currentYear}} {{company.companyName}}. All Rights Reserved.</p>
       </div>
 
-      <div class="col-md-5 text-center text-md-end">
-        <div class="d-grid gap-2 col-6 mx-auto">
+      <div class="col-md-4 text-md-end">
+        <div class="d-grid gap-2 col-7 mx-auto">
           <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
           <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule / Cancel Appointment</button>
         </div>
