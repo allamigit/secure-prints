@@ -23,11 +23,18 @@ export class AppComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   apiStatus?: ApiStatus;
   isLoggedIn: boolean = false;
+  currentUser?: string;
 
-  constructor(private router: Router, private companyService: CompanyService, private userService: UserService) { }
+  constructor(private router: Router, private companyService: CompanyService, private userService: UserService) { 
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationEnd) {
+        window.scrollTo(0, 0); // Scroll to top
+      }
+    });    
+  }
   
   ngOnInit(): void {
-    this.companyService.getCompanyDetails().subscribe(data => this.company = data);
+    this.companyService.getCompanyDetails(1).subscribe(data => this.company = data);
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => this.isUserLoggedIn());
@@ -35,6 +42,7 @@ export class AppComponent implements OnInit {
 
   isUserLoggedIn() {
     this.userService.isUserLoggedIn().subscribe(data => this.isLoggedIn = data);
+    this.currentUser = localStorage.getItem('name')?.toString();
   }
 
   clickLogout() {

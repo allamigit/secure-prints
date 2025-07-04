@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ServiceType } from '@models/ServiceType';
@@ -54,7 +54,13 @@ export class ScheduleComponent {
   step4: boolean = false;
   step5: boolean = false;
 
-  constructor(private router: Router, private reasonService: ReasonService, private appointmentInformationService: AppointmentInformationService) { }
+  constructor(private router: Router, private reasonService: ReasonService, private appointmentInformationService: AppointmentInformationService) {
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationEnd) {
+        window.scrollTo(0, 0); // Scroll to top
+      }
+    });
+   }
   
   ngOnInit(): void {
   }

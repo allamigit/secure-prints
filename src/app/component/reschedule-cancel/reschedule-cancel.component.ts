@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AppointmentInformationService } from '@services/appointment-information.service';
@@ -38,7 +38,13 @@ export class RescheduleCancelComponent implements OnInit {
   showCancel: boolean = false;
   showConfirmation: boolean = false;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private appointmentInformationService: AppointmentInformationService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private appointmentInformationService: AppointmentInformationService) { 
+    this.router.events.subscribe((event) => {
+      if(event instanceof NavigationEnd) {
+        window.scrollTo(0, 0); // Scroll to top
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.appointmentId = this.activatedRoute.snapshot.params['appointmentId'];

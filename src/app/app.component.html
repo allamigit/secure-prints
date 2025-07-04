@@ -36,10 +36,14 @@
                   Administrator Options
                 </button>
                 <ul class="dropdown-menu">
+                  <li><p class="dropdown-item" style="background-color: #004A80; color: rgb(227, 229, 233)">{{currentUser}}</p></li>
                   <li><a class="dropdown-item" routerLink="/appointment">Appointment</a></li>
                   <li><a class="dropdown-item" routerLink="/home">Payment</a></li>
                   <li><a class="dropdown-item" routerLink="/home">Invoice</a></li>
                   <li><a class="dropdown-item" routerLink="/home">Expense</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" routerLink="/home">Company</a></li>
+                  <li><a class="dropdown-item" routerLink="/home">User</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" routerLink="/home" (click)="clickLogout()">Logout</a></li>
                 </ul>

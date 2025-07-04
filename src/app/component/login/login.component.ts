@@ -29,7 +29,7 @@ export class LoginComponent {
 }
   onUsernameEntry() {
     this.errorMessage = '';
-    this.userName = (document.getElementById('user-name') as HTMLInputElement).value.toLocaleLowerCase();
+    this.userName = (document.getElementById('user-name') as HTMLInputElement).value;
   }
 
   onUserPasswordEntry() {
@@ -42,6 +42,7 @@ export class LoginComponent {
       .subscribe(
         data => {
           this.apiStatus = data;
+          localStorage.setItem('name', this.apiStatus.responseMessage.substring(0, this.apiStatus.responseMessage.indexOf(',')));
           this.errorMessage = '';
           this.router.navigate(['/home']);
         }, 

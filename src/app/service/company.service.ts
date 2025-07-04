@@ -15,8 +15,13 @@ export class CompanyService {
 
   constructor(private http: HttpClient) { }
 
-  getCompanyDetails(): Observable<Company> {
-    this.requestUrl = environment.apiUrl + 'company?companyId=1';
+  updateCompanyDetails(company: Company): Observable<Company> {
+    this.requestUrl = environment.apiUrl + 'update-company';
+    return this.http.put<Company>(this.requestUrl, company, { withCredentials: true });
+  }
+
+  getCompanyDetails(companyId: number): Observable<Company> {
+    this.requestUrl = environment.apiUrl + 'company?companyId=' + companyId;
     return this.http.get<Company>(this.requestUrl);
   }
 

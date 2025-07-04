@@ -1,7 +1,7 @@
 
 .logo-text {
   font-size: 16.5px;
-  font-family: 'Arial Narrow';
+  font-family: 'Arial Narrow', 'Anton';
   font-style: italic;
   margin-top: -5px;
   margin-left: 88px;
@@ -191,7 +191,7 @@ html, body {
     color: rgb(240, 240, 240);
     border: 2px solid rgb(189, 188, 188); 
     border-radius: 30px; 
-    background-image: url('assets/title-5.jpg');
+    background-image: url('assets/title-bg.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
