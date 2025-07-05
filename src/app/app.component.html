@@ -1,5 +1,5 @@
 
-<main class="main-content" style="background-image: url('assets/bg-4.jpg'); background-size: cover">
+<main class="main-content" style="background-image: url('assets/background-secure-prints.jpg'); background-size: cover">
   <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: rgb(243, 251, 243);" data-bs-theme="light">
     <div class="container-fluid">
       <a class="navbar-brand" routerLink="/home">
@@ -20,9 +20,6 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/bci-fbi-background">BCI & FBI Background Checks</a>
           </li>
-          <!--<li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/fbi-background">FBI Background</a>
-          </li>-->
         </ul>
       </div>
 
@@ -38,12 +35,11 @@
                 <ul class="dropdown-menu">
                   <li><p class="dropdown-item" style="background-color: #004A80; color: rgb(227, 229, 233)">{{currentUser}}</p></li>
                   <li><a class="dropdown-item" routerLink="/appointment">Appointment</a></li>
-                  <li><a class="dropdown-item" routerLink="/home">Payment</a></li>
-                  <li><a class="dropdown-item" routerLink="/home">Invoice</a></li>
-                  <li><a class="dropdown-item" routerLink="/home">Expense</a></li>
+                  <li><a class="dropdown-item" routerLink="/payment">Payment</a></li>
+                  <li><a class="dropdown-item" routerLink="/invoice">Invoice</a></li>
+                  <li><a class="dropdown-item" routerLink="/expense">Expense</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" routerLink="/home">Company</a></li>
-                  <li><a class="dropdown-item" routerLink="/home">User</a></li>
+                  <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" routerLink="/home" (click)="clickLogout()">Logout</a></li>
                 </ul>

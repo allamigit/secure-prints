@@ -1,14 +1,12 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
-import { AppointmentInformation } from '@models/AppointmentInformation';
 import { Appointment } from '@models/Appointment';
 import { AppointmentTime } from '@models/AppointmentTime';
 import { AppointmentRequest } from '@models/AppointmentRequest';
 import { ApiResponse } from '@models/ApiResponse';
-import { ApiStatus } from '@models/ApiStatus';
 
 @Injectable({
   providedIn: 'root'

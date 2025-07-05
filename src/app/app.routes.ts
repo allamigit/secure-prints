@@ -10,6 +10,14 @@ import { RescheduleCancelComponent } from './component/reschedule-cancel/resched
 import { LoginComponent } from './component/login/login.component';
 import { AppointmentComponent } from './component/appointment/appointment.component';
 import { AppointmentGuard } from './guard/appointment.guard';
+import { PaymentComponent } from './component/payment/payment.component';
+import { PaymentGuard } from './guard/payment.guard';
+import { InvoiceComponent } from './component/invoice/invoice.component';
+import { InvoiceGuard } from './guard/invoice.guard';
+import { ExpenseComponent } from './component/expense/expense.component';
+import { ExpenseGuard } from './guard/expense.guard';
+import { SettingsComponent } from './component/settings/settings.component';
+import { SettingsGuard } from './guard/settings.guard';
 
 export const routes: Routes = [
     { 
@@ -57,5 +65,25 @@ export const routes: Routes = [
         path: 'appointment', 
         component: AppointmentComponent,
         canActivate: [AppointmentGuard]
+    },
+    { 
+        path: 'payment', 
+        component: PaymentComponent,
+        canActivate: [PaymentGuard]
+    },
+    { 
+        path: 'invoice', 
+        component: InvoiceComponent,
+        canActivate: [InvoiceGuard]
+    },
+    { 
+        path: 'expense', 
+        component: ExpenseComponent,
+        canActivate: [ExpenseGuard]
+    },
+    { 
+        path: 'settings', 
+        component: SettingsComponent,
+        canActivate: [SettingsGuard]
     }
 ];

@@ -1,6 +1,4 @@
 
-import { Timestamp } from "rxjs";
-
 export class AppointmentInformation {
 
     appointmentId: string;

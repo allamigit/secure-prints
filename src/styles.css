@@ -1,7 +1,7 @@
 
 .logo-text {
   font-size: 16.5px;
-  font-family: 'Arial Narrow', 'Anton';
+  font-family: 'Arial Narrow', 'Roboto Condensed';
   font-style: italic;
   margin-top: -5px;
   margin-left: 88px;
@@ -165,6 +165,7 @@ html, body {
     font-family: 'Arial';
     font-size: 1.6rem;
     text-align: center;
+    text-justify: left;
     font-weight: 500;
     color: rgb(126, 124, 124);
 }
@@ -227,7 +228,7 @@ html, body {
     margin-top: 20px;
     margin-bottom: -15px;
     border: none;
-    text-align: justify;
+    /*text-align: justify;*/
     text-wrap-mode: wrap;
     text-wrap-style: pretty;
     font-size: large;
@@ -394,4 +395,30 @@ html, body {
   font-size: 18px;
   font-weight: 500;
 }
+
+.carousel-control-prev,
+.carousel-control-next {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5%;
+  height: 100%;
+  z-index: 2;
+}
+
+.carousel-control-prev {
+  left: -6%; /* Move outside to the left */
+}
+
+.carousel-control-next {
+  right: -6%; /* Move outside to the right */
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: -40px; /* Move indicators outside the image */
+  left: 35%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
 
