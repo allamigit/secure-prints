@@ -1,6 +1,10 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '@environments/environment';
+import { Observable } from 'rxjs';
+import { AppointmentPayment } from '@models/AppointmentPayment';
+import { ApiStatus } from '@models/ApiStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +12,33 @@ import { HttpClient } from '@angular/common/http';
 
 export class AppointmentPaymentService {
 
+  private requestUrl = '';
+
   constructor(private http: HttpClient) { }
+
+  getPaymentDetails(appointmentId: string): Observable<AppointmentPayment> {
+    this.requestUrl = environment.apiUrl + 'payment/payment-details?appointmentId=' + appointmentId;
+    return this.http.get<AppointmentPayment>(this.requestUrl, { withCredentials: true });
+  }
+
+  getAllPayments(startDate: string, endDate: string, showNonReconciled: boolean): Observable<AppointmentPayment[]> {
+    this.requestUrl = environment.apiUrl + 'payment/all-payments?startDate=' + startDate + '&endDate=' + endDate + '&showNonReconciled=' + showNonReconciled;
+    return this.http.get<AppointmentPayment[]>(this.requestUrl, { withCredentials: true });
+  }
+
+  updatePaymentDetails(appointmentPayment: AppointmentPayment): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'payment/update-payment';
+    return this.http.put<ApiStatus>(this.requestUrl, appointmentPayment, { withCredentials: true });
+  }
   
+  reconcilePayment(appointmentId: string, paymentReconcileDate: string): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'payment/reconcile-payment?appointmentId=' + appointmentId + '&paymentReconcileDate=' + paymentReconcileDate;
+    return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
+  }
+
+  refundPayment(appointmentId: string, paymentRefundDate: string): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'payment/refund-payment?appointmentId=' + appointmentId + '&paymentRefundDate=' + paymentRefundDate;
+    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
+  }
+
 }

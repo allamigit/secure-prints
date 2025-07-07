@@ -55,8 +55,8 @@ export class AppointmentComponent {
 
   applyFilter(): any[] {
     return this.appointmentList.filter(item =>
-      item.appointmentResponse.appointmentStatus == "Scheduled" ||
-      item.appointmentResponse.appointmentStatus == "Rescheduled"
+      item.appointmentResponse.appointmentStatus == 'Scheduled' ||
+      item.appointmentResponse.appointmentStatus == 'Rescheduled'
       );
   }
 
