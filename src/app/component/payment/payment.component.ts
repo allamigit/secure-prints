@@ -29,8 +29,8 @@ export class PaymentComponent {
     paymentMethodName: string = '';
     showDetails: boolean = false;
     pollSub!: Subscription;
-    sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sCancelled: number = 0; sTotal: number = 0;
-    bProcessed: number = 0; bPending: number = 0; bRefund: number = 0; bCancelled: number = 0; bTotal: number = 0;
+    sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sReconciled: number = 0; sTotal: number = 0;
+    bProcessed: number = 0; bPending: number = 0; bRefund: number = 0; bReconciled: number = 0; bTotal: number = 0;
   
   constructor(private router: Router, private appointmentPaymentService: AppointmentPaymentService, private appUtilService: AppUtilService) { }
 
@@ -73,11 +73,10 @@ export class PaymentComponent {
   clickFilterSwitch() {
     if((document.getElementById('switch-check') as HTMLInputElement).checked) {
       this.showNonReconciled = true;
-      this.clickView();
     } else {
       this.showNonReconciled = false;
-      this.clickView();
     }
+    this.clickView();
   }
 
   clickView() {
@@ -87,18 +86,26 @@ export class PaymentComponent {
       this.startDate = this.endDate;
     }
     this.selectedDate = [];
-    this.sProcessed = 0, this.sPending = 0, this.sRefund = 0, this.sCancelled = 0, this.sTotal = 0;
-    this.bProcessed = 0, this.bPending = 0, this.bRefund = 0, this.bCancelled = 0, this.bTotal = 0;
+    this.sProcessed = 0, this.sPending = 0, this.sRefund = 0, this.sReconciled = 0, this.sTotal = 0;
+    this.bProcessed = 0, this.bPending = 0, this.bRefund = 0, this.bReconciled = 0, this.bTotal = 0;
     this.appointmentPaymentService.getAllPayments(this.startDate, this.endDate, this.showNonReconciled)
       .subscribe(data => {
         this.paymentList = data;
         this.paymentList = this.paymentList.filter(item => item.paymentStatusCode != 203);
         for(let i = 0; i < this.paymentList.length; i++) {
           switch(this.paymentList[i].paymentStatusCode) {
-            case 201: this.sPending += this.paymentList[i].serviceAmount; this.bPending += this.paymentList[i].bciAmount; break;
-            case 202: this.sProcessed += this.paymentList[i].serviceAmount; this.bProcessed += this.paymentList[i].bciAmount; break;
-            case 203: this.sCancelled += this.paymentList[i].serviceAmount; this.bCancelled += this.paymentList[i].bciAmount; break;
-            case 204: this.sRefund += this.paymentList[i].serviceAmount; this.bRefund += this.paymentList[i].bciAmount;
+            case 201: this.sPending += this.paymentList[i].serviceAmount; 
+                      this.bPending += this.paymentList[i].bciAmount; 
+                      break;
+            case 202: this.sProcessed += this.paymentList[i].serviceAmount; 
+                      this.bProcessed += this.paymentList[i].bciAmount; 
+                      break;
+            case 204: this.sRefund += this.paymentList[i].serviceAmount; 
+                      this.bRefund += this.paymentList[i].bciAmount;
+          }
+          if(this.paymentList[i].paymentReconcileDate != null) {
+            this.sReconciled += this.paymentList[i].serviceAmount; 
+            this.bReconciled += this.paymentList[i].bciAmount;
           }
           this.sTotal = this.sProcessed + this.sPending + this.sRefund;
           this.bTotal = this.bProcessed + this.bPending + this.bRefund;
@@ -119,10 +126,13 @@ export class PaymentComponent {
       .subscribe(
         data => {
           this.apiStatus = data;
+          this.clickView();
         }, 
         error => {
-          this.apiStatus = error.error;
+          this.apiStatus = error.error; console.log(this.apiStatus.responseMessage);
+          this.clickView();
         });
+        
   }
 
   selectRefund(appointmentId: string, idx: number) {
@@ -130,9 +140,11 @@ export class PaymentComponent {
       .subscribe(
         data => {
           this.apiStatus = data;
+          this.clickView();
         }, 
         error => {
-          this.apiStatus = error.error;
+          this.apiStatus = error.error; console.log(this.apiStatus.responseMessage);
+          this.clickView();
         });
   }
 

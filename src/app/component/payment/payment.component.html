@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
             </div>
             <div class="col-12">
-                <div class="form-check form-switch">
+                <div class="form-check form-switch" [hidden]="startDate == '' || endDate == ''">
                     <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
                     <label class="form-check-label">Show non-reconciled payments</label>
                 </div>
@@ -61,14 +61,14 @@
                         <td (click)="reset()"><small>{{item.paymentReconcileDate|date:'MM/dd/yyyy'}}</small></td>
                         <td>
                             <div class="input-group mb-0">
-                                <input type="date" name="selected-date{{i}}" class="form-control" [(ngModel)]="selectedDate[i]" [hidden]="!item.paymentUpdate"
+                                <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.paymentStatusCode == 201 || !item.paymentUpdate"
                                     [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.paymentUpdate || selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
                                     <li><a class="dropdown-item" [hidden]="item.paymentReconcileDate != null"
                                         (click)="selectReconcile(item.appointmentId, i)">Reconcile</a></li>
-                                    <li><a class="dropdown-item" (click)="selectRefund(item.appointmentId, i)">Refund</a></li>
+                                    <li><a class="dropdown-item" [hidden]="item.paymentComment != null && item.paymentComment.startsWith('Refund')" (click)="selectRefund(item.appointmentId, i)">Refund</a></li>
                                 </ul>
                             </div>                        
                         </td>
@@ -86,24 +86,24 @@
                             <p>&emsp;Processed</p>
                             <p>&emsp;Pending</p>
                             <p>&emsp;Refund</p>
-                            <!--<p>&emsp;Cancelled</p>-->  
                             <p>T O T A L</p>  
+                            <p>Reconciled</p>
                         </td>
                         <td class="text-left" style="color: rgb(126, 124, 124)">
-                            <p>-</p>
+                            <p style="color: white">-</p>
                             <p>{{sProcessed|currency}}</p>
                             <p>{{sPending|currency}}</p>
                             <p>{{sRefund|currency}}</p>
-                            <!--<p>{{sCancelled|currency}}</p>-->
                             <p>{{sTotal|currency}}</p>
+                            <p>{{sReconciled|currency}}</p>
                         </td>
                         <td class="text-left" style="color: rgb(126, 124, 124)">
-                            <p>-</p>
+                            <p style="color: white">-</p>
                             <p>{{bProcessed|currency}}</p>
                             <p>{{bPending|currency}}</p>
                             <p>{{bRefund|currency}}</p>
-                            <!--<p>{{bCancelled|currency}}</p>-->
                             <p>{{bTotal|currency}}</p>
+                            <p>{{bReconciled|currency}}</p>
                         </td>
                         <td></td>
                         <td></td>

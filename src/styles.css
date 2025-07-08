@@ -152,11 +152,11 @@ html, body {
     display: block;
     margin: 0.5% auto 2% auto;
     font-family: 'Arial';
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     text-align: center;
     font-weight: 550;
     color: #86b943;
-    text-shadow: 1px 1px 1px #004A80;
+    text-shadow: 1px 1px 1px rgb(126, 124, 124);
 }
 
 .title-top-md-2-1 {
