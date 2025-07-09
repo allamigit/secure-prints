@@ -5,12 +5,28 @@
     <div class="container text-md-start">
         <!-- Enter Appointment ID -->
         <div class="form-div" *ngIf="!admin">
-            <label class="form-label">Please eneter Appointment ID:</label>
             <div class="row g-3">
-                <div class="col-auto">
+                <label style="font-size: large">You can find your appointment by Appointment ID <b>-OR-</b> by first and last name</label>
+                <div class="col-auto" *ngIf="customerFirstName == '' && customerLastName == ''">
+                    <div class="input-group">
+                        <div class="input-group-text">Appointment ID</div>
                     <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
                            inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" 
                            (input)="onIdInput()" (keydown.enter)="clickSearch()">
+                
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">First Name</div>
+                        <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control" autocomplete="off" maxlength="15">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <div class="input-group-text">Last Name</div>
+                        <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" autocomplete="off" maxlength="15">
+                    </div>
                 </div>
                 <div class="col-auto">
                     <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>

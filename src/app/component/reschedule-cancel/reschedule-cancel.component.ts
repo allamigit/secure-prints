@@ -18,6 +18,8 @@ import { ApiStatus } from '@models/ApiStatus';
 export class RescheduleCancelComponent implements OnInit {
 
   appointmentId: string = '';
+  customerFirstName: string = '';
+  customerLastName: string = '';
   action: string = '';
   timeList: AppointmentTime[] = [];
   apiResponse!: ApiResponse;
@@ -73,6 +75,18 @@ export class RescheduleCancelComponent implements OnInit {
     this.showConfirm = false;
     this.showCancel = false;
     this.showConfirmation = false;
+    this.customerFirstName = '';
+    this.customerLastName = '';
+  }
+
+  onNameInput() {
+    this.notFound = false;
+    this.showAction = false;
+    this.showReschedule = false;
+    this.showConfirm = false;
+    this.showCancel = false;
+    this.showConfirmation = false;
+    this.appointmentId = '';
   }
 
   clickSearch() {
@@ -80,9 +94,16 @@ export class RescheduleCancelComponent implements OnInit {
     this.showConfirmation = false;
 
     if(this.appointmentId != '') {
-      this.appointmentInformationService.findAppointment(this.appointmentId)
+      this.appointmentInformationService.findAppointmentById(this.appointmentId)
         .subscribe(data => {
-            this.notFound = !data; 
+            this.notFound = !data; console.log('ID: ' + this.notFound + ' (' + this.appointmentId + ')');
+            this.showAction = data;
+        });
+    } else if(this.customerFirstName != '' && this.customerLastName != '') {
+      this.appointmentInformationService.findAppointmentByCustomerName(this.customerFirstName, 
+                                                                       this.customerLastName)
+        .subscribe(data => {
+            this.notFound = !data; console.log('Name: ' + this.notFound + ' (' + this.appointmentId + ')');
             this.showAction = data;
         });
     }
@@ -166,6 +187,8 @@ export class RescheduleCancelComponent implements OnInit {
     this.reset();
     this.showConfirmation = false;
     this.appointmentId = '';
+    this.customerFirstName = '';
+    this.customerLastName = '';
   }
 
 }

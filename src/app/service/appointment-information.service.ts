@@ -29,8 +29,13 @@ export class AppointmentInformationService {
       return this.http.get<AppointmentTime[]>(this.requestUrl, { withCredentials: true });
     }
   
-    findAppointment(appointmentId: string): Observable<boolean> {
-      this.requestUrl = environment.apiUrl + 'find-appointment?appointmentId=' + appointmentId;
+    findAppointmentById(appointmentId: string): Observable<boolean> {
+      this.requestUrl = environment.apiUrl + 'find-appointment-id?appointmentId=' + appointmentId;
+      return this.http.get<boolean>(this.requestUrl);
+    }
+
+    findAppointmentByCustomerName(customerFirstName: string, customerLastName: string): Observable<boolean> {
+      this.requestUrl = environment.apiUrl + 'find-appointment-name?customerFirstName=' + customerFirstName + '&customerLastName=' + customerLastName;
       return this.http.get<boolean>(this.requestUrl);
     }
 
