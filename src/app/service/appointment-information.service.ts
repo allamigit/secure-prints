@@ -34,9 +34,9 @@ export class AppointmentInformationService {
       return this.http.get<boolean>(this.requestUrl);
     }
 
-    findAppointmentByCustomerName(customerFirstName: string, customerLastName: string): Observable<boolean> {
+    findAppointmentByCustomerName(customerFirstName: string, customerLastName: string): Observable<string> {
       this.requestUrl = environment.apiUrl + 'find-appointment-name?customerFirstName=' + customerFirstName + '&customerLastName=' + customerLastName;
-      return this.http.get<boolean>(this.requestUrl);
+      return this.http.get<string>(this.requestUrl);
     }
 
     rescheduleAppointment(appointmentId: string, appointmentTimestamp: string): Observable<ApiResponse> {

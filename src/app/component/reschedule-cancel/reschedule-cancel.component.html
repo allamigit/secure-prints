@@ -3,36 +3,46 @@
     <p class="title-top-md-1">Reschedule / Cancel Appointment</p>
 
     <div class="container text-md-start">
-        <!-- Enter Appointment ID -->
         <div class="form-div" *ngIf="!admin">
             <div class="row g-3">
-                <label style="font-size: large">You can find your appointment by Appointment ID <b>-OR-</b> by first and last name</label>
-                <div class="col-auto" *ngIf="customerFirstName == '' && customerLastName == ''">
+                <label style="font-size: large">You can find your appointment by Appointment ID or by your full name</label>
+                <div class="col-auto">
+                    <!-- Enter Appointment ID -->
                     <div class="input-group">
                         <div class="input-group-text">Appointment ID</div>
-                    <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
-                           inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" 
-                           (input)="onIdInput()" (keydown.enter)="clickSearch()">
-                
+                        <input id="appt-id" type="search" name="apptId" class="form-control form-control-sm" autocomplete="off" maxlength="10" 
+                            inputmode="numeric" [(ngModel)]="appointmentId" (keypress)="allowOnlyNumbers($event)" 
+                            (input)="onIdInput()" (keydown.enter)="clickSearch()">
                     </div>
                 </div>
+            </div>
+            <div class="row g-3">
+                <label style="font-size: large; margin-left: 15px; margin-top: 30px; margin-bottom: 20px;"><b>-OR-</b></label>
+            </div>
+            <div class="row g-3">
+                <!-- Enter Customer Full Name -->
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">First Name</div>
                         <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control" autocomplete="off" maxlength="15">
                     </div>
+                    <small class="text-danger" *ngIf="fname">First Name is required</small>
                 </div>
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">Last Name</div>
                         <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" autocomplete="off" maxlength="15">
                     </div>
+                    <small class="text-danger" *ngIf="lname">Last Name is required</small>
                 </div>
+            </div>
+            <br>
+            <div class="row g-3">
                 <div class="col-auto">
                     <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-outline-danger mb-3" *ngIf="notFound">❌ Appointment ID Not Found</button>
+                    <button type="button" class="btn btn-outline-danger mb-3" *ngIf="notFound" (click)="reload()">❌ Appointment Not Found</button>
                 </div>
             </div>
             

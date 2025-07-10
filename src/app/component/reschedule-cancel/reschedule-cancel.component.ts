@@ -39,6 +39,9 @@ export class RescheduleCancelComponent implements OnInit {
   showConfirm: boolean = false;
   showCancel: boolean = false;
   showConfirmation: boolean = false;
+  fname: boolean = false;
+  lname: boolean = false;
+
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private appointmentInformationService: AppointmentInformationService) { 
     this.router.events.subscribe((event) => {
@@ -56,7 +59,7 @@ export class RescheduleCancelComponent implements OnInit {
       this.admin = true;
     }
     if(this.action == 'R') {
-       this.clickReschedule();
+      this.clickReschedule();
     } else if(this.action == 'C') {
       this.clickCancel();
     }
@@ -66,6 +69,14 @@ export class RescheduleCancelComponent implements OnInit {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
     }
+  }
+
+  onFirstNameEntry() {
+    if(this.customerFirstName.length == 0) this.fname = true; else this.fname = false;
+  }
+
+  onLastNameEntry() {
+    if(this.customerLastName.length == 0) this.lname = true; else this.lname = false;
   }
 
   onIdInput() {
@@ -80,6 +91,10 @@ export class RescheduleCancelComponent implements OnInit {
   }
 
   onNameInput() {
+    this.customerFirstName = (document.getElementById('first-name') as HTMLInputElement).value;
+    this.customerLastName = (document.getElementById('last-name') as HTMLInputElement).value;
+    if(this.customerFirstName.length == 0 && this.customerLastName.length > 0) this.fname = true; else this.fname = false;
+    if(this.customerFirstName.length > 0 && this.customerLastName.length == 0) this.lname = true; else this.lname = false;
     this.notFound = false;
     this.showAction = false;
     this.showReschedule = false;
@@ -96,15 +111,15 @@ export class RescheduleCancelComponent implements OnInit {
     if(this.appointmentId != '') {
       this.appointmentInformationService.findAppointmentById(this.appointmentId)
         .subscribe(data => {
-            this.notFound = !data; console.log('ID: ' + this.notFound + ' (' + this.appointmentId + ')');
-            this.showAction = data;
+            this.notFound = !data;
+            this.showAction = !this.notFound;
         });
     } else if(this.customerFirstName != '' && this.customerLastName != '') {
-      this.appointmentInformationService.findAppointmentByCustomerName(this.customerFirstName, 
-                                                                       this.customerLastName)
+      this.appointmentInformationService.findAppointmentByCustomerName(this.customerFirstName, this.customerLastName)
         .subscribe(data => {
-            this.notFound = !data; console.log('Name: ' + this.notFound + ' (' + this.appointmentId + ')');
-            this.showAction = data;
+          this.appointmentId = data;
+            this.notFound = this.appointmentId == null ? true : false;
+            this.showAction = !this.notFound;
         });
     }
   }
