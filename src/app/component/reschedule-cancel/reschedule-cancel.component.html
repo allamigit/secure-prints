@@ -5,7 +5,7 @@
     <div class="container text-md-start">
         <div class="form-div" *ngIf="!admin">
             <div class="row g-3">
-                <label style="font-size: large">You can find your appointment by Appointment ID or by your full name</label>
+                <label style="font-size: large">You can find your appointment by Appointment ID or by full name</label>
                 <div class="col-auto">
                     <!-- Enter Appointment ID -->
                     <div class="input-group">
@@ -17,21 +17,23 @@
                 </div>
             </div>
             <div class="row g-3">
-                <label style="font-size: large; margin-left: 15px; margin-top: 30px; margin-bottom: 20px;"><b>-OR-</b></label>
+                <label style="font-size: large; margin-top: 30px; margin-bottom: 20px; color: rgb(153, 153, 153)">
+                    ―――――――― OR ――――――――
+                </label>
             </div>
             <div class="row g-3">
                 <!-- Enter Customer Full Name -->
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">First Name</div>
-                        <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control" autocomplete="off" maxlength="15">
+                        <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control" style="text-transform: uppercase" autocomplete="off" maxlength="15">
                     </div>
                     <small class="text-danger" *ngIf="fname">First Name is required</small>
                 </div>
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">Last Name</div>
-                        <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" autocomplete="off" maxlength="15">
+                        <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" style="text-transform: uppercase" autocomplete="off" maxlength="15">
                     </div>
                     <small class="text-danger" *ngIf="lname">Last Name is required</small>
                 </div>

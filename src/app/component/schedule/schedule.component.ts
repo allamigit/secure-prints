@@ -233,6 +233,7 @@ export class ScheduleComponent {
       this.step3 = false;
       this.step4 = false;
       this.step5 = true;
+      window.scrollTo(0, 0);
     }
   }
 

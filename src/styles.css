@@ -421,4 +421,10 @@ html, body {
   z-index: 2;
 }
 
+.step-img {
+  height: 300px;
+  object-fit: contain;
+}
+
+
 

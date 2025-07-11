@@ -51,7 +51,7 @@
                 </thead>
                 <tbody *ngFor="let item of appointmentList">
                     <tr>
-                        <th (click)="clickAppointmentId(item)"><small>{{item.appointmentInformation.appointmentId}}</small></th>
+                        <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentInformation.appointmentId}}</small></th>
                         <td (click)="reset()"><small>{{item.appointmentInformation.customerFirstName}} {{item.appointmentInformation.customerLastName}}</small></td>
                         <td (click)="reset()"><small>{{item.appointmentResponse.serviceName}}</small></td>
                         <td (click)="reset()"><small>{{item.appointmentResponse.appointmentTimestamp}}</small></td>
