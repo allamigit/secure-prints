@@ -139,14 +139,14 @@
                             <div class="mb-3">
                                 <label class="form-label">First Name</label> <span class="required-field"> *</span>
                                 <div class="col-sm-6">
-                                    <input id="first-name" type="text" name="firstName" class="form-control form-control-sm" style="text-transform: uppercase" (input)="onFirstNameEntry()" [(ngModel)]="firstName" maxlength="15">
+                                    <input id="first-name" type="text" name="firstName" class="form-control form-control-sm" (input)="onFirstNameEntry()" [(ngModel)]="firstName" maxlength="15">
                                 </div>
                                 <small class="text-danger" *ngIf="fname">First Name is required</small>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Last Name</label> <span class="required-field"> *</span>
                                 <div class="col-sm-6">
-                                    <input id="last-name" type="text" name="lastName"class="form-control form-control-sm" style="text-transform: uppercase" (input)="onLastNameEntry()" [(ngModel)]="lastName" maxlength="15">
+                                    <input id="last-name" type="text" name="lastName"class="form-control form-control-sm" (input)="onLastNameEntry()" [(ngModel)]="lastName" maxlength="15">
                                 </div>
                                 <small class="text-danger" *ngIf="lname">Last Name is required</small>
                             </div>

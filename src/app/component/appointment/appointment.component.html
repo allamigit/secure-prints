@@ -38,6 +38,12 @@
         </form>
 
         <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
         <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
             <table class="table table-hover">
                 <thead style="position: sticky; top: 0; background: white; z-index: 10">
@@ -90,7 +96,7 @@
                                     <button type="button" class="btn btn-primary btn-sm mb-3" [disabled]="!paymentMethodName" (click)="clickComplete()">Complete</button>
                                 </div>
                             </div>
-                            <div class="form-div" *ngIf="showConfirmation">
+                            <!--<div class="form-div" *ngIf="showConfirmation">
                                 <div class="card">
                                     <div class="card-header">
                                         <h6>{{apiResponse.apiStatus.responseCode == 200 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
@@ -106,7 +112,7 @@
                                         <p class="info-color-1">Appointment Status: <span class="info-color-2">{{apiResponse.apiResponseEntity.appointmentStatus}} on {{apiResponse.apiResponseEntity.statusTimestamp}}</span></p>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-div" *ngIf="showDetails">
                                 <div class="card">
                                     <div class="card-body">

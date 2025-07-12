@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 import { Company } from '@models/Company';
+import { ApiStatus } from '@models/ApiStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class CompanyService {
 
   constructor(private http: HttpClient) { }
 
-  updateCompanyDetails(company: Company): Observable<Company> {
+  updateCompanyDetails(company: Company): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'update-company';
-    return this.http.put<Company>(this.requestUrl, company, { withCredentials: true });
+    return this.http.put<ApiStatus>(this.requestUrl, company, { withCredentials: true });
   }
 
   getCompanyDetails(companyId: number): Observable<Company> {

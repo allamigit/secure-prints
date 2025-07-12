@@ -2,6 +2,72 @@
 <div class="page-wrapper">
     <p class="title-top-md-2-1">Settings</p>
     <div class="container text-md-start">
+        
+        <ul class="nav nav-tabs" id="settings-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true" (click)="selectUser()">User</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false" (click)="selectCompany()">Company</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reason-tab" data-bs-toggle="tab" data-bs-target="#reason-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Reason List</button>
+            </li>
+        </ul>
+        <p></p>
+
+        <div class="tab-content" id="settings-tab-content">
+            <!-- USER INFORMATION -->
+            <div class="tab-pane fade show active" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
+                User...
+            </div>
+
+            <!-- COMPANY INFORMATION -->
+            <div class="tab-pane fade" id="company-tab-pane" role="tabpanel" aria-labelledby="company-tab" tabindex="0">
+                <div class="card col-md-4">
+                    <div class="card-header">
+                        <h6>Company Information</h6>
+                    </div>
+                    <div class="card-body col-md-10">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" maxlength="60">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" maxlength="100">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" maxlength="100">
+                        <input type="tel" class="form-control form-control-sm" [(ngModel)]="companyPhone" inputmode="numeric" 
+                            (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" minlength="14" maxlength="14">
+                        <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" maxlength="60">
+                        <p></p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REASON LIST -->
+            <div class="tab-pane fade" id="reason-tab-pane" role="tabpanel" aria-labelledby="reason-tab" tabindex="0">
+                <div class="card col-md-8">
+                    <div class="card-header">
+                        <h6>Reason List</h6>
+                    </div>
+                    <div class="card-body col-md-10">
+                        <div id="alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
+                        <div class="d-grid gap-4 justify-content-md-center">
+                            <button type="button" class="btn btn-success" (click)="clickRefreshReasonList()">Refresh Reason List</button>
+                            <div class="input-group mb-3">
+                                <input id="input-file" type="file" class="form-control" [(ngModel)]="fileName" (input)="onFileSelected($event)">
+                                <button type="button" class="btn btn-secondary" [disabled]="fileName == ''" [hidden]="loadingButton" (click)="clickImportReasonDataFile()">Import Reason Data File</button>
+                                <button class="btn btn-secondary" type="button" [hidden]="!loadingButton">
+                                    Loading...
+                                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                </button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

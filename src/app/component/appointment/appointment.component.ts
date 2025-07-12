@@ -24,6 +24,8 @@ export class AppointmentComponent {
   startDate: string = '';
   endDate: string = '';
   paymentMethodName: string = '';
+  alertType: string = '';
+  responseMessage: string = '';
   showPaymentMethod: boolean = false;
   showConfirmation: boolean = false;
   showDetails: boolean = false;
@@ -47,6 +49,10 @@ export class AppointmentComponent {
 
   onEndDateEntry() {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
+  }
+
+  hideAlert() {
+    (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
 
   getStatusDate(strTimestamp: string): string {
@@ -125,20 +131,30 @@ export class AppointmentComponent {
       .subscribe(
         data => {
           this.apiResponse = data;
+          this.alertType = 'msg-success';
+          this.responseMessage = this.apiResponse.apiStatus.responseMessage;
           this.showPaymentMethod = false;
           this.showConfirmation = true;
+          this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 3500);
         }, 
         error => {
           this.apiResponse = error.error;
+          this.alertType = 'msg-fail';
+          this.responseMessage = this.apiResponse.apiStatus.responseMessage;
           this.showPaymentMethod = false;
           this.showConfirmation = true;
+          this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 3500);
         });
   }
 
   clickAppointmentId(item: any) {
-    this.selectedAppointmentId = item.appointmentInformation.appointmentId;
-    this.showDetails = !this.showDetails;
-    if(!this.showDetails) this.selectedAppointmentId = '';
+    this.showConfirmation = false;
+    if(item.appointmentInformation.appointmentId == this.selectedAppointmentId) this.showDetails = !this.showDetails; else this.showDetails = true;
+    if(!this.showDetails) this.selectedAppointmentId = ''; else this.selectedAppointmentId = item.appointmentInformation.appointmentId;
   }
 
   reset() {

@@ -38,6 +38,12 @@
         </form>
 
         <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
         <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
             <table class="table table-hover">
                 <thead style="position: sticky; top: 0; background: white; z-index: 10">
@@ -63,7 +69,7 @@
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.paymentStatusCode == 201 || !item.paymentUpdate"
                                     [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
-                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.paymentUpdate || selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
                                     <li><a class="dropdown-item" [hidden]="item.paymentReconcileDate != null"

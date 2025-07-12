@@ -17,8 +17,8 @@
                 </div>
             </div>
             <div class="row g-3">
-                <label style="font-size: large; margin-top: 30px; margin-bottom: 20px; color: rgb(153, 153, 153)">
-                    ―――――――― OR ――――――――
+                <label style="font-size: large; margin-top: 30px; margin-bottom: 20px; color: rgb(160, 160, 160)">
+                    ------------------- OR -------------------
                 </label>
             </div>
             <div class="row g-3">
@@ -26,14 +26,14 @@
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">First Name</div>
-                        <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control" style="text-transform: uppercase" autocomplete="off" maxlength="15">
+                        <input type="search" id="first-name" [(ngModel)]="customerFirstName" (input)="onNameInput()" class="form-control"  autocomplete="off" maxlength="15">
                     </div>
                     <small class="text-danger" *ngIf="fname">First Name is required</small>
                 </div>
                 <div class="col-auto">
                     <div class="input-group">
                         <div class="input-group-text">Last Name</div>
-                        <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" style="text-transform: uppercase" autocomplete="off" maxlength="15">
+                        <input type="search" id="last-name" [(ngModel)]="customerLastName" (input)="onNameInput()"class="form-control" autocomplete="off" maxlength="15">
                     </div>
                     <small class="text-danger" *ngIf="lname">Last Name is required</small>
                 </div>

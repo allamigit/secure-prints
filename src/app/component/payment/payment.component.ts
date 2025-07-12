@@ -25,9 +25,11 @@ export class PaymentComponent {
     startDate: string = '';
     endDate: string = '';
     selectedDate: string[] = [];
-    showNonReconciled: boolean = false;
     paymentMethodName: string = '';
+    alertType: string = '';
+    responseMessage: string = '';
     showDetails: boolean = false;
+    showNonReconciled: boolean = false;
     pollSub!: Subscription;
     sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sReconciled: number = 0; sTotal: number = 0;
     bProcessed: number = 0; bPending: number = 0; bRefund: number = 0; bReconciled: number = 0; bTotal: number = 0;
@@ -56,6 +58,10 @@ export class PaymentComponent {
     this.selectedDate[idx] = (document.getElementsByName('selected-date')[idx] as HTMLInputElement).value;
   }
 
+  hideAlert() {
+    (document.getElementById('alert') as HTMLInputElement).hidden = true;
+  }
+
   getPaymentMethodName(code: number) {
     return this.appUtilService.getPaymentMethodName(code);
   }
@@ -63,12 +69,6 @@ export class PaymentComponent {
   getPaymentStatusName(code: number) {
     return this.appUtilService.getPaymentStatusName(code);
   }
-
-  /*applyFilter(): any[] {
-    return this.paymentList.filter(item =>
-      item.paymentReconcileDate == '' || item.paymentReconcileDate == null
-      );
-  }*/
 
   clickFilterSwitch() {
     if((document.getElementById('switch-check') as HTMLInputElement).checked) {
@@ -129,7 +129,7 @@ export class PaymentComponent {
           this.clickView();
         }, 
         error => {
-          this.apiStatus = error.error; console.log(this.apiStatus.responseMessage);
+          this.apiStatus = error.error;
           this.clickView();
         });
         
@@ -140,18 +140,25 @@ export class PaymentComponent {
       .subscribe(
         data => {
           this.apiStatus = data;
+          this.alertType = 'msg-success';
+          this.responseMessage = this.apiStatus.responseMessage;
           this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         }, 
         error => {
-          this.apiStatus = error.error; console.log(this.apiStatus.responseMessage);
+          this.apiStatus = error.error;
+          this.alertType = 'msg-fail';
+          this.responseMessage = this.apiStatus.responseMessage;
           this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         });
   }
 
   clickAppointmentId(item: any) {
-    this.selectedAppointmentId = item.appointmentId;
-    this.showDetails = !this.showDetails;
-    if(!this.showDetails) this.selectedAppointmentId = '';
+    if(item.appointmentId == this.selectedAppointmentId) this.showDetails = !this.showDetails; else this.showDetails = true;    
+    if(!this.showDetails) this.selectedAppointmentId = ''; else this.selectedAppointmentId = item.appointmentId;
   }
 
   reset() {
