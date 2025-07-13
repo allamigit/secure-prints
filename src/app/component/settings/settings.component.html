@@ -19,7 +19,65 @@
         <div class="tab-content" id="settings-tab-content">
             <!-- USER INFORMATION -->
             <div class="tab-pane fade show active" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
-                User...
+                <div class="row g-1 gap-3">
+                    <div class="card col-md-3" *ngFor="let item of userList; let i = index">
+                        <div class="card-header">
+                            <h6 style="color: rgb(127, 127, 129)">{{item.userName}}</h6>
+                        </div>
+                        <div class="card-body">
+                            <!-- ALERT MESSAGE -->
+                            <div id="user-alert" *ngIf="item.userName == userName" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                                {{responseMessage}}
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-group-text">Full Name</div>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.userFullName" maxlength="60">
+                            </div>
+                            <p></p>
+                            <div class="form-check form-switch">
+                                <input id="active-user" type="checkbox" class="form-check-input" [disabled]="item.userName == currentUser" [(ngModel)]="item.userStatus">
+                                <label class="form-check-label">Active User</label>
+                            </div>
+                            <p></p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                <button type="button" class="btn btn-primary" *ngIf="item.userName == currentUser" (click)="clickChangePassword()">Change Password</button>
+                                <button type="button" class="btn btn-warning" *ngIf="item.userName != currentUser" (click)="clickResetPassword(item.userName)">Reset Password</button>
+                                <button type="button" class="btn btn-success" (click)="clickSaveUser(item)">Save Changes</button>
+                            </div>
+                            <p></p>
+                            <div class="row g-1 gap-3" *ngIf="showChangePassword && item.userName == currentUser">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="userPassword" maxlength="20" placeholder="New Password">
+                                    <label for="floatingPassword">New Password</label>
+                                </div>
+                                <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 3" (click)="clickCancelChangePassword()">Cancel</button>
+                                <button type="button" class="btn btn-success" *ngIf="userPassword.length > 3" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add New User -->
+                    <div class="card col-md-3">
+                        <div class="card-header">
+                            <h6>+ Add New User</h6>
+                        </div>
+                        <div class="card-body">
+                            <!--<input type="text" class="form-control form-control-sm" [(ngModel)]="item.userFullName" maxlength="60">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" [(ngModel)]="item.userStatus">
+                                <label class="form-check-label">Account Active</label>
+                            </div>
+                            <p></p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                <button type="button" class="btn btn-primary" *ngIf="item.userName == currentUser" (click)="clickSaveCompany()">Change Password</button>
+                                <button type="button" class="btn btn-warning" *ngIf="item.userName != currentUser" (click)="clickSaveCompany()">Reset Password</button>
+                                <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save Changes</button>
+                            </div>-->
+                        </div>
+                    </div>
+
+                </div>                
             </div>
 
             <!-- COMPANY INFORMATION -->
@@ -28,7 +86,7 @@
                     <div class="card-header">
                         <h6>Company Information</h6>
                     </div>
-                    <div class="card-body col-md-10">
+                    <div class="card-body">
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" maxlength="60">
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" maxlength="100">
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" maxlength="100">
@@ -36,7 +94,7 @@
                             (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" minlength="14" maxlength="14">
                         <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" maxlength="60">
                         <p></p>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>
                         </div>
                     </div>
@@ -45,15 +103,16 @@
 
             <!-- REASON LIST -->
             <div class="tab-pane fade" id="reason-tab-pane" role="tabpanel" aria-labelledby="reason-tab" tabindex="0">
-                <div class="card col-md-8">
+                <div class="card col-md-5">
                     <div class="card-header">
                         <h6>Reason List</h6>
                     </div>
-                    <div class="card-body col-md-10">
+                    <div class="card-body">
+                        <!-- ALERT MESSAGE -->
                         <div id="alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
                             {{responseMessage}}
                         </div>
-                        <div class="d-grid gap-4 justify-content-md-center">
+                        <div class="d-grid gap-4 justify-content-md-left">
                             <button type="button" class="btn btn-success" (click)="clickRefreshReasonList()">Refresh Reason List</button>
                             <div class="input-group mb-3">
                                 <input id="input-file" type="file" class="form-control" [(ngModel)]="fileName" (input)="onFileSelected($event)">

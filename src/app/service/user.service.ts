@@ -55,9 +55,9 @@ export class UserService {
     return this.http.put<ApiStatus>(this.requestUrl, user, { withCredentials: true });
   }
 
-  getAllUsers(): Observable<User> {
+  getAllUsers(): Observable<User[]> {
     this.requestUrl = environment.apiUrl + 'user/all-users';
-    return this.http.get<User>(this.requestUrl, { withCredentials: true });
+    return this.http.get<User[]>(this.requestUrl, { withCredentials: true });
   }
 
   getUserDetails(userName: string): Observable<User> {

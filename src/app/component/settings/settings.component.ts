@@ -23,6 +23,8 @@ export class SettingsComponent {
   user!: User;
   company!: Company;
   reason!: Reason;
+  userList: User[] = [];
+  currentUser: string | null = localStorage.getItem('user');
   apiStatus!: ApiStatus;
   alertType: string = '';
   responseMessage: string = '';
@@ -38,8 +40,13 @@ export class SettingsComponent {
   companyEmail: string = '';
   formattedPhone: string = '';
   loadingButton: boolean = false;
+  showChangePassword: boolean = false;
 
   constructor(private router: Router, private userService: UserService, private companyService: CompanyService, private reasonService: ReasonService) { }
+
+  ngOnInit(): void {
+    this.selectUser();
+  }
 
   allowOnlyNumbers(event: KeyboardEvent) {
     if (!/[0-9]/.test(event.key)) {
@@ -63,16 +70,18 @@ export class SettingsComponent {
     this.loadingButton = false;
   }
 
+  hideUserAlert() {
+    (document.getElementById('user-alert') as HTMLInputElement).hidden = true;
+    window.location.reload();
+  }
+
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
 
   selectUser() {
     this.userService.getAllUsers().subscribe(data => {
-      this.userName = data.userName;
-      this.userPassword = data.userPassword;
-      this.userFullName = data.userFullName;
-      this.userStatus = data.userStatus;
+      this.userList = data;
     });
   }
 
@@ -100,6 +109,81 @@ export class SettingsComponent {
     });    
   }
 
+  clickAddUser() {
+    this.user = new User();
+    this.user.userFullName = this.userFullName;
+    this.user.userName = this.userName;
+    this.user.userPassword = this.userPassword;
+    this.user.userStatus = this.userStatus;
+    this.userService.addUser(this.user).subscribe(
+      data => {
+        this.apiStatus = data;
+        this.alertType = 'alert alert-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 3500);
+      },
+      error => {
+        this.apiStatus = error.error;
+        this.alertType = 'alert alert-danger';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 4000);
+      });
+  }
+
+  clickSaveUser(user: User) {
+    this.userName = user.userName;
+    this.userFullName = user.userFullName;
+    this.userStatus = (document.getElementById('active-user') as HTMLInputElement).checked;
+    this.userService.updateUserDetails(user).subscribe(data => {
+      this.apiStatus = data;
+      this.alertType = 'alert alert-success';
+      this.responseMessage = this.apiStatus.responseMessage;
+      (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+      setTimeout(this.hideUserAlert, 3500);
+    });
+  }
+
+  clickChangePassword() {
+    this.showChangePassword = true;
+  }
+
+  clickCancelChangePassword() {
+    this.userPassword = '';
+    this.showChangePassword = false;
+  }
+
+  clickSavePassword(oldPassword: string, newPassword: string) {
+    this.userService.changeUserPassword(oldPassword, newPassword).subscribe(
+      data => {
+        this.apiStatus = data;
+        this.userPassword = '';
+        this.showChangePassword = false;
+        this.alertType = 'alert alert-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 3500);
+      },
+      error => {
+        this.apiStatus = error.error;
+        this.alertType = 'alert alert-danger';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 4000);
+    });
+  }
+
+  clickResetPassword(username: string) {
+    this.userService.resetUserPassword(username, 'user1234').subscribe(data => {
+      this.apiStatus = data;
+      this.alertType = 'alert alert-success';
+      this.responseMessage = this.apiStatus.responseMessage;
+      (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+      setTimeout(this.hideUserAlert, 3500);
+    });
+  }
+
   clickRefreshReasonList() {
     this.reasonService.refreshReasonList().subscribe(
       data => {
@@ -107,7 +191,7 @@ export class SettingsComponent {
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        setTimeout(this.hideAlert, 3500);
       });
   }
 
@@ -121,7 +205,7 @@ export class SettingsComponent {
         this.loadingButton = false;
         this.fileName = '';
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        setTimeout(this.hideAlert, 3500);
       },
       error => {
         this.apiStatus = error.error;
