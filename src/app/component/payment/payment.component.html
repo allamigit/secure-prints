@@ -58,7 +58,7 @@
                 </thead>
                 <tbody *ngFor="let item of paymentList; let i = index">
                     <tr>
-                        <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentId}}</small></th>
+                        <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentId}}</small><span *ngIf="item?.paymentComment?.startsWith('Refund')"> 🪪</span></th>
                         <td (click)="reset()"><small>{{item.serviceAmount|currency}}</small></td>
                         <td (click)="reset()"><small>{{item.bciAmount|currency}}</small></td>
                         <td (click)="reset()"><small>{{getPaymentMethodName(item.paymentMethodCode)}}</small></td>

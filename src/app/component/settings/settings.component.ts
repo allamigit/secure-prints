@@ -33,6 +33,10 @@ export class SettingsComponent {
   userPassword: string = '';
   userFullName: string = '';
   userStatus: boolean = true;
+  newUserName: string = '';
+  newUserPassword: string = '';
+  newUserFullName: string = '';
+  newUserStatus: boolean = true;
   companyName: string = '';
   companyAddress1: string = '';
   companyAddress2: string = '';
@@ -68,6 +72,11 @@ export class SettingsComponent {
     const file: File = event.target.files[0];
     if(file.type == 'text/plain') this.fileName = file.name; else this.fileName = '';
     this.loadingButton = false;
+  }
+
+  hideAddUserAlert() {
+    (document.getElementById('add-user-alert') as HTMLInputElement).hidden = true;
+    window.location.reload();
   }
 
   hideUserAlert() {
@@ -111,25 +120,32 @@ export class SettingsComponent {
 
   clickAddUser() {
     this.user = new User();
-    this.user.userFullName = this.userFullName;
-    this.user.userName = this.userName;
-    this.user.userPassword = this.userPassword;
-    this.user.userStatus = this.userStatus;
+    this.user.userFullName = this.newUserFullName;
+    this.user.userName = this.newUserName;
+    this.user.userPassword = this.newUserPassword;
+    this.user.userStatus = this.newUserStatus;
     this.userService.addUser(this.user).subscribe(
       data => {
         this.apiStatus = data;
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;
-        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideUserAlert, 3500);
+        (document.getElementById('add-user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideAddUserAlert, 3500);
       },
       error => {
         this.apiStatus = error.error;
         this.alertType = 'alert alert-danger';
         this.responseMessage = this.apiStatus.responseMessage;
-        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideUserAlert, 4000);
+        (document.getElementById('add-user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideAddUserAlert, 4000);
       });
+  }
+
+  clickReset() {
+    this.newUserFullName = '';
+    this.newUserName = '';
+    this.newUserPassword = '';
+    this.newUserStatus = true;
   }
 
   clickSaveUser(user: User) {

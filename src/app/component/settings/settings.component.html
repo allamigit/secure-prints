@@ -51,8 +51,10 @@
                                     <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="userPassword" maxlength="20" placeholder="New Password">
                                     <label for="floatingPassword">New Password</label>
                                 </div>
-                                <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 3" (click)="clickCancelChangePassword()">Cancel</button>
-                                <button type="button" class="btn btn-success" *ngIf="userPassword.length > 3" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 3" (click)="clickCancelChangePassword()">Cancel</button>
+                                    <button type="button" class="btn btn-success" *ngIf="userPassword.length > 3" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,17 +65,35 @@
                             <h6>+ Add New User</h6>
                         </div>
                         <div class="card-body">
-                            <!--<input type="text" class="form-control form-control-sm" [(ngModel)]="item.userFullName" maxlength="60">
+                            <!-- ALERT MESSAGE -->
+                            <div id="add-user-alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                                {{responseMessage}}
+                            </div>
+
+                            <div class="input-group">
+                                <div class="input-group-text">Full Name <span class="required-field">*</span></div>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="newUserFullName" autocomplete="off" maxlength="60">
+                            </div>
+                            <p></p>
+                            <div class="input-group">
+                                <div class="input-group-text">Username <span class="required-field">*</span></div>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="newUserName" autocomplete="off" maxlength="20">
+                            </div>
+                            <p></p>
+                            <div class="input-group">
+                                <div class="input-group-text">Password <span class="required-field">*</span></div>
+                                <input type="password" class="form-control form-control-sm" [(ngModel)]="newUserPassword" autocomplete="off" maxlength="20">
+                            </div>
+                            <p></p>
                             <div class="form-check form-switch">
-                                <input type="checkbox" class="form-check-input" [(ngModel)]="item.userStatus">
-                                <label class="form-check-label">Account Active</label>
+                                <input type="checkbox" class="form-check-input" [(ngModel)]="newUserStatus">
+                                <label class="form-check-label">Active User</label>
                             </div>
                             <p></p>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                <button type="button" class="btn btn-primary" *ngIf="item.userName == currentUser" (click)="clickSaveCompany()">Change Password</button>
-                                <button type="button" class="btn btn-warning" *ngIf="item.userName != currentUser" (click)="clickSaveCompany()">Reset Password</button>
-                                <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save Changes</button>
-                            </div>-->
+                                <button type="button" class="btn btn-light" (click)="clickReset()">Reset</button>
+                                <button type="button" class="btn btn-success" [disabled]="newUserFullName == '' || newUserName == '' || newUserPassword == ''" (click)="clickAddUser()">Add User</button>
+                            </div>
                         </div>
                     </div>
 

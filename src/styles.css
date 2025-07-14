@@ -43,6 +43,7 @@
 }
 
 .required-field {
+    margin-left: 4px;
     font-size: 16px;
     color: red;
     font-weight: 500;
