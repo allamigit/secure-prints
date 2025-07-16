@@ -18,8 +18,17 @@
                             (input)="onUserPasswordEntry()" (keydown.enter)="clickLogin()">
                 </div>
             </div>
-            <small class="text-danger" *ngIf="errorMessage != ''">{{apiStatus?.responseMessage}}</small>
         </form>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center" style="background-color: rgb(252, 230, 233)" *ngIf="errorMessage != ''">
+            <small class="text-danger">{{apiStatus?.responseMessage}}</small>
+        </div>
+        <div class="d-grid gap-2 justify-content-md-center" style="background-color: rgb(224, 252, 224)" *ngIf="isValidLogin && userPassword == 'user1234'">
+            <small class="text-success">Enter New Password:</small>
+            <input type="password" class="form-control form-control-sm" id="new-password" autocomplete="off" maxlength="20"
+                    (input)="onNewPasswordEntry()" (keydown.enter)="clickSaveNewPassword()">
+            <button type="button" class="btn btn-success" [disabled]="!newPassword" (click)="clickSaveNewPassword()">Save New Password</button>
+        </div>
+        <p></p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
             <button type="button" class="btn btn-outline-secondary" routerLink="/home">Cancel</button>
             <button type="button" class="btn btn-secondary" [disabled]="!userName || !userPassword" (click)="clickLogin()">Login</button>

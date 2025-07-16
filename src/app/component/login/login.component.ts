@@ -18,7 +18,9 @@ export class LoginComponent {
   apiStatus?: ApiStatus;
   userName: string = '';
   userPassword: string = '';
+  newPassword: string = '';
   errorMessage: string | undefined = '';
+  isValidLogin: boolean = false;
 
   constructor(private router: Router, private userService: UserService) { }
 
@@ -28,13 +30,20 @@ export class LoginComponent {
   }
 }
   onUsernameEntry() {
-    this.errorMessage = '';
-    this.userName = (document.getElementById('user-name') as HTMLInputElement).value;
+   this.errorMessage = '';
+   this.isValidLogin = false;
+   this.userName = (document.getElementById('user-name') as HTMLInputElement).value;
   }
 
   onUserPasswordEntry() {
     this.errorMessage = '';
+    this.isValidLogin = false;
     this.userPassword = (document.getElementById('user-password') as HTMLInputElement).value;
+  }
+
+  onNewPasswordEntry() {
+    this.errorMessage = '';
+    this.newPassword = (document.getElementById('new-password') as HTMLInputElement).value;
   }
 
   clickLogin() {
@@ -42,14 +51,26 @@ export class LoginComponent {
       .subscribe(
         data => {
           this.apiStatus = data;
-          localStorage.setItem('name', this.apiStatus.responseMessage.substring(0, this.apiStatus.responseMessage.indexOf(',')));
           this.errorMessage = '';
-          this.router.navigate(['/home']);
+          this.isValidLogin = true;
+          if(this.userPassword != 'user1234') {
+            localStorage.setItem('name', this.apiStatus.responseMessage.substring(0, this.apiStatus.responseMessage.indexOf(',')));
+            this.router.navigate(['/home']); 
+          }
         }, 
         error => {
           this.apiStatus = error.error;
           this.errorMessage = this.apiStatus?.responseMessage;
+          this.isValidLogin = false;
         });
+  }
+
+  clickSaveNewPassword() {
+    this.userService.changeUserPassword(this.userPassword, this.newPassword).subscribe(
+      data => {
+        this.apiStatus = data;
+        this.userPassword = this.newPassword;
+      });
   }
 
 }

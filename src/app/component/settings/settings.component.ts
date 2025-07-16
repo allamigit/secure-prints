@@ -29,7 +29,7 @@ export class SettingsComponent {
   alertType: string = '';
   responseMessage: string = '';
   fileName: string = '';
-  userName: string = '';
+  userName?: string = '';
   userPassword: string = '';
   userFullName: string = '';
   userStatus: boolean = true;
@@ -89,9 +89,7 @@ export class SettingsComponent {
   }
 
   selectUser() {
-    this.userService.getAllUsers().subscribe(data => {
-      this.userList = data;
-    });
+    this.userService.getAllUsers().subscribe(data => this.userList = data);
   }
 
   selectCompany() {
@@ -112,9 +110,10 @@ export class SettingsComponent {
     this.company.companyAddress2 = this.companyAddress2;
     this.company.companyPhone = this.companyPhone;
     this.company.companyEmail = this.companyEmail;
-    this.companyService.updateCompanyDetails(this.company).subscribe(data => {
-      this.apiStatus = data;
-      window.location.reload();
+    this.companyService.updateCompanyDetails(this.company).subscribe(
+      data => {
+        this.apiStatus = data;
+        window.location.reload();
     });    
   }
 
@@ -152,12 +151,13 @@ export class SettingsComponent {
     this.userName = user.userName;
     this.userFullName = user.userFullName;
     this.userStatus = (document.getElementById('active-user') as HTMLInputElement).checked;
-    this.userService.updateUserDetails(user).subscribe(data => {
-      this.apiStatus = data;
-      this.alertType = 'alert alert-success';
-      this.responseMessage = this.apiStatus.responseMessage;
-      (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
-      setTimeout(this.hideUserAlert, 3500);
+    this.userService.updateUserDetails(user).subscribe(
+      data => {
+        this.apiStatus = data;
+        this.alertType = 'alert alert-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 3500);
     });
   }
 
@@ -171,6 +171,7 @@ export class SettingsComponent {
   }
 
   clickSavePassword(oldPassword: string, newPassword: string) {
+    this.userName = localStorage.getItem('user')?.toString();
     this.userService.changeUserPassword(oldPassword, newPassword).subscribe(
       data => {
         this.apiStatus = data;
@@ -191,12 +192,14 @@ export class SettingsComponent {
   }
 
   clickResetPassword(username: string) {
-    this.userService.resetUserPassword(username, 'user1234').subscribe(data => {
-      this.apiStatus = data;
-      this.alertType = 'alert alert-success';
-      this.responseMessage = this.apiStatus.responseMessage;
-      (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
-      setTimeout(this.hideUserAlert, 3500);
+    this.userName = username;
+    this.userService.resetUserPassword(username, 'user1234').subscribe(
+      data => {
+        this.apiStatus = data;
+        this.alertType = 'alert alert-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 3500);
     });
   }
 
