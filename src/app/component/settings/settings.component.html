@@ -107,12 +107,12 @@
                         <h6>Company Information</h6>
                     </div>
                     <div class="card-body">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" maxlength="60">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" maxlength="100">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" maxlength="100">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" placeholder="Company Name" maxlength="60">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" placeholder="Address Line 1" maxlength="100">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" placeholder="Address Line 2" maxlength="100">
                         <input type="tel" class="form-control form-control-sm" [(ngModel)]="companyPhone" inputmode="numeric" 
-                            (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" minlength="14" maxlength="14">
-                        <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" maxlength="60">
+                            (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" placeholder="Phone" minlength="14" maxlength="14">
+                        <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" placeholder="Email" maxlength="60">
                         <p></p>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>
