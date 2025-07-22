@@ -11,6 +11,7 @@ export class AppointmentRequest {
    fbiReasonCode: string;
    fbiReasonDescription?: string;
    appointmentTimestamp: string;
+   userName?: string | undefined;
 
    constructor() {
         this.customerFirstName = '';

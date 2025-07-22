@@ -17,6 +17,7 @@ export class AppointmentInformation {
     resheduleTimestamp: string;
     cancelTimestamp: string;
     completeTimestamp: string;
+    userIpAddress?: string;
 
     constructor() {
         this.appointmentId = '';

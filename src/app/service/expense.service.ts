@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 import { Expense } from '@models/Expense';
 import { ApiStatus } from '@models/ApiStatus';
 import { ExpenseType } from '@models/ExpenseType';
-import { ExpenseCode } from '@models/ExpenseCode';
+import { ExpenseTypeCode } from '@models/ExpenseTypeCode';
+import { ExpenseTypeName } from '@models/ExpenseTypeName';
 
 @Injectable({
   providedIn: 'root'
@@ -58,9 +59,14 @@ export class ExpenseService {
     return this.http.get<ExpenseType[]>(this.requestUrl, { withCredentials: true });
   }
 
-  getExpenseCode(subcategoryName: string): Observable<ExpenseCode> {
-    this.requestUrl = environment.apiUrl + 'expense/get-expense-code?subcategoryName=' + subcategoryName;
-    return this.http.get<ExpenseCode>(this.requestUrl, { withCredentials: true });
+  getExpenseTypeCode(subcategoryName: string): Observable<ExpenseTypeCode> {
+    this.requestUrl = environment.apiUrl + 'expense/get-expense-type-code?subcategoryName=' + subcategoryName;
+    return this.http.get<ExpenseTypeCode>(this.requestUrl, { withCredentials: true });
+  }
+
+  getExpenseTypeName(categoryCode: number, subcategoryCode: number): Observable<ExpenseTypeName> {
+    this.requestUrl = environment.apiUrl + 'expense/get-expense-type-name?categoryCode=' + categoryCode + '&subcategoryCode=' + subcategoryCode;
+    return this.http.get<ExpenseTypeName>(this.requestUrl, { withCredentials: true });
   }
 
 }

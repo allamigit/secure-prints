@@ -221,6 +221,7 @@ export class ScheduleComponent {
       this.appointmentRequest.fbiReasonCode = this.fbiReasonCode;
       this.appointmentRequest.fbiReasonDescription = this.fbiReasonDescription;
       this.appointmentRequest.appointmentTimestamp = this.appointmentTimestamp;
+      this.appointmentRequest.userName = localStorage.getItem('user')?.toString();
 
       this.appointmentInformationService.scheduleAppointment(this.appointmentRequest)
           .subscribe(

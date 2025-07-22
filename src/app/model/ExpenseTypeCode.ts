@@ -1,5 +1,5 @@
 
-export class ExpenseCode {
+export class ExpenseTypeCode {
 
     categoryCode: number;
     subcategoryCode: number;
