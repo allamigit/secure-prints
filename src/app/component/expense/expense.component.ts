@@ -21,6 +21,7 @@ export class ExpenseComponent {
       selectedExpenseId: number = 0;
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
+      expense!: Expense;
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
@@ -28,11 +29,26 @@ export class ExpenseComponent {
       paymentMethodName: string = '';
       alertType: string = '';
       responseMessage: string = '';
+      modalTitle: string = '';
+      saveButton: string = '';
       showDetails: boolean = false;
       showNonReconciled: boolean = false;
       pollSub!: Subscription;
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
   
+      expId: number = 0;
+      refNumber: string = '';
+      refDate: string = '';
+      clientName: string = '';
+      catCode: number = 0;
+      subcatCode: number = 0;
+      expDescription: string = '';
+      expAmount: number = 0;
+      pymtStatusCode: number = 0;
+      pymtDate: string = '';
+      pymtMethodCode: number = 0;
+      reconcileDate: string = '';
+
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
   ngOnInit(): void {
@@ -114,6 +130,23 @@ export class ExpenseComponent {
     this.clickView();
   }
 
+  clickAddExpense() {
+    this.modalTitle = 'Add New Expense';
+    this.saveButton = 'Add Expense';
+    this.resetFields();
+  }
+
+  clickSaveExpense() {
+    if(this.modalTitle == 'Add New Expense') {
+      this.expense = new Expense();
+      this.assignFields();
+      //addExpenseDetails, this.resetFields()
+    } else {
+      this.assignFields();
+      //updateExpenseDetails, this.resetFields()
+    }
+  }
+
   selectReconcile(expenseId: number, idx: number) {
     this.expenseService.reconcileExpense(expenseId, this.selectedDate[idx])
       .subscribe(
@@ -149,15 +182,42 @@ export class ExpenseComponent {
         });
   }
 
-  clickAppointmentId(item: any) {
-    if(item.expenseId == this.selectedExpenseId) this.showDetails = !this.showDetails; else this.showDetails = true;    
-    if(!this.showDetails) this.selectedExpenseId = 0; else this.selectedExpenseId = item.expenseId;
+  clickReference(item: any) {
+    this.resetFields();
+    //if(item.expenseId == this.selectedExpenseId) this.showDetails = !this.showDetails; else this.showDetails = true;    
+    //if(!this.showDetails) this.selectedExpenseId = 0; else this.selectedExpenseId = item.expenseId;
+    this.modalTitle = 'Update Expense';
+    this.saveButton = 'Save Changes';
+    this.refNumber = item.expenseReferenceNumber;
+    this.refDate = item.expenseReferenceDate;
+    //TODO
   }
 
   reset() {
     this.showDetails = false;
     this.selectedExpenseId = 0;
     this.clickView();
+  }
+
+  resetFields() {
+    this.expId = 0;
+    this.refNumber = '';
+    this.refDate = '';
+    this.clientName = '';
+    this.catCode = 0;
+    this.subcatCode = 0;
+    this.expDescription = '';
+    this.expAmount = 0;
+    this.pymtStatusCode = 0;
+    this.pymtDate = '';
+    this.pymtMethodCode = 0;
+    this.reconcileDate = '';
+  }
+
+  assignFields() {
+    this.expense.expenseReferenceNumber = this.refNumber;
+    this.expense.expenseReferenceDate = this.refDate;
+    //TODO
   }
 
 }
