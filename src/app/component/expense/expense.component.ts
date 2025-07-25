@@ -8,6 +8,7 @@ import { Expense } from '@models/Expense';
 import { ApiStatus } from '@models/ApiStatus';
 import { Subscription } from 'rxjs';
 import { AppUtilService } from '@services/app-util.service';
+import { ExpenseType } from '@models/ExpenseType';
 
 @Component({
   selector: 'app-expense',
@@ -22,6 +23,8 @@ export class ExpenseComponent {
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
       expense!: Expense;
+      expenseTypeList: ExpenseType[] = [];
+      expenseCategoryList: ExpenseType[] = [];
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
@@ -39,7 +42,7 @@ export class ExpenseComponent {
       expId: number = 0;
       refNumber: string = '';
       refDate: string = '';
-      clientName: string = '';
+      vendorName: string = '';
       catCode: number = 0;
       subcatCode: number = 0;
       expDescription: string = '';
@@ -133,6 +136,7 @@ export class ExpenseComponent {
   clickAddExpense() {
     this.modalTitle = 'Add New Expense';
     this.saveButton = 'Add Expense';
+    this.generateExpenseTypeList();
     this.resetFields();
   }
 
@@ -140,10 +144,25 @@ export class ExpenseComponent {
     if(this.modalTitle == 'Add New Expense') {
       this.expense = new Expense();
       this.assignFields();
-      //addExpenseDetails, this.resetFields()
+      this.expenseService.addExpenseDetails(this.expense).subscribe(
+        data => {
+          this.apiStatus = data;
+          //this.resetFields();
+        }, error => {
+          this.apiStatus = error.error;
+        }
+      )
     } else {
       this.assignFields();
-      //updateExpenseDetails, this.resetFields()
+      this.expense.expenseId = this.expId; console.log(this.expense);
+      this.expenseService.updateExpenseDetails(this.expense).subscribe(
+        data => {
+          this.apiStatus = data;
+          //this.resetFields();
+        }, error => {
+          this.apiStatus = error.error;
+        }
+      )
     }
   }
 
@@ -182,15 +201,32 @@ export class ExpenseComponent {
         });
   }
 
-  clickReference(item: any) {
-    this.resetFields();
+  clickReference(item: Expense) {
     //if(item.expenseId == this.selectedExpenseId) this.showDetails = !this.showDetails; else this.showDetails = true;    
     //if(!this.showDetails) this.selectedExpenseId = 0; else this.selectedExpenseId = item.expenseId;
     this.modalTitle = 'Update Expense';
     this.saveButton = 'Save Changes';
+    this.expId = item.expenseId;
     this.refNumber = item.expenseReferenceNumber;
     this.refDate = item.expenseReferenceDate;
-    //TODO
+    this.vendorName = item.expenseVendorName;
+    this.catCode = item.expenseCategoryCode;
+    this.subcatCode = item.expenseSubcategoryCode;
+    this.expDescription = item.expenseDescription;
+    this.expAmount = item.expenseAmount;
+    this.pymtStatusCode = item.expensePaymentStatusCode;
+    this.pymtDate = item.expensePaymentDate;
+    this.pymtMethodCode = item.expensePaymentMethodCode;
+    this.reconcileDate = item.expenseReconcileDate;
+    this.generateExpenseTypeList();
+  }
+
+  selectExpenseCategory(idx: number) {
+    //for(let i = 0; i < this.expenseTypeList[idx].expenseSubcategories; i++)
+  }
+
+  generateExpenseTypeList() {
+    this.expenseService.generateExpenseTypeList().subscribe(data => this.expenseTypeList = data);
   }
 
   reset() {
@@ -203,7 +239,7 @@ export class ExpenseComponent {
     this.expId = 0;
     this.refNumber = '';
     this.refDate = '';
-    this.clientName = '';
+    this.vendorName = '';
     this.catCode = 0;
     this.subcatCode = 0;
     this.expDescription = '';
@@ -217,7 +253,15 @@ export class ExpenseComponent {
   assignFields() {
     this.expense.expenseReferenceNumber = this.refNumber;
     this.expense.expenseReferenceDate = this.refDate;
-    //TODO
+    this.expense.expenseVendorName = this.vendorName;
+    this.expense.expenseCategoryCode = this.catCode;
+    this.expense.expenseSubcategoryCode = this.subcatCode;
+    this.expense.expenseDescription = this.expDescription;
+    this.expense.expenseAmount = this.expAmount;
+    this.expense.expensePaymentStatusCode = this.pymtStatusCode;
+    this.expense.expensePaymentDate = this.pymtDate;
+    this.expense.expensePaymentMethodCode = this.pymtMethodCode;
+    this.expense.expenseReconcileDate = this.reconcileDate;
   }
 
 }

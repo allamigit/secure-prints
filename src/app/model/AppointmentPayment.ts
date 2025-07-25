@@ -9,7 +9,7 @@ export class AppointmentPayment {
     paymentDate: string;
     paymentComment: string;
     paymentReconcileDate: string;
-    paymentUpdate: boolean;
+    paymentUpdate?: boolean;
 
     constructor() {
         this.appointmentId = '';
@@ -20,7 +20,6 @@ export class AppointmentPayment {
         this.paymentDate = '';
         this.paymentComment = '';
         this.paymentReconcileDate = '';
-        this.paymentUpdate = true;
     }
 
 }

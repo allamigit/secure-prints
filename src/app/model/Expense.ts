@@ -2,7 +2,7 @@
 export class Expense {
 
     expenseId: number;
-    expensePayeeName: string;
+    expenseVendorName: string;
     expenseReferenceNumber: string;
     expenseReferenceDate: string;
     expenseCategoryCode: number;
@@ -18,7 +18,7 @@ export class Expense {
 
     constructor() {
         this.expenseId = 0;
-        this.expensePayeeName = '';
+        this.expenseVendorName = '';
         this.expenseReferenceNumber = '';
         this.expenseReferenceDate = '';
         this.expenseCategoryCode = 0;

@@ -2,7 +2,7 @@
 export class Invoice {
 
     invoiceNumber: string;
-    invoicePayeeName: string;
+    invoiceClientName: string;
     invoiceDate: string;
     invoiceDueDate: string;
     invoiceAmount: number;
@@ -15,7 +15,7 @@ export class Invoice {
 
     constructor() {
         this.invoiceNumber = '';
-        this.invoicePayeeName = '';
+        this.invoiceClientName = '';
         this.invoiceDate = '';
         this.invoiceDueDate = '';
         this.invoiceAmount = 0;
