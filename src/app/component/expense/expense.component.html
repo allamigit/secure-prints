@@ -151,17 +151,17 @@
                             </div>
                             <div class="select-div">
                                 <p></p>
-                                <select class="form-select col-md-3">
+                                <select class="form-select col-md-3" (change)="selectExpenseCategory($event)">
                                     <option selected disabled>Expense Category *</option>
-                                    <option *ngFor="let item of expenseTypeList; let i = index" value={{item.expenseCategory.categoryCode}} (change)="selectExpenseCategory(i)">
+                                    <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
                                         {{item.expenseCategory.categoryName}}
                                     </option>
                                 </select>
                                 <p></p>
-                                <select class="form-select col-md-3">
+                                <select class="form-select col-md-3" (change)="selectExpenseSubcategory($event)">
                                     <option selected disabled>Expense Subcategory *</option>
-                                    <option *ngFor="let item of expenseTypeList; let i = index" value={{item.expenseCategory.categoryCode}}>
-                                        {{item.expenseCategory.categoryName}}
+                                    <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
+                                        {{item.subcategoryName}}
                                     </option>
                                 </select>
                             </div>
@@ -174,20 +174,20 @@
                                 <label>Expense Amount<span class="required-field">*</span></label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <select class="form-select-sm">
+                                <select class="form-select-sm" (change)="selectPaymentStatus($event)">
                                     <option selected disabled>Payment Status *</option>
                                     <option value=201>Pending</option>
                                     <option value=202>Processed</option>
                                 </select>                            
                             </div>
                             <div class="form-floating col-md-2">
-                                <select class="form-select-sm">
+                                <select class="form-select-sm" (change)="selectPaymentMethod($event)">
                                     <option selected disabled>Payment Method</option>
-                                    <option value="Card">Credit/Debit Card</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Zelle">Zelle</option>
-                                    <option value="Check">Check</option>
-                                    <option value="DD">Direct Deposit</option>
+                                    <option value=301>Credit/Debit Card</option>
+                                    <option value=302>Cash</option>
+                                    <option value=303>Zelle</option>
+                                    <option value=304>Check</option>
+                                    <option value=305>Direct Deposit</option>
                                 </select>                            
                             </div>
                             <div class="form-floating col-md-2">

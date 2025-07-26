@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ExpenseService } from '@services/expense.service';
 import { Expense } from '@models/Expense';
+import { ExpenseSubcategory } from '@models/ExpenseSubcategory';
 import { ApiStatus } from '@models/ApiStatus';
 import { Subscription } from 'rxjs';
 import { AppUtilService } from '@services/app-util.service';
@@ -23,8 +24,9 @@ export class ExpenseComponent {
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
       expense!: Expense;
+      expenseType: any;
       expenseTypeList: ExpenseType[] = [];
-      expenseCategoryList: ExpenseType[] = [];
+      expenseSubcategoryList: ExpenseSubcategory[] = [];
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
@@ -221,8 +223,22 @@ export class ExpenseComponent {
     this.generateExpenseTypeList();
   }
 
-  selectExpenseCategory(idx: number) {
-    //for(let i = 0; i < this.expenseTypeList[idx].expenseSubcategories; i++)
+  selectExpenseCategory(event: Event) {
+    this.catCode = Number((event.target as HTMLSelectElement).value);
+    this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
+    this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
+  }
+
+  selectExpenseSubcategory(event: Event) {
+    this.subcatCode = Number((event.target as HTMLSelectElement).value);
+  }
+
+  selectPaymentStatus(event: Event) {
+    this.pymtStatusCode = Number((event.target as HTMLSelectElement).value);
+  }
+
+  selectPaymentMethod(event: Event) {
+    this.pymtMethodCode = Number((event.target as HTMLSelectElement).value);
   }
 
   generateExpenseTypeList() {
