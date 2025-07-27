@@ -10,6 +10,7 @@ import { ApiStatus } from '@models/ApiStatus';
 import { Subscription } from 'rxjs';
 import { AppUtilService } from '@services/app-util.service';
 import { ExpenseType } from '@models/ExpenseType';
+import { ExpenseTypeName } from '@models/ExpenseTypeName';
 
 @Component({
   selector: 'app-expense',
@@ -24,6 +25,7 @@ export class ExpenseComponent {
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
       expense!: Expense;
+      expnseTypName!: ExpenseTypeName;
       expenseType: any;
       expenseTypeList: ExpenseType[] = [];
       expenseSubcategoryList: ExpenseSubcategory[] = [];
@@ -36,7 +38,7 @@ export class ExpenseComponent {
       responseMessage: string = '';
       modalTitle: string = '';
       saveButton: string = '';
-      showDetails: boolean = false;
+      subcategoryName: string = '';
       showNonReconciled: boolean = false;
       pollSub!: Subscription;
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
@@ -57,13 +59,17 @@ export class ExpenseComponent {
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
   ngOnInit(): void {
-    /*this.pollSub = interval(6000).subscribe(() => {
-      if(this.expenseList.length != 0) this.clickView();
-    });*/
+    this.expenseService.generateExpenseTypeList().subscribe(data => this.expenseTypeList = data);
   }
 
   ngOnDestroy(): void {
     if (this.pollSub) this.pollSub.unsubscribe();
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    if (!/[0-9.-]/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 
   onStartDateEntry() {
@@ -138,34 +144,28 @@ export class ExpenseComponent {
   clickAddExpense() {
     this.modalTitle = 'Add New Expense';
     this.saveButton = 'Add Expense';
-    this.generateExpenseTypeList();
     this.resetFields();
   }
 
   clickSaveExpense() {
+    this.assignFields();
     if(this.modalTitle == 'Add New Expense') {
       this.expense = new Expense();
-      this.assignFields();
       this.expenseService.addExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;
-          //this.resetFields();
         }, error => {
           this.apiStatus = error.error;
-        }
-      )
+        });
     } else {
-      this.assignFields();
-      this.expense.expenseId = this.expId; console.log(this.expense);
       this.expenseService.updateExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;
-          //this.resetFields();
         }, error => {
           this.apiStatus = error.error;
-        }
-      )
+        });
     }
+    this.resetFields();
   }
 
   selectReconcile(expenseId: number, idx: number) {
@@ -204,8 +204,7 @@ export class ExpenseComponent {
   }
 
   clickReference(item: Expense) {
-    //if(item.expenseId == this.selectedExpenseId) this.showDetails = !this.showDetails; else this.showDetails = true;    
-    //if(!this.showDetails) this.selectedExpenseId = 0; else this.selectedExpenseId = item.expenseId;
+    //this.resetFields();
     this.modalTitle = 'Update Expense';
     this.saveButton = 'Save Changes';
     this.expId = item.expenseId;
@@ -220,7 +219,23 @@ export class ExpenseComponent {
     this.pymtDate = item.expensePaymentDate;
     this.pymtMethodCode = item.expensePaymentMethodCode;
     this.reconcileDate = item.expenseReconcileDate;
-    this.generateExpenseTypeList();
+    this.expenseService.getExpenseTypeName(this.catCode, this.subcatCode).subscribe(
+      data => {
+        this.expnseTypName = data; 
+        this.subcategoryName = data.subcategoryName;
+      });
+    
+    (document.getElementById('exp-category') as HTMLInputElement).value = this.catCode.toString();
+    this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
+    this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
+    (document.getElementById('pymt-status') as HTMLInputElement).value = this.pymtStatusCode.toString();
+    (document.getElementById('pymt-method') as HTMLInputElement).value = this.pymtMethodCode.toString();
+  }
+
+  clickSubcategoryName() {
+    this.subcategoryName = '';
+    (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
+    //(document.getElementById('exp-subcategory') as HTMLSelectElement).click();
   }
 
   selectExpenseCategory(event: Event) {
@@ -241,12 +256,7 @@ export class ExpenseComponent {
     this.pymtMethodCode = Number((event.target as HTMLSelectElement).value);
   }
 
-  generateExpenseTypeList() {
-    this.expenseService.generateExpenseTypeList().subscribe(data => this.expenseTypeList = data);
-  }
-
   reset() {
-    this.showDetails = false;
     this.selectedExpenseId = 0;
     this.clickView();
   }
@@ -264,6 +274,12 @@ export class ExpenseComponent {
     this.pymtDate = '';
     this.pymtMethodCode = 0;
     this.reconcileDate = '';
+    this.subcategoryName = '';
+    /*(document.getElementById('exp-category') as HTMLInputElement).value = "0";
+    (document.getElementById('exp-subcategory') as HTMLInputElement).value = "0";
+    (document.getElementById('pymt-status') as HTMLInputElement).value = "0";
+    (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
+    this.expenseSubcategoryList = [];*/
   }
 
   assignFields() {

@@ -35,11 +35,11 @@
                     <label class="form-check-label">Show non-reconciled expenses</label>
                 </div>
             </div>
-            <div class="col-12">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickAddExpense()">
+            <!--<div class="col-12">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickAddExpense()">
                     Add Expense
                 </button>
-            </div>
+            </div>-->
         </form>
 
         <p></p>
@@ -86,11 +86,6 @@
                             </div>                        
                         </td>
                     </tr>
-                    <tr *ngIf="showDetails && item.expenseId == selectedExpenseId">
-                        <td colspan="9">
-                            <p style="color: blue">{{item.expenseDescription}}</p>
-                        </td>
-                    </tr>
                 </tbody>
                 <tfoot>
                     <tr *ngIf="expenseList.length > 0">
@@ -133,7 +128,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">{{modalTitle}}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
                         <form class="row g-3">
@@ -151,18 +146,22 @@
                             </div>
                             <div class="select-div">
                                 <p></p>
-                                <select class="form-select col-md-3" (change)="selectExpenseCategory($event)">
+                                <select class="form-select col-md-3" id="exp-category" (change)="selectExpenseCategory($event)">
                                     <option selected disabled>Expense Category *</option>
                                     <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
                                         {{item.expenseCategory.categoryName}}
                                     </option>
                                 </select>
                                 <p></p>
-                                <select class="form-select col-md-3" (change)="selectExpenseSubcategory($event)">
+                                <select class="form-select col-md-3" id="exp-subcategory" [hidden]="modalTitle == 'Update Expense' && subcategoryName != ''"
+                                    (change)="selectExpenseSubcategory($event)">
                                     <option selected disabled>Expense Subcategory *</option>
                                     <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
                                         {{item.subcategoryName}}
                                     </option>
+                                </select>
+                                <select class="form-select col-md-3" *ngIf="modalTitle == 'Update Expense' && subcategoryName != ''" (click)="clickSubcategoryName()">
+                                    <option>{{subcategoryName}}</option>
                                 </select>
                             </div>
                             <div class="form-floating col-md-4">
@@ -170,18 +169,18 @@
                                 <label>Expense Description</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="number" class="form-control form-control-sm col-md-5" autocomplete="off" name="expAmount" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
+                                <input type="number" class="form-control form-control-sm col-md-5" autocomplete="off" name="expAmount" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
                                 <label>Expense Amount<span class="required-field">*</span></label>
                             </div>
-                            <div class="form-floating col-md-2">
-                                <select class="form-select-sm" (change)="selectPaymentStatus($event)">
+                            <div class="form-floating col-md-3">
+                                <select class="form-select-sm col-md-11" id="pymt-status" (change)="selectPaymentStatus($event)">
                                     <option selected disabled>Payment Status *</option>
                                     <option value=201>Pending</option>
                                     <option value=202>Processed</option>
-                                </select>                            
+                                </select>
                             </div>
-                            <div class="form-floating col-md-2">
-                                <select class="form-select-sm" (change)="selectPaymentMethod($event)">
+                            <div class="form-floating col-md-3">
+                                <select class="form-select-sm col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
                                     <option selected disabled>Payment Method</option>
                                     <option value=301>Credit/Debit Card</option>
                                     <option value=302>Cash</option>
@@ -201,8 +200,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" (click)="clickSaveExpense()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="clickSaveExpense()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>
