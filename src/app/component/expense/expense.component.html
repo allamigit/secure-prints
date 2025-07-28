@@ -35,11 +35,11 @@
                     <label class="form-check-label">Show non-reconciled expenses</label>
                 </div>
             </div>
-            <!--<div class="col-12">
+            <div class="col-12">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickAddExpense()">
                     Add Expense
                 </button>
-            </div>-->
+            </div>
         </form>
 
         <p></p>
@@ -64,14 +64,14 @@
                 </thead>
                 <tbody *ngFor="let item of expenseList; let i = index">
                     <tr>
-                        <th style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickReference(item)"><small>{{item.expenseReferenceNumber}}</small><span *ngIf="item?.expenseDescription?.startsWith('Refund')"> 🪪</span></th>
-                        <td (click)="reset()"><small>{{item.expenseReferenceDate|date:'MM/dd/yyyy'}}</small></td>
-                        <td (click)="reset()"><small>{{item.expenseVendorName}}</small></td>
-                        <td (click)="reset()"><small>{{item.expenseAmount|currency}}</small></td>
-                        <td (click)="reset()"><small>{{getPaymentMethodName(item.expensePaymentMethodCode)}}</small></td>
-                        <td (click)="reset()"><small>{{getPaymentStatusName(item.expensePaymentStatusCode)}}</small></td>
-                        <td (click)="reset()"><small>{{item.expensePaymentDate|date:'MM/dd/yyyy'}}</small></td>
-                        <td (click)="reset()"><small>{{item.expenseReconcileDate|date:'MM/dd/yyyy'}}</small></td>
+                        <th style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickReferenceNumber(item)"><small>{{item.expenseReferenceNumber}}</small><span *ngIf="item?.expenseDescription?.startsWith('Refund')"> 🪪</span></th>
+                        <td><small>{{item.expenseReferenceDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.expenseVendorName}}</small></td>
+                        <td><small>{{item.expenseAmount|currency}}</small></td>
+                        <td><small>{{getPaymentMethodName(item.expensePaymentMethodCode)}}</small></td>
+                        <td><small>{{getPaymentStatusName(item.expensePaymentStatusCode)}}</small></td>
+                        <td><small>{{item.expensePaymentDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.expenseReconcileDate|date:'MM/dd/yyyy'}}</small></td>
                         <td>
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.expensePaymentStatusCode == 201 || !item.expenseUpdate"
@@ -133,61 +133,72 @@
                     <div class="modal-body">
                         <form class="row g-3">
                             <div class="form-floating col-md-2">
-                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" maxlength="30" placeholder="Reference Number" required>
-                                <label>Reference Number<span class="required-field">*</span></label>
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqRefNumber}}" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" 
+                                    [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (input)="onRefNumberEntry()" maxlength="30" placeholder="Reference Number" required>
+                                <label>Reference Number</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="refDate" [style]="refDate == null || refDate == '' ? 'color: white' : 'color: black'" [(ngModel)]="refDate" placeholder="Reference Date" required>
-                                <label>Reference Date<span class="required-field">*</span></label>
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqRefDate}}" autocomplete="off" name="refDate" [style]="refDate == null || refDate == '' ? 'color: white' : 'color: black'" 
+                                    [(ngModel)]="refDate" (input)="onRefDateEntry()" placeholder="Reference Date" required>
+                                <label>Reference Date</label>
                             </div>
                             <div class="form-floating col-md-3">
-                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="vendorName" [(ngModel)]="vendorName" placeholder="Vendor Name" required>
-                                <label>Vendor Name<span class="required-field">*</span></label>
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqVendorName}}" autocomplete="off" name="vendorName" [(ngModel)]="vendorName" 
+                                    (input)="onVendorNameEntry()" maxlength="80" placeholder="Vendor Name" required>
+                                <label>Vendor Name</label>
                             </div>
-                            <div class="select-div">
-                                <p></p>
-                                <select class="form-select col-md-3" id="exp-category" (change)="selectExpenseCategory($event)">
-                                    <option selected disabled>Expense Category *</option>
+                            <!--<label>ℹ️</label>-->
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqCategory}}" id="exp-category" (change)="selectExpenseCategory($event)">
+                                    <option value=0 selected></option>
                                     <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
                                         {{item.expenseCategory.categoryName}}
                                     </option>
                                 </select>
-                                <p></p>
-                                <select class="form-select col-md-3" id="exp-subcategory" [hidden]="modalTitle == 'Update Expense' && subcategoryName != ''"
+                                <label>Expense Category</label>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory" [hidden]="modalTitle == 'Update Expense' && subcategoryName != ''"
                                     (change)="selectExpenseSubcategory($event)">
-                                    <option selected disabled>Expense Subcategory *</option>
+                                    <option value=0 selected></option>
                                     <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
                                         {{item.subcategoryName}}
                                     </option>
                                 </select>
-                                <select class="form-select col-md-3" *ngIf="modalTitle == 'Update Expense' && subcategoryName != ''" (click)="clickSubcategoryName()">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="modalTitle == 'Update Expense' && subcategoryName != ''" (click)="clickSubcategoryName()">
                                     <option>{{subcategoryName}}</option>
                                 </select>
+                                <label>Expense Subcategory</label>
                             </div>
                             <div class="form-floating col-md-4">
-                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="expDescription" [(ngModel)]="expDescription" placeholder="Expense Description">
+                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="expDescription" [(ngModel)]="expDescription" 
+                                    [disabled]="refNumber.startsWith('ApptID-')" maxlength="100" placeholder="Expense Description">
                                 <label>Expense Description</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="number" class="form-control form-control-sm col-md-5" autocomplete="off" name="expAmount" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
-                                <label>Expense Amount<span class="required-field">*</span></label>
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqExpAmount}}" autocomplete="off" name="expAmount" 
+                                    (input)="onExpAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
+                                <label>Expense Amount</label>
                             </div>
                             <div class="form-floating col-md-3">
-                                <select class="form-select-sm col-md-11" id="pymt-status" (change)="selectPaymentStatus($event)">
-                                    <option selected disabled>Payment Status *</option>
+                                <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
+                                    <option value=0 selected></option>
                                     <option value=201>Pending</option>
                                     <option value=202>Processed</option>
+                                    <option value=204 [hidden]="pymtStatusCode != 204">Refunded</option>
                                 </select>
+                                <label>Payment Status</label>
                             </div>
                             <div class="form-floating col-md-3">
-                                <select class="form-select-sm col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
-                                    <option selected disabled>Payment Method</option>
+                                <select class="form-select col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
+                                    <option value=0 selected></option>
                                     <option value=301>Credit/Debit Card</option>
                                     <option value=302>Cash</option>
                                     <option value=303>Zelle</option>
                                     <option value=304>Check</option>
                                     <option value=305>Direct Deposit</option>
-                                </select>                            
+                                </select>   
+                                <label>Payment Method</label>                         
                             </div>
                             <div class="form-floating col-md-2">
                                 <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="pymtDate" [style]="pymtDate == null || pymtDate == ''? 'color: white' : 'color: black'" [(ngModel)]="pymtDate" placeholder="Payment Date">
@@ -201,7 +212,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="clickSaveExpense()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields()" (click)="clickSaveExpense()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 
 export class Expense {
 
-    expenseId: number;
+    expenseId: any;
     expenseVendorName: string;
     expenseReferenceNumber: string;
     expenseReferenceDate: string;
@@ -14,10 +14,10 @@ export class Expense {
     expensePaymentMethodCode: number;
     expenseDocumentFileName: string;
     expenseReconcileDate: string;
-    expenseUpdate?: boolean;
+    expenseUpdate: boolean;
 
     constructor() {
-        this.expenseId = 0;
+        this.expenseId = null;
         this.expenseVendorName = '';
         this.expenseReferenceNumber = '';
         this.expenseReferenceDate = '';
@@ -30,6 +30,7 @@ export class Expense {
         this.expensePaymentMethodCode = 0;
         this.expenseDocumentFileName = '';
         this.expenseReconcileDate = '';
+        this.expenseUpdate = true;
     }
 
 }

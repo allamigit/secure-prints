@@ -21,7 +21,6 @@ import { ExpenseTypeName } from '@models/ExpenseTypeName';
 
 export class ExpenseComponent {
 
-      selectedExpenseId: number = 0;
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
       expense!: Expense;
@@ -41,9 +40,16 @@ export class ExpenseComponent {
       subcategoryName: string = '';
       showNonReconciled: boolean = false;
       pollSub!: Subscription;
+      reqRefNumber:string = 'is-invalid';
+      reqRefDate:string = 'is-invalid';
+      reqVendorName:string = 'is-invalid';
+      reqCategory:string = 'is-invalid';
+      reqSubcategory:string = 'is-invalid';
+      reqExpAmount:string = 'is-invalid';
+      reqPymtStatus:string = 'is-invalid';
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
   
-      expId: number = 0;
+      expId: number | null = null;
       refNumber: string = '';
       refDate: string = '';
       vendorName: string = '';
@@ -82,6 +88,23 @@ export class ExpenseComponent {
 
   onSelectedDateEntry(idx: number) {
     this.selectedDate[idx] = (document.getElementsByName('selected-date')[idx] as HTMLInputElement).value;
+  }
+
+  onRefNumberEntry() {
+    if(this.refNumber == '') this.reqRefNumber = 'is-invalid'; else this.reqRefNumber = '';
+  }
+
+  onRefDateEntry() {
+    if(this.refDate == '') this.reqRefDate = 'is-invalid'; else this.reqRefDate = '';
+    if(this.pymtStatusCode == 202) this.pymtDate = this.refDate;
+  }
+
+  onVendorNameEntry() {
+    if(this.vendorName == '') this.reqVendorName = 'is-invalid'; else this.reqVendorName = '';
+  }
+
+  onExpAmountEntry() {
+    if(this.expAmount == 0) this.reqExpAmount = 'is-invalid'; else this.reqExpAmount = '';
   }
 
   hideAlert() {
@@ -150,25 +173,34 @@ export class ExpenseComponent {
   clickSaveExpense() {
     this.assignFields();
     if(this.modalTitle == 'Add New Expense') {
-      this.expense = new Expense();
       this.expenseService.addExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;
+          this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         }, error => {
           this.apiStatus = error.error;
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         });
     } else {
       this.expenseService.updateExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;
+          this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         }, error => {
           this.apiStatus = error.error;
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         });
     }
     this.resetFields();
   }
 
-  selectReconcile(expenseId: number, idx: number) {
+  selectReconcile(expenseId: any, idx: number) {
     this.expenseService.reconcileExpense(expenseId, this.selectedDate[idx])
       .subscribe(
         data => {
@@ -182,7 +214,7 @@ export class ExpenseComponent {
         
   }
 
-  selectRefund(expenseId: number, idx: number) {
+  selectRefund(expenseId: any, idx: number) {
     this.expenseService.refundExpense(expenseId, this.selectedDate[idx])
       .subscribe(
         data => {
@@ -203,8 +235,7 @@ export class ExpenseComponent {
         });
   }
 
-  clickReference(item: Expense) {
-    //this.resetFields();
+  clickReferenceNumber(item: Expense) {
     this.modalTitle = 'Update Expense';
     this.saveButton = 'Save Changes';
     this.expId = item.expenseId;
@@ -235,34 +266,32 @@ export class ExpenseComponent {
   clickSubcategoryName() {
     this.subcategoryName = '';
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
-    //(document.getElementById('exp-subcategory') as HTMLSelectElement).click();
   }
 
   selectExpenseCategory(event: Event) {
     this.catCode = Number((event.target as HTMLSelectElement).value);
+    if(this.catCode == 0) this.reqCategory = 'is-invalid'; else this.reqCategory = '';
     this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
     this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
   }
 
   selectExpenseSubcategory(event: Event) {
     this.subcatCode = Number((event.target as HTMLSelectElement).value);
+    if(this.subcatCode == 0) this.reqSubcategory = 'is-invalid'; else this.reqSubcategory = '';
   }
 
   selectPaymentStatus(event: Event) {
     this.pymtStatusCode = Number((event.target as HTMLSelectElement).value);
+    if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
+    if(this.pymtStatusCode == 202) this.pymtDate = this.refDate;
   }
 
   selectPaymentMethod(event: Event) {
     this.pymtMethodCode = Number((event.target as HTMLSelectElement).value);
   }
 
-  reset() {
-    this.selectedExpenseId = 0;
-    this.clickView();
-  }
-
   resetFields() {
-    this.expId = 0;
+    this.expId = null;
     this.refNumber = '';
     this.refDate = '';
     this.vendorName = '';
@@ -275,14 +304,26 @@ export class ExpenseComponent {
     this.pymtMethodCode = 0;
     this.reconcileDate = '';
     this.subcategoryName = '';
-    /*(document.getElementById('exp-category') as HTMLInputElement).value = "0";
+    this.expenseSubcategoryList = [];
+
+    this.reqRefNumber = 'is-invalid';
+    this.reqRefDate = 'is-invalid';
+    this.reqVendorName = 'is-invalid';
+    this.reqCategory = 'is-invalid';
+    this.reqSubcategory = 'is-invalid';
+    this.reqExpAmount = 'is-invalid';
+    this.reqPymtStatus = 'is-invalid';
+    (document.getElementById('exp-category') as HTMLInputElement).value = "0";
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = "0";
     (document.getElementById('pymt-status') as HTMLInputElement).value = "0";
     (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
-    this.expenseSubcategoryList = [];*/
   }
 
   assignFields() {
+    if(!this.expense) {
+      this.expense = new Expense();
+    }
+    if(this.modalTitle == 'Update Expense') this.expense.expenseId = this.expId; else this.expense.expenseId = null;
     this.expense.expenseReferenceNumber = this.refNumber;
     this.expense.expenseReferenceDate = this.refDate;
     this.expense.expenseVendorName = this.vendorName;
@@ -294,6 +335,19 @@ export class ExpenseComponent {
     this.expense.expensePaymentDate = this.pymtDate;
     this.expense.expensePaymentMethodCode = this.pymtMethodCode;
     this.expense.expenseReconcileDate = this.reconcileDate;
+  }
+
+  validaeRequiedFields(): boolean {
+    if(this.refNumber == '') this.reqRefNumber = 'is-invalid'; else this.reqRefNumber = '';
+    if(this.refDate == '') this.reqRefDate = 'is-invalid'; else this.reqRefDate = '';
+    if(this.vendorName == '') this.reqVendorName = 'is-invalid'; else this.reqVendorName = '';
+    if(this.catCode == 0) this.reqCategory = 'is-invalid'; else this.reqCategory = '';
+    if(this.subcatCode == 0) this.reqSubcategory = 'is-invalid'; else this.reqSubcategory = '';
+    if(this.expAmount == 0) this.reqExpAmount = 'is-invalid'; else this.reqExpAmount = '';
+    if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
+
+    return this.refNumber != '' && this.refDate != '' && this.vendorName != '' && this.catCode != 0 && 
+           this.subcatCode != 0 && this.expAmount != 0 && this.pymtStatusCode != 0;
   }
 
 }
