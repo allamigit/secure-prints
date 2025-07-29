@@ -5,11 +5,11 @@ import { ExpenseSubcategory } from "@models/ExpenseSubcategory";
 export class ExpenseType {
 
     expenseCategory: ExpenseCategory;
-    expenseSubcategories: ExpenseSubcategory;
+    expenseSubcategories: ExpenseSubcategory[];
 
     constructor() {
         this.expenseCategory = new ExpenseCategory();
-        this.expenseSubcategories = new ExpenseSubcategory();
+        this.expenseSubcategories = [];
     }
 
 }

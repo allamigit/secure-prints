@@ -147,7 +147,6 @@
                                     (input)="onVendorNameEntry()" maxlength="80" placeholder="Vendor Name" required>
                                 <label>Vendor Name</label>
                             </div>
-                            <!--<label>ℹ️</label>-->
                             <div class="form-floating col-md-4">
                                 <select class="form-select col-md-3 {{reqCategory}}" id="exp-category" (change)="selectExpenseCategory($event)">
                                     <option value=0 selected></option>
@@ -157,15 +156,18 @@
                                 </select>
                                 <label>Expense Category</label>
                             </div>
+                            <div class="form-floating col-md-1">
+                                <button type="button" class="btn btn-outline-light" (click)="openExpenseTypeModal()">ℹ️</button>
+                            </div>
                             <div class="form-floating col-md-4">
-                                <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory" [hidden]="modalTitle == 'Update Expense' && subcategoryName != ''"
+                                <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory" [hidden]="subcategoryName != ''"
                                     (change)="selectExpenseSubcategory($event)">
                                     <option value=0 selected></option>
                                     <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
                                         {{item.subcategoryName}}
                                     </option>
                                 </select>
-                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="modalTitle == 'Update Expense' && subcategoryName != ''" (click)="clickSubcategoryName()">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="subcategoryName != ''" (mouseover)="clickSubcategoryName()">
                                     <option>{{subcategoryName}}</option>
                                 </select>
                                 <label>Expense Subcategory</label>
@@ -213,6 +215,40 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields()" (click)="clickSaveExpense()">{{saveButton}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPENSE TYPE MODAL -->
+        <div class="modal fade" tabindex="-1" id="expense-type-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Expense Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="openExpenseModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-6">
+                            <input type="search" name="keyword" class="form-control form-control-sm" autocomplete="off" maxlength="50" placeholder="Search Keyword...">
+                        </div>
+                        <div class="form-div">
+                            <ul>
+                                <li *ngFor="let item of expenseTypeList2" style="color: darkblue; font-weight: bold">
+                                    {{item.expenseCategory.categoryName}}
+                                    <ul>
+                                        <li *ngFor="let sub of item.expenseSubcategories" style="cursor: pointer; color: black; font-weight: lighter" 
+                                            (click)="clickSubcategory(sub.subcategoryName)">
+                                            <b>{{sub.subcategoryName}}:</b> {{sub.subcategoryDescription}}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="openExpenseModal()">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="clickSelectExpenseType()">Select</button>
                     </div>
                 </div>
             </div>

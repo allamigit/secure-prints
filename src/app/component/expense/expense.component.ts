@@ -12,6 +12,8 @@ import { AppUtilService } from '@services/app-util.service';
 import { ExpenseType } from '@models/ExpenseType';
 import { ExpenseTypeName } from '@models/ExpenseTypeName';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-expense',
   standalone: true,
@@ -28,6 +30,8 @@ export class ExpenseComponent {
       expenseType: any;
       expenseTypeList: ExpenseType[] = [];
       expenseSubcategoryList: ExpenseSubcategory[] = [];
+      expenseTypeList2: ExpenseType[] = [];
+      expenseSubcategoryList2: ExpenseSubcategory[] = [];
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
@@ -39,6 +43,8 @@ export class ExpenseComponent {
       saveButton: string = '';
       subcategoryName: string = '';
       showNonReconciled: boolean = false;
+      expenseModal: any;
+      expenseTypeModal: any;
       pollSub!: Subscription;
       reqRefNumber:string = 'is-invalid';
       reqRefDate:string = 'is-invalid';
@@ -65,7 +71,16 @@ export class ExpenseComponent {
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
   ngOnInit(): void {
-    this.expenseService.generateExpenseTypeList().subscribe(data => this.expenseTypeList = data);
+    this.expenseService.generateExpenseTypeList().subscribe(
+      data => {
+        this.expenseTypeList = data;
+        this.expenseTypeList2 = this.expenseTypeList;
+      });
+  }
+
+  ngAfterViewInit() {
+    this.expenseModal = new bootstrap.Modal(document.getElementById('expense-modal'));
+    this.expenseTypeModal = new bootstrap.Modal(document.getElementById('expense-type-modal'));
   }
 
   ngOnDestroy(): void {
@@ -117,6 +132,33 @@ export class ExpenseComponent {
 
   getPaymentStatusName(code: number) {
     return this.appUtilService.getPaymentStatusName(code);
+  }
+
+  openExpenseModal() {
+    this.expenseModal.show();
+    this.expenseTypeModal.hide();
+  }
+
+  openExpenseTypeModal() {
+    this.expenseModal.hide();
+    this.expenseTypeModal.show();    
+  }
+
+  clickSubcategory(subcategoryName: string) {
+    this.subcategoryName = subcategoryName;
+    this.expenseService.getExpenseTypeCode(subcategoryName).subscribe(
+      data => {
+        this.catCode = data.categoryCode;
+        this.subcatCode = data.subcategoryCode;
+      });
+  }
+
+  clickSelectExpenseType() {
+    this.expenseType = this.expenseTypeList2.find(item => item.expenseCategory.categoryCode == this.catCode);
+    this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
+    (document.getElementById('exp-category') as HTMLInputElement).value = this.catCode.toString();
+    (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
+    this.openExpenseModal();
   }
 
   clickFilterSwitch() {
