@@ -229,15 +229,23 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="openExpenseModal()"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="col-md-6">
-                            <input type="search" name="keyword" class="form-control form-control-sm" autocomplete="off" maxlength="50" placeholder="Search Keyword...">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <input type="search" name="keyword" class="form-control" style="background-color: rgb(243, 243, 216)" 
+                                    [(ngModel)]="keyword" (input)="onKeywordEntry()" (keydown.enter)="clickSearchKeyword()" autocomplete="off" maxlength="50" placeholder="Search Keyword...">                                
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-outline" (click)="clickSearchKeyword()">🔎</button>
+                            </div>
                         </div>
-                        <div class="form-div">
+                        <p></p>
+                        <div style="max-height: 400px; overflow-y: auto">
                             <ul>
                                 <li *ngFor="let item of expenseTypeList2" style="color: darkblue; font-weight: bold">
                                     {{item.expenseCategory.categoryName}}
                                     <ul>
-                                        <li *ngFor="let sub of item.expenseSubcategories" style="cursor: pointer; color: black; font-weight: lighter" 
+                                        <li *ngFor="let sub of item.expenseSubcategories; let i = index" style="cursor: pointer; color: black; font-weight: lighter" 
+                                            [ngStyle]="{'background-color': item.expenseSubcategories[i].subcategoryName == subcategoryName ? 'lightblue' : 'white'}"
                                             (click)="clickSubcategory(sub.subcategoryName)">
                                             <b>{{sub.subcategoryName}}:</b> {{sub.subcategoryDescription}}
                                         </li>

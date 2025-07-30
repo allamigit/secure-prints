@@ -31,7 +31,6 @@ export class ExpenseComponent {
       expenseTypeList: ExpenseType[] = [];
       expenseSubcategoryList: ExpenseSubcategory[] = [];
       expenseTypeList2: ExpenseType[] = [];
-      expenseSubcategoryList2: ExpenseSubcategory[] = [];
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
@@ -45,6 +44,7 @@ export class ExpenseComponent {
       showNonReconciled: boolean = false;
       expenseModal: any;
       expenseTypeModal: any;
+      keyword: string = '';
       pollSub!: Subscription;
       reqRefNumber:string = 'is-invalid';
       reqRefDate:string = 'is-invalid';
@@ -67,6 +67,7 @@ export class ExpenseComponent {
       pymtDate: string = '';
       pymtMethodCode: number = 0;
       reconcileDate: string = '';
+color: { [klass: string]: any; }|null|undefined;
 
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
@@ -122,6 +123,10 @@ export class ExpenseComponent {
     if(this.expAmount == 0) this.reqExpAmount = 'is-invalid'; else this.reqExpAmount = '';
   }
 
+  onKeywordEntry() {
+    if(this.keyword == '') this.expenseTypeList2 = this.expenseTypeList;
+  }
+
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
@@ -140,6 +145,9 @@ export class ExpenseComponent {
   }
 
   openExpenseTypeModal() {
+    this.keyword = '';
+    this.subcategoryName = '';
+    this.expenseTypeList2 = this.expenseTypeList;
     this.expenseModal.hide();
     this.expenseTypeModal.show();    
   }
@@ -159,6 +167,10 @@ export class ExpenseComponent {
     (document.getElementById('exp-category') as HTMLInputElement).value = this.catCode.toString();
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
     this.openExpenseModal();
+  }
+
+  clickSearchKeyword() {
+    this.expenseService.searchExpenseTypeList(this.keyword).subscribe(data => this.expenseTypeList2 = data);
   }
 
   clickFilterSwitch() {
