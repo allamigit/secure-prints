@@ -28,6 +28,8 @@ export class PaymentComponent {
     paymentMethodName: string = '';
     alertType: string = '';
     responseMessage: string = '';
+    serviceAmount: number[] = [];
+    paymentComment: string[] = [];
     showDetails: boolean = false;
     showNonReconciled: boolean = false;
     pollSub!: Subscription;
@@ -48,6 +50,12 @@ export class PaymentComponent {
 
   onStartDateEntry() {
     this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    if (!/[0-9.]/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 
   onEndDateEntry() {
@@ -93,6 +101,8 @@ export class PaymentComponent {
         this.paymentList = data;
         this.paymentList = this.paymentList.filter(item => item.paymentStatusCode != 203);
         for(let i = 0; i < this.paymentList.length; i++) {
+          this.serviceAmount[i] = this.paymentList[i].serviceAmount;
+          this.paymentComment[i] = this.paymentList[i].paymentComment
           switch(this.paymentList[i].paymentStatusCode) {
             case 201: this.sPending += this.paymentList[i].serviceAmount; 
                       this.bPending += this.paymentList[i].bciAmount; 
@@ -157,7 +167,9 @@ export class PaymentComponent {
   }
 
   clickAppointmentId(item: any) {
-    if(item.appointmentId == this.selectedAppointmentId) this.showDetails = !this.showDetails; else this.showDetails = true;    
+    if(item.appointmentId == this.selectedAppointmentId) {
+      this.showDetails = !this.showDetails; 
+     } else this.showDetails = true;  
     if(!this.showDetails) this.selectedAppointmentId = ''; else this.selectedAppointmentId = item.appointmentId;
   }
 
@@ -165,6 +177,28 @@ export class PaymentComponent {
     this.showDetails = false;
     this.selectedAppointmentId = '';
     this.clickView();
+  }
+
+  clickSave(appointmentId: string, idx: number) {
+    this.appointmentPaymentService.updateServiceAmountAndComment(appointmentId, this.serviceAmount[idx], this.paymentComment[idx]).subscribe(
+      data => {
+        this.apiStatus = data;
+        this.alertType = 'msg-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        this.clickView();
+        (document.getElementById('alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideAlert, 4000);
+      }, 
+      error => {
+        this.apiStatus = error.error;
+        this.alertType = 'msg-fail';
+        this.responseMessage = this.apiStatus.responseMessage;
+        this.clickView();
+        (document.getElementById('alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideAlert, 4000);
+      });
+      
+      this.reset();
   }
 
 }

@@ -23,6 +23,7 @@ export class AppointmentComponent {
   apiResponse!: ApiResponse; 
   startDate: string = '';
   endDate: string = '';
+  fullName: string = '';
   paymentMethodName: string = '';
   alertType: string = '';
   responseMessage: string = '';
@@ -51,6 +52,10 @@ export class AppointmentComponent {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
   }
 
+  onNameEntry() {
+    if(this.fullName == '') this.appointmentList = this.originalAppointmentList; else this.appointmentList = this.applyNameFilter();
+  }
+
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
@@ -63,6 +68,14 @@ export class AppointmentComponent {
     return this.appointmentList.filter(item =>
       item.appointmentResponse.appointmentStatus == 'Scheduled' ||
       item.appointmentResponse.appointmentStatus == 'Rescheduled'
+      );
+  }
+
+  applyNameFilter(): any[] {
+    this.fullName = this.fullName.toLowerCase();
+    return this.appointmentList.filter(item =>
+      item.appointmentInformation.customerFirstName.toLowerCase().includes(this.fullName) ||
+      item.appointmentInformation.customerLastName.toLowerCase().includes(this.fullName)
       );
   }
 

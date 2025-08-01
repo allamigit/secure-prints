@@ -35,6 +35,10 @@
                     <label class="form-check-label">Show active appointments</label>
                 </div>
             </div>
+            <div class="col-12">
+                <input type="search" name="fullName" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="fullName"
+                    (input)="onNameEntry()" autocomplete="off" maxlength="30" placeholder="If name contains...">                                
+            </div>
         </form>
 
         <p></p>

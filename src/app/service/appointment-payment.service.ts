@@ -31,6 +31,11 @@ export class AppointmentPaymentService {
     return this.http.put<ApiStatus>(this.requestUrl, appointmentPayment, { withCredentials: true });
   }
   
+  updateServiceAmountAndComment(appointmentId: string, serviceAmount: number, paymentComment: string): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'payment/update-amount-comment?appointmentId=' + appointmentId + '&serviceAmount=' + serviceAmount + '&paymentComment=' + paymentComment;
+    return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
+  }
+
   reconcilePayment(appointmentId: string, paymentReconcileDate: string): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'payment/reconcile-payment?appointmentId=' + appointmentId + '&paymentReconcileDate=' + paymentReconcileDate;
     return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });

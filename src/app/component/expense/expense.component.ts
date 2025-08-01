@@ -147,7 +147,6 @@ color: { [klass: string]: any; }|null|undefined;
   openExpenseTypeModal() {
     this.keyword = '';
     this.subcategoryName = '';
-    this.expenseTypeList2 = this.expenseTypeList;
     this.expenseModal.hide();
     this.expenseTypeModal.show();    
   }
@@ -162,7 +161,7 @@ color: { [klass: string]: any; }|null|undefined;
   }
 
   clickSelectExpenseType() {
-    this.expenseType = this.expenseTypeList2.find(item => item.expenseCategory.categoryCode == this.catCode);
+    this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
     this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
     (document.getElementById('exp-category') as HTMLInputElement).value = this.catCode.toString();
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
