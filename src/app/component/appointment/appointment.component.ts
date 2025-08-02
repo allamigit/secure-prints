@@ -53,7 +53,10 @@ export class AppointmentComponent {
   }
 
   onNameEntry() {
-    if(this.fullName == '') this.appointmentList = this.originalAppointmentList; else this.appointmentList = this.applyNameFilter();
+    if(this.fullName == '' || this.appointmentList.length == 0) {
+      this.appointmentList = this.originalAppointmentList;
+      this.clickFilterSwitch();
+    }
   }
 
   hideAlert() {
@@ -72,11 +75,11 @@ export class AppointmentComponent {
   }
 
   applyNameFilter(): any[] {
-    this.fullName = this.fullName.toLowerCase();
-    return this.appointmentList.filter(item =>
-      item.appointmentInformation.customerFirstName.toLowerCase().includes(this.fullName) ||
-      item.appointmentInformation.customerLastName.toLowerCase().includes(this.fullName)
+    this.appointmentList = this.appointmentList.filter(item =>
+      item.appointmentInformation.customerFirstName.toLowerCase().includes(this.fullName.toLowerCase()) ||
+      item.appointmentInformation.customerLastName.toLowerCase().includes(this.fullName.toLowerCase())
       );
+    return this.appointmentList;
   }
 
   clickFilterSwitch() {
