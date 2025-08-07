@@ -149,7 +149,7 @@
                             </div>
                             <div class="form-floating col-md-4">
                                 <select class="form-select col-md-3 {{reqCategory}}" id="exp-category" (change)="selectExpenseCategory($event)">
-                                    <option value=0 selected></option>
+                                    <option value="0" selected></option>
                                     <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
                                         {{item.expenseCategory.categoryName}}
                                     </option>
@@ -162,12 +162,12 @@
                             <div class="form-floating col-md-4">
                                 <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory" [hidden]="subcategoryName != ''"
                                     (change)="selectExpenseSubcategory($event)">
-                                    <option value=0 selected></option>
+                                    <option value="0" selected></option>
                                     <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
                                         {{item.subcategoryName}}
                                     </option>
                                 </select>
-                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="subcategoryName != ''" (mouseover)="clickSubcategoryName()">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="subcategoryName != ''" (mouseover)="showSubcategoryName()">
                                     <option>{{subcategoryName}}</option>
                                 </select>
                                 <label>Expense Subcategory</label>
@@ -184,21 +184,21 @@
                             </div>
                             <div class="form-floating col-md-3">
                                 <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
-                                    <option value=0 selected></option>
-                                    <option value=201>Pending</option>
-                                    <option value=202>Processed</option>
-                                    <option value=204 [hidden]="pymtStatusCode != 204">Refunded</option>
+                                    <option value="0" selected></option>
+                                    <option value="201">Pending</option>
+                                    <option value="202">Processed</option>
+                                    <option value="204" [hidden]="pymtStatusCode != 204">Refunded</option>
                                 </select>
                                 <label>Payment Status</label>
                             </div>
                             <div class="form-floating col-md-3">
                                 <select class="form-select col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
-                                    <option value=0 selected></option>
-                                    <option value=301>Credit/Debit Card</option>
-                                    <option value=302>Cash</option>
-                                    <option value=303>Zelle</option>
-                                    <option value=304>Check</option>
-                                    <option value=305>Direct Deposit</option>
+                                    <option value="0" selected></option>
+                                    <option value="301">Credit/Debit Card</option>
+                                    <option value="302">Cash</option>
+                                    <option value="303">Zelle</option>
+                                    <option value="304">Check</option>
+                                    <option value="305">Direct Deposit</option>
                                 </select>   
                                 <label>Payment Method</label>                         
                             </div>
@@ -246,7 +246,7 @@
                                     <ul>
                                         <li *ngFor="let sub of item.expenseSubcategories; let i = index" style="cursor: pointer; color: black; font-weight: lighter" 
                                             [ngStyle]="{'background-color': item.expenseSubcategories[i].subcategoryName == subcategoryName ? 'lightblue' : 'white'}"
-                                            (click)="clickSubcategory(sub.subcategoryName)">
+                                            (click)="clickSubcategoryName(sub.subcategoryName)">
                                             <b>{{sub.subcategoryName}}:</b> {{sub.subcategoryDescription}}
                                         </li>
                                     </ul>
@@ -256,7 +256,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="openExpenseModal()">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="clickSelectExpenseType()">Select</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="subcategoryName == ''" (click)="clickSelectExpenseType()">Select</button>
                     </div>
                 </div>
             </div>

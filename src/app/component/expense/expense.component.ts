@@ -151,9 +151,9 @@ color: { [klass: string]: any; }|null|undefined;
     this.expenseTypeModal.show();    
   }
 
-  clickSubcategory(subcategoryName: string) {
-    this.subcategoryName = subcategoryName;
-    this.expenseService.getExpenseTypeCode(subcategoryName).subscribe(
+  clickSubcategoryName(selectedSubcategoryName: string) {
+    this.subcategoryName = selectedSubcategoryName;
+    this.expenseService.getExpenseTypeCode(selectedSubcategoryName).subscribe(
       data => {
         this.catCode = data.categoryCode;
         this.subcatCode = data.subcategoryCode;
@@ -316,16 +316,23 @@ color: { [klass: string]: any; }|null|undefined;
     (document.getElementById('pymt-method') as HTMLInputElement).value = this.pymtMethodCode.toString();
   }
 
-  clickSubcategoryName() {
+  showSubcategoryName() {
     this.subcategoryName = '';
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = this.subcatCode.toString();
   }
 
   selectExpenseCategory(event: Event) {
     this.catCode = Number((event.target as HTMLSelectElement).value);
-    if(this.catCode == 0) this.reqCategory = 'is-invalid'; else this.reqCategory = '';
-    this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
-    this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
+    if(this.catCode == 0) {
+      this.reqCategory = 'is-invalid'; 
+      this.reqSubcategory = 'is-invalid';
+      this.subcatCode = 0;
+      this.expenseSubcategoryList = [];
+    } else {
+      this.reqCategory = '';
+      this.expenseType = this.expenseTypeList.find(item => item.expenseCategory.categoryCode == this.catCode);
+      this.expenseSubcategoryList = this.expenseType.expenseSubcategories;
+    }
   }
 
   selectExpenseSubcategory(event: Event) {

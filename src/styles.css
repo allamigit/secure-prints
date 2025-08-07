@@ -31,13 +31,13 @@
 }
 
 .msg-fail {
-    border: 2px solid red;
+    border: 2px solid rgb(251, 97, 97);
     border-radius: 50px;
     /*box-shadow: 8px 8px 5px lightgrey;*/
     padding: 12px 12px;
     text-align: center;
     height: 60px;
-    color: red;
+    color: rgb(251, 97, 97);
     font-size: 1.2rem;
     font-weight: 550;
 }

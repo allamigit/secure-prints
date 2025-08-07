@@ -93,7 +93,7 @@
                                     <label>Payment Comment</label>
                                 </div>
                                 <div class="form-floating col-md-2">
-                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund')" (click)="clickSave(item.appointmentId, i)">Save</button>
+                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund')" (click)="clickSave(selectedAppointmentId, i)">Save</button>
                                 </div>
                             </form>
                         </td>
