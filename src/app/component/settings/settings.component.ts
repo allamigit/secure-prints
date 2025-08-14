@@ -42,6 +42,8 @@ export class SettingsComponent {
   companyAddress2: string = '';
   companyPhone: string = '';
   companyEmail: string = '';
+  startDate: string = '';
+  endDate: string = '';
   formattedPhone: string = '';
   loadingButton: boolean = false;
   showChangePassword: boolean = false;
@@ -74,6 +76,14 @@ export class SettingsComponent {
     this.loadingButton = false;
   }
 
+  onStartDateEntry() {
+    this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
+  }
+
+  onEndDateEntry() {
+    this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
+  }
+
   hideAddUserAlert() {
     (document.getElementById('add-user-alert') as HTMLInputElement).hidden = true;
     window.location.reload();
@@ -99,6 +109,8 @@ export class SettingsComponent {
       this.companyAddress2 = data.companyAddress2;
       this.companyPhone = data.companyPhone;
       this.companyEmail = data.companyEmail;
+      this.startDate = data.companyHolidayStartDate;
+      this.endDate = data.companyHolidayEndDate;
     });
   }
 
@@ -110,6 +122,8 @@ export class SettingsComponent {
     this.company.companyAddress2 = this.companyAddress2;
     this.company.companyPhone = this.companyPhone;
     this.company.companyEmail = this.companyEmail;
+    this.company.companyHolidayStartDate = this.startDate;
+    this.company.companyHolidayEndDate = this.endDate;
     this.companyService.updateCompanyDetails(this.company).subscribe(
       data => {
         this.apiStatus = data;

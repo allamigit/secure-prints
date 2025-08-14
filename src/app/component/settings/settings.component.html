@@ -81,7 +81,7 @@
                             </div>
                             <p></p>
                             <div class="input-group">
-                                <div class="input-group-text">Password <span class="required-field">*</span></div>
+                                <div class="input-group-text">Password <span class="required-field">*</span>&nbsp;</div>
                                 <input type="password" class="form-control form-control-sm" [(ngModel)]="newUserPassword" autocomplete="off" maxlength="20">
                             </div>
                             <p></p>
@@ -113,6 +113,18 @@
                         <input type="tel" class="form-control form-control-sm" [(ngModel)]="companyPhone" inputmode="numeric" 
                             (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" placeholder="Phone" minlength="14" maxlength="14">
                         <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" placeholder="Email" maxlength="60">
+                        <p></p>
+                        <label><b>Company Holiday</b></label>
+                        <div class="input-group">
+                            <div class="input-group-text" style="font-size: small">Start Date</div>
+                            <input type="date" id="start-date" class="form-control form-control-sm" [value]="startDate" [(ngModel)]="startDate"  
+                                [style]="startDate == null || startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-text" style="font-size: small">End Date&nbsp;</div>
+                            <input type="date" id="end-date" class="form-control form-control-sm" [value]="endDate" [(ngModel)]="endDate"  
+                                [style]="endDate == null || endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                        </div>
                         <p></p>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>

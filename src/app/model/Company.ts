@@ -7,6 +7,8 @@ export class Company {
     companyAddress2: string;
     companyPhone: string;
     companyEmail: string;
+    companyHolidayStartDate: string;
+    companyHolidayEndDate: string;
 
     constructor() {
         this.companyId = 0;
@@ -15,6 +17,8 @@ export class Company {
         this.companyAddress2 = '';
         this.companyPhone = '';
         this.companyEmail = '';
+        this.companyHolidayStartDate = '';
+        this.companyHolidayEndDate = '';
     }
 
 }

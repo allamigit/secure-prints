@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
       if(event instanceof NavigationEnd) {
         window.scrollTo(0, 0); // Scroll to top
       }
-    });    
+    }); 
   }
   
   ngOnInit(): void {
