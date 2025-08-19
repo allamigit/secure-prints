@@ -106,6 +106,7 @@
             <div class="card">
                 <div class="card-header">
                     <h6>{{apiResponse.apiStatus.responseCode == 200 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
+                    <h6 style="color: rgb(96, 96, 255); font-weight:bold" *ngIf="apiResponse.apiStatus.responseCode == 200">🖂 Confirmation email was sent to you. If not received, please check Spam messages.</h6>
                 </div>
                 <div class="card-body">
                     <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>

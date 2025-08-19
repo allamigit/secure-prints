@@ -40,6 +40,10 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => this.isUserLoggedIn());
   }
 
+  openEmail() {
+    window.open('https://secure-prints.awsapps.com/mail', '_blank');
+  }
+
   isUserLoggedIn() {
     this.userService.isUserLoggedIn().subscribe(data => this.isLoggedIn = data);
     this.currentUser = localStorage.getItem('name')?.toString();

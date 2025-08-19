@@ -47,6 +47,7 @@ export class ScheduleComponent {
   searchText: string = '';
   fname: boolean = false;
   lname: boolean = false;
+  cmail: boolean = false;
   cphone: boolean = false;
   step1: boolean = true;
   step2: boolean = false;
@@ -88,6 +89,10 @@ export class ScheduleComponent {
 
   onLastNameEntry() {
     if(this.lastName.length == 0) this.lname = true; else this.lname = false;
+  }
+
+  onEmailEntry() {
+    if(this.email.length == 0 || !this.email.includes('@') || !this.email.includes('.')) this.cmail = true; else this.cmail = false;
   }
 
   onBciDescriptionEntry() {
@@ -209,7 +214,7 @@ export class ScheduleComponent {
   clickSchedule() {
     this.getPersonalInfo();
 
-    if(!this.fname && !this.lname && !this.cphone) {
+    if(!this.fname && !this.lname && !this.cmail && !this.cphone) {
       this.appointmentRequest = new AppointmentRequest();
       this.appointmentRequest.customerFirstName = this.firstName;
       this.appointmentRequest.customerLastName = this.lastName;
@@ -257,6 +262,7 @@ export class ScheduleComponent {
     this.searchText = '';
     this.fname = false;
     this.lname = false;
+    this.cmail = false;
     this.cphone = false;
     this.step1 = true;
     this.step2 = false;

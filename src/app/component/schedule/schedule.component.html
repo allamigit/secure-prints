@@ -151,10 +151,11 @@
                                 <small class="text-danger" *ngIf="lname">Last Name is required</small>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email Address</label>
+                                <label class="form-label">Email Address</label> <span class="required-field">*</span>
                                 <div class="col-sm-8">
-                                    <input id="email" type="email" name="email" class="form-control form-control-sm" [(ngModel)]="email" maxlength="60" placeholder="Optional">
+                                    <input id="email" type="email" name="email" class="form-control form-control-sm" (input)="onEmailEntry()" [(ngModel)]="email" maxlength="60">
                                 </div>
+                                <small class="text-danger" *ngIf="cmail">Email Address is required</small>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Phone Number</label>
@@ -181,6 +182,7 @@
             <div class="card">
                 <div class="card-header">
                     <h6>{{apiResponse.apiStatus.responseCode == 201 ? '✅' : '❌'}} {{apiResponse.apiStatus.responseMessage}}</h6>
+                    <h6 style="color: rgb(96, 96, 255); font-weight:bold" *ngIf="apiResponse.apiStatus.responseCode == 201">🖂 Confirmation email was sent to you. If not received, please check Spam messages.</h6>
                 </div>
                     <div class="card-body">
                         <button class="btn btn-secondary" style="background-color: #004A80">Appointment ID: <span>{{apiResponse.apiResponseEntity.appointmentId}}</span></button>
