@@ -67,7 +67,7 @@ export class ExpenseComponent {
       pymtDate: string = '';
       pymtMethodCode: number = 0;
       reconcileDate: string = '';
-color: { [klass: string]: any; }|null|undefined;
+      //color: { [klass: string]: any; }|null|undefined;
 
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
@@ -148,7 +148,8 @@ color: { [klass: string]: any; }|null|undefined;
     this.keyword = '';
     this.subcategoryName = '';
     this.expenseModal.hide();
-    this.expenseTypeModal.show();    
+    this.expenseTypeModal.show();
+    this.clickSearchKeyword();    
   }
 
   clickSubcategoryName(selectedSubcategoryName: string) {

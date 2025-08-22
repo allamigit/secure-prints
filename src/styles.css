@@ -17,6 +17,12 @@
   color: #004A80;
 }
 
+.footer-links {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  gap: 20px; /* space between links */
+}
+
 .msg-success {
     border: 2px solid #86b943;
     border-radius: 50px;

@@ -1,10 +1,13 @@
 
 export class Invoice {
 
+    invoiceId: number;
     invoiceNumber: string;
-    invoiceClientName: string;
+    invoicePayeeName: string;
     invoiceDate: string;
     invoiceDueDate: string;
+    expenseCategoryCode: number;
+    expenseSubcategoryCode: number;
     invoiceAmount: number;
     invoicePaymentStatusCode: number;
     invoicePaymentDate: string;
@@ -14,10 +17,13 @@ export class Invoice {
     invoiceReconcileDate: string;
 
     constructor() {
+        this.invoiceId = 0;
         this.invoiceNumber = '';
-        this.invoiceClientName = '';
+        this.invoicePayeeName = '';
         this.invoiceDate = '';
         this.invoiceDueDate = '';
+        this.expenseCategoryCode = 0;
+        this.expenseSubcategoryCode = 0;
         this.invoiceAmount = 0;
         this.invoicePaymentStatusCode = 0;
         this.invoicePaymentDate = '';

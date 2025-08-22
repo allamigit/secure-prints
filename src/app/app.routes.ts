@@ -18,6 +18,9 @@ import { ExpenseComponent } from './component/expense/expense.component';
 import { ExpenseGuard } from './guard/expense.guard';
 import { SettingsComponent } from './component/settings/settings.component';
 import { SettingsGuard } from './guard/settings.guard';
+import { ContactUsComponent } from './component/contact-us/contact-us.component';
+import { ReportComponent } from './component/report/report.component';
+import { ReportGuard } from './guard/report.guard';
 
 export const routes: Routes = [
     { 
@@ -40,6 +43,10 @@ export const routes: Routes = [
     { 
         path: 'bci-fbi-background', 
         component: BciFbiBackgroundComponent 
+    },
+    { 
+        path: 'contact-us', 
+        component: ContactUsComponent 
     },
     { 
         path: 'privacy-policy', 
@@ -80,6 +87,11 @@ export const routes: Routes = [
         path: 'expense', 
         component: ExpenseComponent,
         canActivate: [ExpenseGuard]
+    },
+    { 
+        path: 'report', 
+        component: ReportComponent,
+        canActivate: [ReportGuard]
     },
     { 
         path: 'settings', 

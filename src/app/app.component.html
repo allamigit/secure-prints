@@ -20,6 +20,9 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/bci-fbi-background">BCI & FBI Background Checks</a>
           </li>
+          <!--<li class="nav-item">
+            <a class="nav-link" aria-current="page" routerLink="/contact-us">Contact</a>
+          </li>-->
         </ul>
       </div>
 
@@ -38,9 +41,10 @@
                   <li><a class="dropdown-item" routerLink="/payment">Payment</a></li>
                   <li><a class="dropdown-item" routerLink="/invoice">Invoice</a></li>
                   <li><a class="dropdown-item" routerLink="/expense">Expense</a></li>
+                  <li><a class="dropdown-item" routerLink="/report">Report</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
-                  <li><a class="dropdown-item" style="cursor: pointer" (click)="openEmail()">Email</a></li>
+                  <li><a class="dropdown-item" style="cursor: pointer" (click)="openEmail()">Amazon WorkMail</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" routerLink="/home" (click)="clickLogout()">Logout</a></li>
                 </ul>
@@ -63,7 +67,10 @@
       </div>
 
       <div class="col-md-4 mb-2 mb-md-0">
-        <a class="mb-1" style="color: rgb(227, 229, 233)" routerLink="/privacy-policy">Privacy Policy</a>
+        <div class="footer-links">
+          <a class="mb-1" style="color: rgb(227, 229, 233)" routerLink="/privacy-policy">Privacy Policy</a>
+          <!--<a class="mb-1" style="color: rgb(227, 229, 233)" routerLink="/contact-us">Contact Us</a>-->
+        </div>
         <p></p>
         <p class="mb-1">© {{currentYear}} {{company.companyName}}. All Rights Reserved.</p>
       </div>

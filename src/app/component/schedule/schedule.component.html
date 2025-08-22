@@ -153,7 +153,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label> <span class="required-field">*</span>
                                 <div class="col-sm-8">
-                                    <input id="email" type="email" name="email" class="form-control form-control-sm" (input)="onEmailEntry()" [(ngModel)]="email" maxlength="60">
+                                    <input id="email" type="email" name="email" style="text-transform: lowercase" class="form-control form-control-sm" (input)="onEmailEntry()" [(ngModel)]="email" maxlength="60">
                                 </div>
                                 <small class="text-danger" *ngIf="cmail">Email Address is required</small>
                             </div>
