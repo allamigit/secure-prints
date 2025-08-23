@@ -41,4 +41,9 @@ export class InvoiceService {
     return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
   }
   
+  getInvoiceDueDate(invoiceDate: string): Observable<string> {
+    this.requestUrl = environment.apiUrl + 'invoice/due-date?invoiceDate=' + invoiceDate;
+    return this.http.get<string>(this.requestUrl);
+  }
+
 }

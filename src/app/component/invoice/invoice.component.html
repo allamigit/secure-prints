@@ -2,6 +2,275 @@
 <div class="page-wrapper">
     <p class="title-top-md-2-1">Invoice Information</p>
     <div class="container text-md-start">
+        
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Start Date</div>
+                    <input type="date" id="start-date" class="form-control" [value]="startDate" 
+                        [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">End Date</div>
+                    <input type="date" id="end-date" class="form-control" [value]="endDate" 
+                            [style]="endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
+                    View Report
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{invoiceList.length}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch" [hidden]="invoiceList.length == 0">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
+                    <label class="form-check-label">Show non-reconciled expenses</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" (click)="clickAddInvoice()">
+                    Add Invoice
+                </button>
+            </div>
+        </form>
+
+        <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
+        <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
+            <table class="table table-hover">
+                <thead style="position: sticky; top: 0; background: white; z-index: 10">
+                    <th></th>
+                    <th>Invoice #</th>
+                    <th>Invoice Date</th>
+                    <th>Payee Name</th>
+                    <th>Invoice Amount</th>
+                    <th>Due Date</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>Payment Date</th>
+                    <th>Reconcile Date</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody *ngFor="let item of invoiceList; let i = index">
+                    <tr>
+                        <td>{{getDueDateFlag(item.invoiceDate, item.invoiceDueDate, item.invoicePaymentStatusCode)}}</td>
+                        <th style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#invoice-modal" (click)="clickInvoiceNumber(item)"><small>{{item.invoiceNumber}}</small></th>
+                        <td><small>{{item.invoiceDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.invoicePayeeName}}</small></td>
+                        <td><small>{{item.invoiceAmount|currency}}</small></td>
+                        <td><small>{{item.invoiceDueDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{getPaymentMethodName(item.invoicePaymentMethodCode)}}</small></td>
+                        <td><small>{{getPaymentStatusName(item.invoicePaymentStatusCode)}}</small></td>
+                        <td><small>{{item.invoicePaymentDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.invoiceReconcileDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td>
+                            <div class="input-group mb-0" [hidden]="item.invoiceReconcileDate != null">
+                                <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
+                                    [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                                    aria-expanded="false" [hidden]="selectedDate[i] == null">Choose...</button>
+                                <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
+                                    <li>
+                                        <a class="dropdown-item" [hidden]="item.invoiceReconcileDate != null"
+                                        (click)="selectReconcile(item.invoiceId, i)">Reconcile</a>
+                                    </li>
+                                </ul>
+                            </div>                        
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr *ngIf="invoiceList.length > 0">
+                        <td></td>
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p>Report Summary:</p>
+                            <p>&emsp;Processed</p>
+                            <p>&emsp;Pending</p>
+                            <p>T O T A L</p>  
+                            <p>Reconciled</p>
+                        </td>
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p style="color: white">-</p>
+                            <p>{{eProcessed|currency}}</p>
+                            <p>{{ePending|currency}}</p>
+                            <p>{{eTotal|currency}}</p>
+                            <p>{{eReconciled|currency}}</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr *ngIf="invoiceList.length == 0">
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="11">
+                            There is no report data to view
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+
+        <!-- INVOICE MODAL -->
+        <div class="modal fade" tabindex="-1" id="invoice-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{modalTitle}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3">
+                            <div class="form-floating col-md-2">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvNumber}}" autocomplete="off" name="invNumber" [(ngModel)]="invNumber" 
+                                    style="text-transform: uppercase" (input)="onInvoiceNumberEntry()" maxlength="30" placeholder="Invoice Number" required>
+                                <label>Invoice Number</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqPayeeName}}" autocomplete="off" name="payeeName" [(ngModel)]="payeeName" 
+                                    (input)="onPayeeNameEntry()" maxlength="80" placeholder="Payee Name" required>
+                                <label>Payee Name</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqInvDate}}" autocomplete="off" name="invDate" [style]="invDate == null || invDate == '' ? 'color: white' : 'color: black'" 
+                                    [(ngModel)]="invDate" (input)="onInvoiceDateEntry()" placeholder="Invoice Date" required>
+                                <label>Invoice Date</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqInvDueDate}}" autocomplete="off" name="invDueDate" [style]="invDueDate == null || invDueDate == '' ? 'color: white' : 'color: black'" 
+                                    [(ngModel)]="invDueDate" (input)="onInvoiceDueDateEntry()" placeholder="Invoice Due Date" required>
+                                <label>Invoice Due Date</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvAmount}}" autocomplete="off" name="invAmount" 
+                                    (input)="onInvoiceAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="invAmount" placeholder="Invoice Amount" required>
+                                <label>Invoice Amount</label>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqCategory}}" id="exp-category" (change)="selectExpenseCategory($event)">
+                                    <option value="0" selected></option>
+                                    <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
+                                        {{item.expenseCategory.categoryName}}
+                                    </option>
+                                </select>
+                                <label>Expense Category</label>
+                            </div>
+                            <!--<div class="form-floating col-md-1">
+                                <button type="button" class="btn btn-outline-light" (click)="openExpenseTypeModal()">ℹ️</button>
+                            </div>-->
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory"  [hidden]="subcategoryName != ''" 
+                                    (change)="selectExpenseSubcategory($event)">
+                                    <option value="0" selected></option>
+                                    <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
+                                        {{item.subcategoryName}}
+                                    </option>
+                                </select>
+                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="subcategoryName != ''" (mouseover)="showSubcategoryName()">
+                                    <option>{{subcategoryName}}</option>
+                                </select>
+                                <label>Expense Subcategory</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
+                                    <option value="0" selected></option>
+                                    <option value="201">Pending</option>
+                                    <option value="202">Processed</option>
+                                </select>
+                                <label>Payment Status</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <select class="form-select col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
+                                    <option value="0" selected></option>
+                                    <option value="301">Credit/Debit Card</option>
+                                    <option value="302">Cash</option>
+                                    <option value="303">Zelle</option>
+                                    <option value="304">Check</option>
+                                    <option value="305">Direct Deposit</option>
+                                </select>   
+                                <label>Payment Method</label>                         
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="pymtDate" [style]="pymtDate == null || pymtDate == ''? 'color: white' : 'color: black'" [(ngModel)]="pymtDate" placeholder="Payment Date">
+                                <label>Payment Date</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
+                                <label>Reconcile Date</label>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="invComments" [(ngModel)]="invComments" 
+                                    maxlength="100" placeholder="Invoice Comments">
+                                <label>Invoice Comments</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields()" (click)="clickSaveInvoice()">{{saveButton}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPENSE TYPE MODAL -->
+        <div class="modal fade" tabindex="-1" id="expense-type-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Expense Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="openInvoiceModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <input type="search" name="keyword" class="form-control" style="background-color: rgb(243, 243, 216)" 
+                                    [(ngModel)]="keyword" (input)="onKeywordEntry()" (keydown.enter)="clickSearchKeyword()" autocomplete="off" maxlength="50" placeholder="Search Keyword...">                                
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-outline" (click)="clickSearchKeyword()">🔎</button>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div style="max-height: 400px; overflow-y: auto">
+                            <ul>
+                                <li *ngFor="let item of expenseTypeList2" style="color: darkblue; font-weight: bold">
+                                    {{item.expenseCategory.categoryName}}
+                                    <ul>
+                                        <li *ngFor="let sub of item.expenseSubcategories; let i = index" style="cursor: pointer; color: black; font-weight: lighter" 
+                                            [ngStyle]="{'background-color': item.expenseSubcategories[i].subcategoryName == subcategoryName ? 'lightblue' : 'white'}"
+                                            (click)="clickSubcategoryName(sub.subcategoryName)">
+                                            <b>{{sub.subcategoryName}}:</b> {{sub.subcategoryDescription}}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="openInvoiceModal()">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="subcategoryName == ''" (click)="clickSelectExpenseType()">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

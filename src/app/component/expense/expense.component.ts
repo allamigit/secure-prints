@@ -112,7 +112,6 @@ export class ExpenseComponent {
 
   onRefDateEntry() {
     if(this.refDate == '') this.reqRefDate = 'is-invalid'; else this.reqRefDate = '';
-    if(this.pymtStatusCode == 202) this.pymtDate = this.refDate;
   }
 
   onVendorNameEntry() {
@@ -264,6 +263,8 @@ export class ExpenseComponent {
         error => {
           this.apiStatus = error.error;
           this.clickView();
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          setTimeout(this.hideAlert, 4000);
         });
         
   }
@@ -344,6 +345,12 @@ export class ExpenseComponent {
   selectPaymentStatus(event: Event) {
     this.pymtStatusCode = Number((event.target as HTMLSelectElement).value);
     if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
+    if(this.pymtStatusCode == 201) {
+      this.pymtDate = '';
+      this.pymtMethodCode = 0;
+      this.reconcileDate = '';
+      (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
+    }
     if(this.pymtStatusCode == 202) this.pymtDate = this.refDate;
   }
 

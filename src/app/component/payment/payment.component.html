@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
             </div>
             <div class="col-12">
-                <div class="form-check form-switch" [hidden]="startDate == '' || endDate == ''">
+                <div class="form-check form-switch" [hidden]="paymentList.length == 0">
                     <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
                     <label class="form-check-label">Show non-reconciled payments</label>
                 </div>
