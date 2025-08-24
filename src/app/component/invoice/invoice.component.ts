@@ -1,7 +1,7 @@
 
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { InvoiceService } from '@services/invoice.service';
 import { ApiStatus } from '@models/ApiStatus';
@@ -345,7 +345,13 @@ export class InvoiceComponent {
       this.reconcileDate = '';
       (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
     }
-    if(this.pymtStatusCode == 202) this.pymtDate = this.invDate;
+    if(this.pymtStatusCode == 202) {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let dd = String(today.getDate()).padStart(2, '0');
+      this.pymtDate = `${yyyy}-${mm}-${dd}`;
+    }
   }
 
   selectPaymentMethod(event: Event) {

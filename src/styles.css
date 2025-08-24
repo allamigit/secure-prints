@@ -26,20 +26,20 @@
 .msg-success {
     border: 2px solid #86b943;
     border-radius: 50px;
-    /*box-shadow: 8px 8px 5px lightgrey;*/
+    box-shadow: 8px 8px 5px lightgrey;
     padding: 12px 12px;
     text-align: center;
     height: 60px;
     color: #86b943;
     font-size: 1.2rem;
     font-weight: 550;
-    /*text-shadow: 1px 1px 1px rgb(126, 124, 124);*/
+    text-shadow: 1px 1px 1px rgb(126, 124, 124);
 }
 
 .msg-fail {
     border: 2px solid rgb(251, 97, 97);
     border-radius: 50px;
-    /*box-shadow: 8px 8px 5px lightgrey;*/
+    box-shadow: 8px 8px 5px lightgrey;
     padding: 12px 12px;
     text-align: center;
     height: 60px;

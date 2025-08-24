@@ -28,6 +28,11 @@ export class AppointmentInformationService {
       this.requestUrl = environment.apiUrl + 'times-list?selectedDate=' + selectedDate;
       return this.http.get<AppointmentTime[]>(this.requestUrl, { withCredentials: true });
     }
+
+    formatName(enteredName: string): Observable<string> {
+      this.requestUrl = environment.apiUrl + 'format-name?enteredName=' + enteredName;
+      return this.http.get<string>(this.requestUrl);
+    }
   
     findAppointmentById(appointmentId: string): Observable<boolean> {
       this.requestUrl = environment.apiUrl + 'find-appointment-id?appointmentId=' + appointmentId;

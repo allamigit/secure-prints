@@ -67,7 +67,6 @@ export class ExpenseComponent {
       pymtDate: string = '';
       pymtMethodCode: number = 0;
       reconcileDate: string = '';
-      //color: { [klass: string]: any; }|null|undefined;
 
   constructor(private router: Router, private expenseService: ExpenseService, private appUtilService: AppUtilService) { }
 
@@ -351,7 +350,13 @@ export class ExpenseComponent {
       this.reconcileDate = '';
       (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
     }
-    if(this.pymtStatusCode == 202) this.pymtDate = this.refDate;
+    if(this.pymtStatusCode == 202) {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let dd = String(today.getDate()).padStart(2, '0');
+      this.pymtDate = `${yyyy}-${mm}-${dd}`;
+    }
   }
 
   selectPaymentMethod(event: Event) {
