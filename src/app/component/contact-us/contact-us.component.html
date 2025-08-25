@@ -3,18 +3,19 @@
     <p class="title-top-md-2-1">Contact SecurePrints</p>
     <div class="container text-md-start">
 
-        <span><b>Business Hours:</b> Monday to Friday: 10:00 AM to 4:00 PM</span> <br>
-        <span><b>Email:</b> info&#64;secure-prints.com</span> <br>
-        <span><b>Phone:</b> (713) 815-8120</span> <br>
-        <span><b>Address:</b> 1105 Schrock Rd, STE 130C, Columbus, Ohio 43229</span> <br><br>
+        <span class="info-color-1">Business Hours: <span class="info-color-2">Monday to Friday: 10:00 AM to 4:00 PM</span></span> <br>
+        <span class="info-color-1">Email: <span class="info-color-2">{{company.companyEmail}}</span></span> <br>
+        <span class="info-color-1">Phone: <span class="info-color-2">{{company.companyPhone}}</span></span> <br>
+        <span class="info-color-1">Address: <span class="info-color-2">{{company.companyAddress1}}, {{company.companyAddress2}}</span></span> <br>
 
         <!-- ALERT MESSAGE -->
+        <br>
         <div id="alert" class={{alertType}} role="alert" hidden>
             {{responseMessage}}
         </div>
         <p></p>
 
-        <label>To submit a message to <b>SecurePrints</b> team, please fill in the below form:</label>
+        <label style="font-size: large">To submit a message to <b>SecurePrints</b> team, please fill in the below form:</label>
         <p></p>
         <form class="form-floating">
             <div class="form-floating mb-3 col-sm-4">

@@ -6,6 +6,8 @@ import { ContactUsService } from '@services/contact-us.service';
 import { AppointmentInformationService } from '@services/appointment-information.service';
 import { ContactEmail } from '@models/ContactEmail';
 import { ApiStatus } from '@models/ApiStatus';
+import { CompanyService } from '@services/company.service';
+import { Company } from '@models/Company';
 
 @Component({
   selector: 'app-contact-us',
@@ -25,15 +27,20 @@ export class ContactUsComponent {
   reqMessage: string = 'is-invalid';
   contactEmail!: ContactEmail;
   apiStatus!: ApiStatus
+  company!: Company;
   alertType: string = '';
   responseMessage: string = '';
 
-  constructor(private router: Router, private contactUsService: ContactUsService, private appointmentInformationService: AppointmentInformationService) {
+  constructor(private router: Router, private contactUsService: ContactUsService, private appointmentInformationService: AppointmentInformationService, private companyService: CompanyService) {
     this.router.events.subscribe((event) => {
       if(event instanceof NavigationEnd) {
         window.scrollTo(0, 0); // Scroll to top
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.companyService.getCompanyDetails(1).subscribe(data => this.company = data);
   }
 
   hideAlert() {
@@ -68,13 +75,13 @@ export class ContactUsComponent {
         this.alertType = 'msg-success';
         this.responseMessage = this.apiStatus.responseMessage; 
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        setTimeout(this.hideAlert, 5000);
       }, error => {
         this.apiStatus = error.error;
         this.alertType = 'msg-fail';
         this.responseMessage = this.apiStatus.responseMessage; 
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        setTimeout(this.hideAlert, 5000);
       });
   }
 
