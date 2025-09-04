@@ -50,16 +50,16 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td>BCI Fees (Ohio AG Invoices)</td>
+                    <td>Total BCI Amount</td>
                     <td>{{financialReport.revenueAll.bciFees|currency}}</td>
                     <td>
-                        Invoiced: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
-                        Not Invoiced: {{financialReport.revenueAll.totalNotInvoiced|currency}}
+                        Ohio AG Invoice: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
+                        {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{financialReport.revenueAll.totalNotInvoiced|currency}}
                     </td>
                     <td>{{financialReport.revenueProcessed.bciFees|currency}}</td>
                     <td>
-                        Invoiced: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
-                        Not Invoiced: {{financialReport.revenueProcessed.totalNotInvoiced|currency}}
+                        Ohio AG Invoice: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
+                        {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{financialReport.revenueProcessed.totalNotInvoiced|currency}}
                     </td>
                 </tr>
                 <tr>
