@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
             </div>
             <div class="col-12">
-                <div class="form-check form-switch" [hidden]="appointmentList.length == 0">
+                <div class="form-check form-switch">
                     <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()" checked>
                     <label class="form-check-label">Show active appointments</label>
                 </div>
