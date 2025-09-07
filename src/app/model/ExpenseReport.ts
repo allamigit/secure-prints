@@ -1,6 +1,6 @@
 
-import { ExpenseCategory } from "./ExpenseCategory";
-import { ExpenseSubcategoryTotal } from "./ExpenseSubcategoryTotal";
+import { ExpenseCategory } from "@models/ExpenseCategory";
+import { ExpenseSubcategoryTotal } from "@models/ExpenseSubcategoryTotal";
 
 export interface ExpenseReport {
 

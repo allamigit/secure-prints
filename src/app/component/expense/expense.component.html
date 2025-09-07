@@ -208,7 +208,7 @@
                                 <label>Payment Date</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
+                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [disabled]="refNumber.startsWith('ApptID-')" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
                                 <label>Reconcile Date</label>
                             </div>
                         </form>

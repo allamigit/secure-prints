@@ -5,6 +5,7 @@ import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 import { AppointmentPayment } from '@models/AppointmentPayment';
 import { ApiStatus } from '@models/ApiStatus';
+import { Payment } from '@models/Payment';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,9 @@ export class AppointmentPaymentService {
     return this.http.get<AppointmentPayment>(this.requestUrl, { withCredentials: true });
   }
 
-  getAllPayments(startDate: string, endDate: string, showNonReconciled: boolean): Observable<AppointmentPayment[]> {
+  getAllPayments(startDate: string, endDate: string, showNonReconciled: boolean): Observable<Payment> {
     this.requestUrl = environment.apiUrl + 'payment/all-payments?startDate=' + startDate + '&endDate=' + endDate + '&showNonReconciled=' + showNonReconciled;
-    return this.http.get<AppointmentPayment[]>(this.requestUrl, { withCredentials: true });
+    return this.http.get<Payment>(this.requestUrl, { withCredentials: true });
   }
 
   updatePaymentDetails(appointmentPayment: AppointmentPayment): Observable<ApiStatus> {

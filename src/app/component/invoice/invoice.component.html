@@ -50,6 +50,15 @@
         </div>
         <p></p>
 
+        <form class="row row-cols-lg-auto g-4 align-items-center" *ngIf="invoiceList.length > 0">
+            <div class="col-12">📄 Paid Invoice</div>
+            <div class="col-12">🟢 Payment not due</div>
+            <div class="col-12">🟡 Payment due within 4 to 6 days</div>
+            <div class="col-12">🟠 Payment due within 1 to 3 days</div>
+            <div class="col-12">🔴 Payment due/overdue</div>
+        </form>
+        <p></p>
+
         <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
             <table class="table table-hover">
                 <thead style="position: sticky; top: 0; background: white; z-index: 10">

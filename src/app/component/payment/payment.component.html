@@ -21,7 +21,7 @@
                 <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
                     View Report
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        {{paymentList.length}}
+                        {{paymentList ? paymentList.appointmentPayment.length : 0}}
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </button>
@@ -48,6 +48,8 @@
             <table class="table table-hover">
                 <thead style="position: sticky; top: 0; background: white; z-index: 10">
                     <th>Appointment ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Service Name</th>
                     <th>Service Amount</th>
                     <th>BCI Amount</th>
                     <th>Payment Method</th>
@@ -56,9 +58,11 @@
                     <th>Reconcile Date</th>
                     <th>Actions</th>
                 </thead>
-                <tbody *ngFor="let item of paymentList; let i = index">
+                <tbody *ngFor="let item of paymentList.appointmentPayment; let i = index">
                     <tr>
                         <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentId}}</small><span *ngIf="item?.paymentComment?.startsWith('Refund')"> 🪪</span></th>
+                        <td (click)="reset()"><small>{{paymentList.appointmentInformation[i].customerFirstName}} {{paymentList.appointmentInformation[i].customerLastName}}</small></td>
+                        <td (click)="reset()"><small>{{getServiceName(paymentList.appointmentInformation[i].serviceCode)}}</small></td>
                         <td (click)="reset()"><small>{{item.serviceAmount|currency}}</small></td>
                         <td (click)="reset()"><small>{{item.bciAmount|currency}}</small></td>
                         <td (click)="reset()"><small>{{getPaymentMethodName(item.paymentMethodCode)}}</small></td>
@@ -80,7 +84,7 @@
                         </td>
                     </tr>
                     <tr *ngIf="showDetails && item.appointmentId == selectedAppointmentId">
-                        <td colspan="8">
+                        <td colspan="10">
                             <form class="row g-3">
                                 <div class="form-floating col-md-2">
                                     <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="service-amount{{i}}" 
@@ -100,7 +104,7 @@
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr *ngIf="paymentList.length > 0">
+                    <tr *ngIf="paymentList.appointmentPayment.length > 0">
                         <td class="text-left" style="color: rgb(126, 124, 124)">
                             <p>Report Summary:</p>
                             <p>&emsp;Processed</p>
@@ -131,8 +135,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr *ngIf="paymentList.length == 0">
-                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="8">
+                    <tr [hidden]="!paymentList || paymentList.appointmentPayment.length == 0 ? false : true">
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="10">
                             There is no report data to view
                         </td>
                     </tr>

@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { AppointmentPayment } from '@models/AppointmentPayment';
 import { AppointmentPaymentService } from '@services/appointment-payment.service';
 import { ApiStatus } from '@models/ApiStatus';
 import { Subscription } from 'rxjs';
 import { AppUtilService } from '@services/app-util.service';
+import { Payment } from '@models/Payment';
 
 @Component({
   selector: 'app-payment',
@@ -19,11 +19,12 @@ import { AppUtilService } from '@services/app-util.service';
 export class PaymentComponent {
 
     selectedAppointmentId: string = '';
-    originalPaymentList: AppointmentPayment[] = [];
-    paymentList: AppointmentPayment[] = [];
+    originalPaymentList!: Payment;
+    paymentList!: Payment;
     apiStatus!: ApiStatus; 
     startDate: string = '';
     endDate: string = '';
+    fullName: string = '';
     selectedDate: string[] = [];
     paymentMethodName: string = '';
     alertType: string = '';
@@ -52,12 +53,6 @@ export class PaymentComponent {
     this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
   }
 
-  allowOnlyNumbers(event: KeyboardEvent) {
-    if (!/[0-9.]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
   onEndDateEntry() {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
   }
@@ -66,8 +61,18 @@ export class PaymentComponent {
     this.selectedDate[idx] = (document.getElementsByName('selected-date')[idx] as HTMLInputElement).value;
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+    if (!/[0-9.]/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
+  }
+
+  getServiceName(code: string) {
+    return this.appUtilService.getServiceName(code);
   }
 
   getPaymentMethodName(code: number) {
@@ -99,23 +104,23 @@ export class PaymentComponent {
     this.appointmentPaymentService.getAllPayments(this.startDate, this.endDate, this.showNonReconciled)
       .subscribe(data => {
         this.paymentList = data;
-        this.paymentList = this.paymentList.filter(item => item.paymentStatusCode != 203);
-        for(let i = 0; i < this.paymentList.length; i++) {
-          this.serviceAmount[i] = this.paymentList[i].serviceAmount;
-          this.paymentComment[i] = this.paymentList[i].paymentComment
-          switch(this.paymentList[i].paymentStatusCode) {
-            case 201: this.sPending += this.paymentList[i].serviceAmount; 
-                      this.bPending += this.paymentList[i].bciAmount; 
+        this.paymentList.appointmentPayment = this.paymentList.appointmentPayment.filter(item => item.paymentStatusCode != 203);
+        for(let i = 0; i < this.paymentList.appointmentPayment.length; i++) {
+          this.serviceAmount[i] = this.paymentList.appointmentPayment[i].serviceAmount;
+          this.paymentComment[i] = this.paymentList.appointmentPayment[i].paymentComment
+          switch(this.paymentList.appointmentPayment[i].paymentStatusCode) {
+            case 201: this.sPending += this.paymentList.appointmentPayment[i].serviceAmount; 
+                      this.bPending += this.paymentList.appointmentPayment[i].bciAmount; 
                       break;
-            case 202: this.sProcessed += this.paymentList[i].serviceAmount; 
-                      this.bProcessed += this.paymentList[i].bciAmount; 
+            case 202: this.sProcessed += this.paymentList.appointmentPayment[i].serviceAmount; 
+                      this.bProcessed += this.paymentList.appointmentPayment[i].bciAmount; 
                       break;
-            case 204: this.sRefund += this.paymentList[i].serviceAmount; 
-                      this.bRefund += this.paymentList[i].bciAmount;
+            case 204: this.sRefund += this.paymentList.appointmentPayment[i].serviceAmount; 
+                      this.bRefund += this.paymentList.appointmentPayment[i].bciAmount;
           }
-          if(this.paymentList[i].paymentReconcileDate != null) {
-            this.sReconciled += this.paymentList[i].serviceAmount; 
-            this.bReconciled += this.paymentList[i].bciAmount;
+          if(this.paymentList.appointmentPayment[i].paymentReconcileDate != null) {
+            this.sReconciled += this.paymentList.appointmentPayment[i].serviceAmount; 
+            this.bReconciled += this.paymentList.appointmentPayment[i].bciAmount;
           }
           this.sTotal = this.sProcessed + this.sPending + this.sRefund;
           this.bTotal = this.bProcessed + this.bPending + this.bRefund;

@@ -7,10 +7,22 @@ import { Injectable } from '@angular/core';
 
 export class AppUtilService {
 
+  serviceName: string = '';
   paymentStatusName: string = '';
   paymentMethodName: string = '';
 
   constructor() { }
+
+  getServiceName(code: string): string {
+    switch(code) {
+      case 'BCI': this.serviceName = 'BCI Background Check';
+                break;
+      case 'FBI': this.serviceName = 'FBI Background Check';
+                break;
+      case 'BCI_FBI': this.serviceName = 'BCI and FBI Background Check';
+    }
+    return this.serviceName;
+  }
 
   getPaymentStatusName(code: number): string {
     switch(code) {

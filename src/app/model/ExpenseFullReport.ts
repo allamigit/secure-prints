@@ -1,4 +1,5 @@
-import { ExpenseReport } from "./ExpenseReport";
+
+import { ExpenseReport } from "@models/ExpenseReport";
 
 export interface ExpenseFullReport {
 
