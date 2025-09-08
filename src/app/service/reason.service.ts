@@ -26,9 +26,9 @@ export class ReasonService {
     return this.http.get<ApiStatus>(this.requestUrl, { withCredentials: true });
   }
 
-  importReasonDataFile(fileName: string): Observable<ApiStatus> {
-    this.requestUrl = environment.apiUrl + 'import-reason-data-file?fileName=' + fileName;
-    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
+  importReasonDataFile(fileContent: FormData): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'import-reason-data-file';
+    return this.http.post<ApiStatus>(this.requestUrl, fileContent, { withCredentials: true });
   }
 
 }

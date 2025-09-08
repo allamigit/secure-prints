@@ -144,16 +144,16 @@
                         <div id="alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
                             {{responseMessage}}
                         </div>
-                        <div class="d-grid gap-4 justify-content-md-left">
-                            <button type="button" class="btn btn-success" (click)="clickRefreshReasonList()">Refresh Reason List</button>
+                        <div class="d-grid gap-2 justify-content-md-left">
                             <div class="input-group mb-3">
-                                <input id="input-file" type="file" class="form-control" [(ngModel)]="fileName" (input)="onFileSelected($event)">
-                                <button type="button" class="btn btn-secondary" [disabled]="fileName == ''" [hidden]="loadingButton" (click)="clickImportReasonDataFile()">Import Reason Data File</button>
-                                <button class="btn btn-secondary" type="button" [hidden]="!loadingButton">
+                                <input id="input-file" type="file" class="form-control" [(ngModel)]="fileName" (change)="onFileSelected($event)">
+                                <button type="button" class="btn btn-success" [disabled]="fileName == ''" [hidden]="loadingButton" (click)="clickImportReasonDataFile()">Import Reason Data File</button>
+                                <button class="btn btn-success" type="button" [hidden]="!loadingButton">
                                     Loading...
                                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                                 </button> 
                             </div>
+                            <button type="button" class="btn btn-success" (click)="clickRefreshReasonList()">Refresh Reason List</button>
                         </div>
                     </div>
                 </div>

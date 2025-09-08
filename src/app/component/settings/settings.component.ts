@@ -26,6 +26,7 @@ export class SettingsComponent {
   userList: User[] = [];
   currentUser: string | null = localStorage.getItem('user');
   apiStatus!: ApiStatus;
+  fileContent!: FormData;
   alertType: string = '';
   responseMessage: string = '';
   fileName: string = '';
@@ -72,6 +73,8 @@ export class SettingsComponent {
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
+    this.fileContent = new FormData();
+    this.fileContent.append('file', file);
     if(file.type == 'text/plain') this.fileName = file.name; else this.fileName = '';
     this.loadingButton = false;
   }
@@ -224,13 +227,13 @@ export class SettingsComponent {
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 3500);
+        setTimeout(this.hideAlert, 4000);
       });
   }
 
   clickImportReasonDataFile() {
     this.loadingButton = true;
-    this.reasonService.importReasonDataFile(this.fileName).subscribe(
+    this.reasonService.importReasonDataFile(this.fileContent).subscribe(
       data => {
         this.apiStatus = data;
         this.alertType = 'alert alert-success';
@@ -238,7 +241,7 @@ export class SettingsComponent {
         this.loadingButton = false;
         this.fileName = '';
         (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 3500);
+        setTimeout(this.hideAlert, 4000);
       },
       error => {
         this.apiStatus = error.error;
