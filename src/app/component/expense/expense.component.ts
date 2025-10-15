@@ -46,13 +46,15 @@ export class ExpenseComponent {
       expenseTypeModal: any;
       keyword: string = '';
       pollSub!: Subscription;
-      reqRefNumber:string = 'is-invalid';
-      reqRefDate:string = 'is-invalid';
-      reqVendorName:string = 'is-invalid';
-      reqCategory:string = 'is-invalid';
-      reqSubcategory:string = 'is-invalid';
-      reqExpAmount:string = 'is-invalid';
-      reqPymtStatus:string = 'is-invalid';
+      reqRefNumber: string = 'is-invalid';
+      reqRefDate: string = 'is-invalid';
+      reqVendorName: string = 'is-invalid';
+      reqCategory: string = 'is-invalid';
+      reqSubcategory: string = 'is-invalid';
+      reqExpAmount: string = 'is-invalid';
+      reqPymtStatus: string = 'is-invalid';
+      reqPymtDate: string = '';
+      reqPymtMethod: string = '';
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
   
       expId: number | null = null;
@@ -349,6 +351,8 @@ export class ExpenseComponent {
       this.pymtMethodCode = 0;
       this.reconcileDate = '';
       (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
+      this.reqPymtDate = '';
+      this.reqPymtMethod = '';
     }
     if(this.pymtStatusCode == 202) {
       let today = new Date();
@@ -356,11 +360,18 @@ export class ExpenseComponent {
       let mm = String(today.getMonth() + 1).padStart(2, '0');
       let dd = String(today.getDate()).padStart(2, '0');
       this.pymtDate = `${yyyy}-${mm}-${dd}`;
+      this.reqPymtMethod = 'is-invalid';
     }
   }
 
   selectPaymentMethod(event: Event) {
     this.pymtMethodCode = Number((event.target as HTMLSelectElement).value);
+    if(this.pymtStatusCode == 202 && this.pymtMethodCode == 0) this.reqPymtMethod = 'is-invalid'; else this.reqPymtMethod = '';
+  }
+
+  checkPaymentDate(event: Event) {
+    let dt = (event.target as HTMLSelectElement).value;
+    if(this.pymtStatusCode == 202 && dt == '') this.reqPymtDate = 'is-invalid'; else this.reqPymtDate = '';
   }
 
   resetFields() {
@@ -386,6 +397,8 @@ export class ExpenseComponent {
     this.reqSubcategory = 'is-invalid';
     this.reqExpAmount = 'is-invalid';
     this.reqPymtStatus = 'is-invalid';
+    this.reqPymtDate = '';
+    this.reqPymtMethod = '';
     (document.getElementById('exp-category') as HTMLInputElement).value = "0";
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = "0";
     (document.getElementById('pymt-status') as HTMLInputElement).value = "0";
@@ -420,7 +433,7 @@ export class ExpenseComponent {
     if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
 
     return this.refNumber != '' && this.refDate != '' && this.vendorName != '' && this.catCode != 0 && 
-           this.subcatCode != 0 && this.expAmount != 0 && this.pymtStatusCode != 0;
+           this.subcatCode != 0 && this.expAmount != 0 && this.pymtStatusCode != 0 && this.reqPymtDate == '' && this.reqPymtMethod == '';
   }
 
 }

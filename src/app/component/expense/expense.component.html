@@ -193,7 +193,7 @@
                                 <label>Payment Status</label>
                             </div>
                             <div class="form-floating col-md-3">
-                                <select class="form-select col-md-11" id="pymt-method" (change)="selectPaymentMethod($event)">
+                                <select class="form-select col-md-11 {{reqPymtMethod}}" id="pymt-method" (change)="selectPaymentMethod($event)">
                                     <option value="0" selected></option>
                                     <option value="301">Credit/Debit Card</option>
                                     <option value="302">Cash</option>
@@ -204,11 +204,11 @@
                                 <label>Payment Method</label>                         
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="pymtDate" [style]="pymtDate == null || pymtDate == ''? 'color: white' : 'color: black'" [(ngModel)]="pymtDate" placeholder="Payment Date">
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqPymtDate}}" (change)="checkPaymentDate($event)" autocomplete="off" name="pymtDate" [style]="pymtDate == null || pymtDate == ''? 'color: white' : 'color: black'" [(ngModel)]="pymtDate" placeholder="Payment Date">
                                 <label>Payment Date</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [disabled]="refNumber.startsWith('ApptID-')" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
+                                <input type="date" class="form-control form-control-sm col-md-5" [disabled]="pymtDate == null || pymtDate == ''" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [disabled]="refNumber.startsWith('ApptID-')" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
                                 <label>Reconcile Date</label>
                             </div>
                         </form>

@@ -47,14 +47,16 @@ export class InvoiceComponent {
       expenseTypeModal: any;
       keyword: string = '';
       pollSub!: Subscription;
-      reqInvNumber:string = 'is-invalid';
-      reqPayeeName:string = '';
-      reqInvDate:string = 'is-invalid';
-      reqInvDueDate:string = 'is-invalid';
-      reqCategory:string = '';
-      reqSubcategory:string = '';
-      reqInvAmount:string = 'is-invalid';
-      reqPymtStatus:string = 'is-invalid';
+      reqInvNumber: string = 'is-invalid';
+      reqPayeeName: string = '';
+      reqInvDate: string = 'is-invalid';
+      reqInvDueDate: string = 'is-invalid';
+      reqCategory: string = '';
+      reqSubcategory: string = '';
+      reqInvAmount: string = 'is-invalid';
+      reqPymtStatus: string = 'is-invalid';
+      reqPymtDate: string = '';
+      reqPymtMethod: string = '';
       eProcessed: number = 0; ePending: number = 0; eReconciled: number = 0; eTotal: number = 0;
   
       invId: number | null = null;
@@ -344,6 +346,8 @@ export class InvoiceComponent {
       this.pymtMethodCode = 0;
       this.reconcileDate = '';
       (document.getElementById('pymt-method') as HTMLInputElement).value = "0";
+      this.reqPymtDate = '';
+      this.reqPymtMethod = '';
     }
     if(this.pymtStatusCode == 202) {
       let today = new Date();
@@ -351,18 +355,25 @@ export class InvoiceComponent {
       let mm = String(today.getMonth() + 1).padStart(2, '0');
       let dd = String(today.getDate()).padStart(2, '0');
       this.pymtDate = `${yyyy}-${mm}-${dd}`;
+      this.reqPymtMethod = 'is-invalid';
     }
   }
 
   selectPaymentMethod(event: Event) {
     this.pymtMethodCode = Number((event.target as HTMLSelectElement).value);
+    if(this.pymtStatusCode == 202 && this.pymtMethodCode == 0) this.reqPymtMethod = 'is-invalid'; else this.reqPymtMethod = '';
   }
 
-  getDueDateFlag(invoiceDate: string, invoiceDueDate: string, invoicePaymentStatusCode: number): string {
-    let invDate = new Date(invoiceDate);
+  checkPaymentDate(event: Event) {
+    let dt = (event.target as HTMLSelectElement).value;
+    if(this.pymtStatusCode == 202 && dt == '') this.reqPymtDate = 'is-invalid'; else this.reqPymtDate = '';
+  }
+
+  getDueDateFlag(invoiceDueDate: string, invoicePaymentStatusCode: number): string {
+    let currentDate = new Date();
     let dueDate = new Date(invoiceDueDate);
-    let diffMs = dueDate.getTime() - invDate.getTime();
-    let diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    let diffMs = dueDate.getTime() - currentDate.getTime();
+    let diffDays = Math.ceil(diffMs / 86400000);
     let dueFlag = '🟢';
     if(diffDays < 7) dueFlag = '🟡';
     if(diffDays < 4) dueFlag = '🟠';
@@ -396,6 +407,8 @@ export class InvoiceComponent {
     this.reqSubcategory = '';
     this.reqInvAmount = 'is-invalid';
     this.reqPymtStatus = 'is-invalid';
+    this.reqPymtDate = '';
+    this.reqPymtMethod = '';
     (document.getElementById('exp-category') as HTMLInputElement).value = "0";
     (document.getElementById('exp-subcategory') as HTMLInputElement).value = "0";
     (document.getElementById('pymt-status') as HTMLInputElement).value = "0";
@@ -432,7 +445,7 @@ export class InvoiceComponent {
     if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
 
     return this.invNumber != '' && this.payeeName != '' && this.invDate != '' && this.invDueDate != '' && this.catCode != 0 && 
-           this.subcatCode != 0 && this.invAmount != 0 && this.pymtStatusCode != 0;
+           this.subcatCode != 0 && this.invAmount != 0 && this.pymtStatusCode != 0 && this.reqPymtDate == '' && this.reqPymtMethod == '';
   }
 
 }

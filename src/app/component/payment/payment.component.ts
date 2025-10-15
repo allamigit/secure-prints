@@ -105,6 +105,7 @@ export class PaymentComponent {
       .subscribe(data => {
         this.paymentList = data;
         this.paymentList.appointmentPayment = this.paymentList.appointmentPayment.filter(item => item.paymentStatusCode != 203);
+        this.paymentList.appointmentInformation = this.paymentList.appointmentInformation.filter(item => item.appointmentStatusCode != 103);
         for(let i = 0; i < this.paymentList.appointmentPayment.length; i++) {
           this.serviceAmount[i] = this.paymentList.appointmentPayment[i].serviceAmount;
           this.paymentComment[i] = this.paymentList.appointmentPayment[i].paymentComment
