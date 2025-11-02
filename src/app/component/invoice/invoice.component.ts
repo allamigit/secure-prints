@@ -247,10 +247,14 @@ export class InvoiceComponent {
           this.apiStatus = data;
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          this.alertType = 'msg-success';
+          this.responseMessage = data.responseMessage;
           setTimeout(this.hideAlert, 4000);
         }, error => {
           this.apiStatus = error.error;
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          this.alertType = 'msg-fail';
+          this.responseMessage = error.error.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
     } else {
@@ -259,10 +263,14 @@ export class InvoiceComponent {
           this.apiStatus = data;
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          this.alertType = 'msg-success';
+          this.responseMessage = data.responseMessage;
           setTimeout(this.hideAlert, 4000);
         }, error => {
           this.apiStatus = error.error;
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          this.alertType = 'msg-fail';
+          this.responseMessage = error.error.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
     }
@@ -280,6 +288,8 @@ export class InvoiceComponent {
           this.apiStatus = error.error;
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          this.alertType = 'msg-fail';
+          this.responseMessage = error.error.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
         

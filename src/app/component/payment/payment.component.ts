@@ -27,6 +27,8 @@ export class PaymentComponent {
     fullName: string = '';
     selectedDate: string[] = [];
     paymentMethodName: string = '';
+    paymentMethodCode: number[] = [];
+    paymentReconcileDate: string[] = [];
     alertType: string = '';
     responseMessage: string = '';
     serviceAmount: number[] = [];
@@ -59,6 +61,10 @@ export class PaymentComponent {
 
   onSelectedDateEntry(idx: number) {
     this.selectedDate[idx] = (document.getElementsByName('selected-date')[idx] as HTMLInputElement).value;
+  }
+
+  onReconcileDateEntry(idx: number) {
+    this.selectedDate[idx] = this.paymentReconcileDate[idx];
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
@@ -108,7 +114,9 @@ export class PaymentComponent {
         this.paymentList.appointmentInformation = this.paymentList.appointmentInformation.filter(item => item.appointmentStatusCode != 103);
         for(let i = 0; i < this.paymentList.appointmentPayment.length; i++) {
           this.serviceAmount[i] = this.paymentList.appointmentPayment[i].serviceAmount;
-          this.paymentComment[i] = this.paymentList.appointmentPayment[i].paymentComment
+          this.paymentMethodCode[i] = this.paymentList.appointmentPayment[i].paymentMethodCode;
+          this.paymentComment[i] = this.paymentList.appointmentPayment[i].paymentComment;
+          this.paymentReconcileDate[i] = this.paymentList.appointmentPayment[i].paymentReconcileDate;
           switch(this.paymentList.appointmentPayment[i].paymentStatusCode) {
             case 201: this.sPending += this.paymentList.appointmentPayment[i].serviceAmount; 
                       this.bPending += this.paymentList.appointmentPayment[i].bciAmount; 
@@ -173,10 +181,8 @@ export class PaymentComponent {
   }
 
   clickAppointmentId(item: any) {
-    if(item.appointmentId == this.selectedAppointmentId) {
-      this.showDetails = !this.showDetails; 
-     } else this.showDetails = true;  
-    if(!this.showDetails) this.selectedAppointmentId = ''; else this.selectedAppointmentId = item.appointmentId;
+    this.showDetails = item.appointmentId == this.selectedAppointmentId ? !this.showDetails : true;
+    this.selectedAppointmentId = this.showDetails ? item.appointmentId : '';
   }
 
   reset() {
@@ -186,7 +192,7 @@ export class PaymentComponent {
   }
 
   clickSave(appointmentId: string, idx: number) {
-    this.appointmentPaymentService.updateServiceAmountAndComment(appointmentId, this.serviceAmount[idx], this.paymentComment[idx]).subscribe(
+    this.appointmentPaymentService.updatePaymentDetails(appointmentId, this.serviceAmount[idx], this.paymentMethodCode[idx], this.paymentComment[idx]).subscribe(
       data => {
         this.apiStatus = data;
         this.alertType = 'msg-success';

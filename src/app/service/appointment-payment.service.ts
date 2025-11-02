@@ -27,13 +27,13 @@ export class AppointmentPaymentService {
     return this.http.get<Payment>(this.requestUrl, { withCredentials: true });
   }
 
-  updatePaymentDetails(appointmentPayment: AppointmentPayment): Observable<ApiStatus> {
+  /*updatePaymentDetails(appointmentPayment: AppointmentPayment): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'payment/update-payment';
     return this.http.put<ApiStatus>(this.requestUrl, appointmentPayment, { withCredentials: true });
-  }
+  }*/
   
-  updateServiceAmountAndComment(appointmentId: string, serviceAmount: number, paymentComment: string): Observable<ApiStatus> {
-    this.requestUrl = environment.apiUrl + 'payment/update-amount-comment?appointmentId=' + appointmentId + '&serviceAmount=' + serviceAmount + '&paymentComment=' + paymentComment;
+  updatePaymentDetails(appointmentId: string, serviceAmount: number, paymentMethodCode: number, paymentComment: string): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'payment/update-amount-comment?appointmentId=' + appointmentId + '&serviceAmount=' + serviceAmount + '&paymentMethodCode=' + paymentMethodCode + '&paymentComment=' + paymentComment;
     return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
   }
 

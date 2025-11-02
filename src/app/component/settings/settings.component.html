@@ -48,12 +48,12 @@
                             <p></p>
                             <div class="row g-1 gap-3" *ngIf="showChangePassword && item.userName == currentUser">
                                 <div class="form-floating">
-                                    <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="userPassword" maxlength="20" placeholder="New Password">
-                                    <label for="floatingPassword">New Password</label>
+                                    <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="userPassword" minlength="8" maxlength="20" placeholder="New Password (8-20 characters)">
+                                    <label for="floatingPassword">New Password (8-20 characters)</label>
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                    <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 3" (click)="clickCancelChangePassword()">Cancel</button>
-                                    <button type="button" class="btn btn-success" *ngIf="userPassword.length > 3" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
+                                    <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 7" (click)="clickCancelChangePassword()">Cancel</button>
+                                    <button type="button" class="btn btn-success" *ngIf="userPassword.length > 7" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             <p></p>
                             <div class="input-group">
                                 <div class="input-group-text">Password <span class="required-field">*</span>&nbsp;</div>
-                                <input type="password" class="form-control form-control-sm" [(ngModel)]="newUserPassword" autocomplete="off" maxlength="20">
+                                <input type="password" class="form-control form-control-sm" [(ngModel)]="newUserPassword" autocomplete="off" minlength="8" maxlength="20" placeholder="Password (8-20 characters)">
                             </div>
                             <p></p>
                             <div class="form-check form-switch">
@@ -92,7 +92,7 @@
                             <p></p>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                 <button type="button" class="btn btn-light" (click)="clickReset()">Reset</button>
-                                <button type="button" class="btn btn-success" [disabled]="newUserFullName == '' || newUserName == '' || newUserPassword == ''" (click)="clickAddUser()">Add User</button>
+                                <button type="button" class="btn btn-success" [disabled]="newUserFullName == '' || newUserName == '' || newUserPassword == '' || newUserPassword.length < 8" (click)="clickAddUser()">Add User</button>
                             </div>
                         </div>
                     </div>
@@ -145,6 +145,7 @@
                             {{responseMessage}}
                         </div>
                         <div class="d-grid gap-2 justify-content-md-left">
+                            <small style="color: green">* When import new reason(s) from external text file into Reason Table in Database</small>
                             <div class="input-group mb-3">
                                 <input id="input-file" type="file" class="form-control" [(ngModel)]="fileName" (change)="onFileSelected($event)">
                                 <button type="button" class="btn btn-success" [disabled]="fileName == ''" [hidden]="loadingButton" (click)="clickImportReasonDataFile()">Import Reason Data File</button>
@@ -153,6 +154,7 @@
                                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                                 </button> 
                             </div>
+                            <small style="color: green">* When enter new reason(s) directly into Reason Table in Database</small>
                             <button type="button" class="btn btn-success" (click)="clickRefreshReasonList()">Refresh Reason List</button>
                         </div>
                     </div>
