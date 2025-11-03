@@ -44,7 +44,7 @@
                                     <th>Reason Code</th>
                                     <th>Reason Description</th>
                                 </thead>
-                                <tbody>
+                                <tbody style="cursor: pointer">
                                     <tr *ngFor="let item of filteredBciReasonList()" (click)="selectBciReason(item)"
                                         [class.table-active]="item.reasonCode == bciReasonCode">
                                         <td>{{item.reasonCode}}</td>
@@ -74,7 +74,7 @@
                                     <th>Reason Code</th>
                                     <th>Reason Description</th>
                                 </thead>
-                                <tbody>
+                                <tbody style="cursor: pointer">
                                     <tr *ngFor="let item of filteredFbiReasonList()" (click)="selectFbiReason(item)"
                                         [class.table-active]="item.reasonCode == fbiReasonCode">
                                         <td>{{item.reasonCode}}</td>
@@ -156,6 +156,7 @@
                                     <input id="email" type="email" name="email" style="text-transform: lowercase" class="form-control form-control-sm" (input)="onEmailEntry()" [(ngModel)]="email" maxlength="60">
                                 </div>
                                 <small class="text-danger" *ngIf="cmail">Email Address is required</small>
+                                <small class="text-danger" *ngIf="!cmail && !isEmailValid">Invalid Email Address</small>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Phone Number</label>

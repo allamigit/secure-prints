@@ -44,6 +44,7 @@ export class ScheduleComponent {
   lastName: string = '';
   email: string = '';
   phone: string = '';
+  isEmailValid: boolean = true;
   searchText: string = '';
   fname: boolean = false;
   lname: boolean = false;
@@ -84,15 +85,17 @@ export class ScheduleComponent {
   }
 
   onFirstNameEntry() {
-    if(this.firstName.length == 0) this.fname = true; else this.fname = false;
+    if(this.firstName.length < 3) this.fname = true; else this.fname = false;
   }
 
   onLastNameEntry() {
-    if(this.lastName.length == 0) this.lname = true; else this.lname = false;
+    if(this.lastName.length < 3) this.lname = true; else this.lname = false;
   }
 
   onEmailEntry() {
-    if(this.email.length == 0 || !this.email.includes('@') || !this.email.includes('.')) this.cmail = true; else this.cmail = false;
+    if(this.email.length == 0) this.cmail = true; else this.cmail = false;
+    const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    this.isEmailValid = emailPattern.test(this.email);
   }
 
   onBciDescriptionEntry() {
@@ -205,6 +208,7 @@ export class ScheduleComponent {
     this.phone = (document.getElementById('phone') as HTMLInputElement).value;
     if(this.firstName == '') this.fname = true;
     if(this.lastName == '') this.lname = true;
+    if(this.email == '') this.cmail = true;
     if(this.phone != '' && this.phone.length < 14) this.cphone = true; else this.cphone = false;
   }
 
@@ -214,7 +218,14 @@ export class ScheduleComponent {
   clickSchedule() {
     this.getPersonalInfo();
 
-    if(!this.fname && !this.lname && !this.cmail && !this.cphone) {
+      this.step1 = false;
+      this.step2 = false;
+      this.step3 = false;
+      this.step4 = false;
+      this.step5 = true;
+      window.scrollTo(0, 0);
+
+      if(!this.fname && !this.lname && !this.cmail && this.isEmailValid && !this.cphone) {
       this.appointmentRequest = new AppointmentRequest();
       this.appointmentRequest.customerFirstName = this.firstName;
       this.appointmentRequest.customerLastName = this.lastName;
@@ -233,13 +244,6 @@ export class ScheduleComponent {
               data => this.apiResponse = data, 
               error => this.apiResponse = error.error
           );
-
-      this.step1 = false;
-      this.step2 = false;
-      this.step3 = false;
-      this.step4 = false;
-      this.step5 = true;
-      window.scrollTo(0, 0);
     }
   }
 
@@ -259,6 +263,7 @@ export class ScheduleComponent {
     this.lastName = '';
     this.email = '';
     this.phone = '';
+    this.isEmailValid = true;
     this.searchText = '';
     this.fname = false;
     this.lname = false;

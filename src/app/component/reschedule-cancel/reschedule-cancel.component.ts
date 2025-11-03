@@ -156,13 +156,13 @@ export class RescheduleCancelComponent implements OnInit {
    * Confirm Reschedule Appointment
    */
   clickConfirm() {
+    this.reset();
+
     this.appointmentInformationService.rescheduleAppointment(this.appointmentId, this.appointmentTimestamp)
       .subscribe(
         data => this.apiResponse = data,
         error => this.apiResponse = error.error
       );
-
-    this.reset();
   }
 
   /**
@@ -178,13 +178,13 @@ export class RescheduleCancelComponent implements OnInit {
    * Confirm Cancel Appointment
    */
   clickYes() {
+    this.reset();
+
     this.appointmentInformationService.cancelAppointment(this.appointmentId)
       .subscribe(
         data => this.apiResponse = data,
         error => this.apiResponse = error.error
       );
-
-    this.reset();
   }
 
   reset() {

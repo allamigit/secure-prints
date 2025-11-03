@@ -27,10 +27,15 @@ export class LoginComponent {
   constructor(private router: Router, private userService: UserService) { }
 
   onKeyDown(event: KeyboardEvent) {
-  if (event.key == 'Escape') {
-    this.router.navigate(['/home']);
+    if (event.key == 'Escape') {
+      this.router.navigate(['/home']);
+    }
   }
-}
+
+  focusPassword(): void {
+    (document.getElementById('user-password') as HTMLInputElement).focus();
+  }  
+
   onUsernameEntry() {
    this.errorMessage = '';
    this.isValidLogin = false;
