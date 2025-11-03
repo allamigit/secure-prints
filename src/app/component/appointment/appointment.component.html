@@ -70,7 +70,7 @@
                         <td>
                             <div class="dropdown" role="group">
                                 <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" 
-                                        [hidden]="item.appointmentInformation.appointmentStatusCode == 103 || item.appointmentInformation.appointmentStatusCode == 104">
+                                        [hidden]="item.appointmentInformation.appointmentStatusCode == 103 || item.appointmentInformation.appointmentStatusCode == 104 || !userFullAccess">
                                     Choose...
                                 </button>
                                 <ul class="dropdown-menu" style="cursor: pointer">

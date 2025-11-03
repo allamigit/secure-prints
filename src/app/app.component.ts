@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   apiStatus?: ApiStatus;
   isLoggedIn: boolean = false;
-  currentUser?: string;
+  userFullAccess: boolean = false;
+  currentUser: any;
 
   constructor(private router: Router, private companyService: CompanyService, private userService: UserService) { 
     this.router.events.subscribe((event) => {
@@ -47,11 +48,15 @@ export class AppComponent implements OnInit {
   isUserLoggedIn() {
     this.userService.isUserLoggedIn().subscribe(data => this.isLoggedIn = data);
     this.currentUser = localStorage.getItem('name')?.toString();
+    this.userFullAccess = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
   }
 
   clickLogout() {
     this.userService.userLogout().subscribe(data => this.apiStatus = data);
     this.isLoggedIn = false;
+    localStorage.removeItem('name');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rx');
     this.router.navigate(['/home']);
   }
 

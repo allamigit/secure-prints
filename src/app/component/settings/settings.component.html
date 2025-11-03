@@ -39,6 +39,10 @@
                                 <input id="active-user" type="checkbox" class="form-check-input" [disabled]="item.userName == currentUser" [(ngModel)]="item.userStatus">
                                 <label class="form-check-label">Active User</label>
                             </div>
+                            <div class="form-check form-switch">
+                                <input id="full-access" type="checkbox" class="form-check-input" [disabled]="item.userName == currentUser" [(ngModel)]="item.userFullAccess">
+                                <label class="form-check-label">Full Access</label>
+                            </div>
                             <p></p>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                 <button type="button" class="btn btn-primary" *ngIf="item.userName == currentUser" (click)="clickChangePassword()">Change Password</button>
@@ -88,6 +92,10 @@
                             <div class="form-check form-switch">
                                 <input type="checkbox" class="form-check-input" [(ngModel)]="newUserStatus">
                                 <label class="form-check-label">Active User</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" [(ngModel)]="newUserFullAccess">
+                                <label class="form-check-label">Full Access</label>
                             </div>
                             <p></p>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center">

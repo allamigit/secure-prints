@@ -34,10 +34,12 @@ export class SettingsComponent {
   userPassword: string = '';
   userFullName: string = '';
   userStatus: boolean = true;
+  userFullAccess: boolean = true;
   newUserName: string = '';
   newUserPassword: string = '';
   newUserFullName: string = '';
   newUserStatus: boolean = true;
+  newUserFullAccess: boolean = true;
   companyName: string = '';
   companyAddress1: string = '';
   companyAddress2: string = '';
@@ -140,6 +142,7 @@ export class SettingsComponent {
     this.user.userName = this.newUserName;
     this.user.userPassword = this.newUserPassword;
     this.user.userStatus = this.newUserStatus;
+    this.user.userStatus = this.newUserFullAccess;
     this.userService.addUser(this.user).subscribe(
       data => {
         this.apiStatus = data;
@@ -162,12 +165,14 @@ export class SettingsComponent {
     this.newUserName = '';
     this.newUserPassword = '';
     this.newUserStatus = true;
+    this.newUserFullAccess = true;
   }
 
   clickSaveUser(user: User) {
     this.userName = user.userName;
     this.userFullName = user.userFullName;
     this.userStatus = (document.getElementById('active-user') as HTMLInputElement).checked;
+    this.userFullAccess = (document.getElementById('full-access') as HTMLInputElement).checked;
     this.userService.updateUserDetails(user).subscribe(
       data => {
         this.apiStatus = data;

@@ -46,6 +46,7 @@ export class InvoiceComponent {
       invoiceModal: any;
       expenseTypeModal: any;
       keyword: string = '';
+      userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
       pollSub!: Subscription;
       reqInvNumber: string = 'is-invalid';
       reqPayeeName: string = '';

@@ -30,6 +30,7 @@ export class AppointmentComponent {
   showPaymentMethod: boolean = false;
   showConfirmation: boolean = false;
   showDetails: boolean = false;
+  userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
   pollSub!: Subscription;
 
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }

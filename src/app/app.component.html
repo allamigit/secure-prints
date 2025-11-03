@@ -28,8 +28,8 @@
 
       <form class="d-flex">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="submit" class="btn btn-success btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
-          <button type="submit" class="btn btn-warning btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule / Cancel Appointment</button>
+          <button type="submit" class="btn btn-success btn-sm rounded-text" [disabled]="!userFullAccess && isLoggedIn" routerLink="/schedule">Schedule Appointment</button>
+          <button type="submit" class="btn btn-warning btn-sm rounded-text" [disabled]="!userFullAccess && isLoggedIn" routerLink="/reschedule-cancel">Reschedule / Cancel Appointment</button>
             <div class="dropdown" role="group" *ngIf="isLoggedIn && currentUser != null">
                 <button type="button" class="btn btn-secondary btn-sm rounded-text dropdown-toggle" style="background-color: #004A80; color: rgb(227, 229, 233)"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,7 +43,7 @@
                   <li><a class="dropdown-item" routerLink="/expense">Expense</a></li>
                   <li><a class="dropdown-item" routerLink="/report">Financial Report</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+                  <li *ngIf="userFullAccess"><a class="dropdown-item" routerLink="/settings">Settings</a></li>
                   <li><a class="dropdown-item" style="cursor: pointer" (click)="openEmail()">Amazon WorkMail</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" routerLink="/home" (click)="clickLogout()">Logout</a></li>
@@ -77,8 +77,8 @@
 
       <div class="col-md-4 text-md-end">
         <div class="d-grid gap-2 col-7 mx-auto">
-          <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/schedule">Schedule Appointment</button>
-          <button type="button" class="btn btn-outline-light btn-sm rounded-text" routerLink="/reschedule-cancel">Reschedule / Cancel Appointment</button>
+          <button type="button" class="btn btn-outline-light btn-sm rounded-text" [disabled]="!userFullAccess && isLoggedIn" routerLink="/schedule">Schedule Appointment</button>
+          <button type="button" class="btn btn-outline-light btn-sm rounded-text" [disabled]="!userFullAccess && isLoggedIn" routerLink="/reschedule-cancel">Reschedule / Cancel Appointment</button>
         </div>
       </div>
     </div>

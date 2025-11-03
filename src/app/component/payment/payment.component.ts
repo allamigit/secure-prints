@@ -35,6 +35,7 @@ export class PaymentComponent {
     paymentComment: string[] = [];
     showDetails: boolean = false;
     showNonReconciled: boolean = false;
+    userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
     pollSub!: Subscription;
     sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sReconciled: number = 0; sTotal: number = 0;
     bProcessed: number = 0; bPending: number = 0; bRefund: number = 0; bReconciled: number = 0; bTotal: number = 0;

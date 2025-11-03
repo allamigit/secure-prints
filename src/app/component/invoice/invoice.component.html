@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" (click)="clickAddInvoice()">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" [disabled]="!userFullAccess" (click)="clickAddInvoice()">
                     Add Invoice
                 </button>
             </div>
@@ -89,7 +89,7 @@
                         <td>
                             <div class="input-group mb-0" [hidden]="item.invoiceReconcileDate != null || item.invoicePaymentDate == null">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
-                                    [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                    [disabled]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
@@ -146,7 +146,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="row g-3">
+                        <form class="row g-3 {{!userFullAccess ? 'disableDiv' : ''}}">
                             <div class="form-floating col-md-2">
                                 <input type="text" class="form-control form-control-sm col-md-5 {{reqInvNumber}}" autocomplete="off" name="invNumber" [(ngModel)]="invNumber" 
                                     style="text-transform: uppercase" (input)="onInvoiceNumberEntry()" maxlength="30" placeholder="Invoice Number" required>
@@ -233,7 +233,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields()" (click)="clickSaveInvoice()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess" (click)="clickSaveInvoice()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>

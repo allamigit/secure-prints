@@ -23,6 +23,10 @@
   gap: 20px; /* space between links */
 }
 
+.disableDiv {
+    pointer-events: none;
+}
+
 .msg-success {
     border: 2px solid #86b943;
     border-radius: 50px;

@@ -45,6 +45,7 @@ export class ExpenseComponent {
       expenseModal: any;
       expenseTypeModal: any;
       keyword: string = '';
+      userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
       pollSub!: Subscription;
       reqRefNumber: string = 'is-invalid';
       reqRefDate: string = 'is-invalid';

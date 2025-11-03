@@ -17,8 +17,8 @@ export class ReportComponent {
 
   financialReport!: FinancialReport;
   expenseFullReport!: ExpenseFullReport;
-  startDate: string = '';
-  endDate: string = '';
+  startDate: string = '2025-10-01';
+  endDate: string = '2025-10-31';
   showReport: boolean = false;
   expenseAll: number = 0;
   expenseProcessed: number = 0;

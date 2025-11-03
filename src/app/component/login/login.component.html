@@ -31,7 +31,7 @@
         <p></p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
             <button type="button" class="btn btn-outline-secondary" routerLink="/home">Cancel</button>
-            <button type="button" class="btn btn-secondary" [disabled]="!userName || !userPassword" (click)="clickLogin()">Login</button>
+            <button type="button" class="btn btn-secondary" [disabled]="!userName || !userPassword || userPassword.length < 8" (click)="clickLogin()">Login</button>
         </div>
         <p></p>
     </div>   

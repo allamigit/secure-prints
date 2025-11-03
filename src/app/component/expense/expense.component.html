@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickAddExpense()">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" [disabled]="!userFullAccess" (click)="clickAddExpense()">
                     Add Expense
                 </button>
             </div>
@@ -76,7 +76,7 @@
                         <td>
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.expensePaymentStatusCode == 201 || !item.expenseUpdate"
-                                    [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                    [disabled]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.expenseUpdate || selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
@@ -132,7 +132,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="row g-3">
+                        <form class="row g-3 {{!userFullAccess ? 'disableDiv' : ''}}">
                             <div class="form-floating col-md-2">
                                 <input type="text" class="form-control form-control-sm col-md-5 {{reqRefNumber}}" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" 
                                     [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (input)="onRefNumberEntry()" maxlength="30" placeholder="Reference Number" required>
@@ -215,7 +215,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields()" (click)="clickSaveExpense()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess" (click)="clickSaveExpense()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>
