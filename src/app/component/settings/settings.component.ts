@@ -35,6 +35,7 @@ export class SettingsComponent {
   userFullName: string = '';
   userStatus: boolean = true;
   userFullAccess: boolean = true;
+  oldPassword: string = '';
   newUserName: string = '';
   newUserPassword: string = '';
   newUserFullName: string = '';
@@ -91,12 +92,12 @@ export class SettingsComponent {
 
   hideAddUserAlert() {
     (document.getElementById('add-user-alert') as HTMLInputElement).hidden = true;
-    window.location.reload();
+    if(this.alertType == 'alert alert-success') window.location.reload();
   }
 
   hideUserAlert() {
     (document.getElementById('user-alert') as HTMLInputElement).hidden = true;
-    window.location.reload();
+    if(this.alertType == 'alert alert-success') window.location.reload();
   }
 
   hideAlert() {
@@ -146,6 +147,7 @@ export class SettingsComponent {
     this.userService.addUser(this.user).subscribe(
       data => {
         this.apiStatus = data;
+        this.clickReset();
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('add-user-alert') as HTMLInputElement).hidden = false;
@@ -189,6 +191,7 @@ export class SettingsComponent {
 
   clickCancelChangePassword() {
     this.userPassword = '';
+    this.oldPassword = '';
     this.showChangePassword = false;
   }
 
@@ -198,6 +201,7 @@ export class SettingsComponent {
       data => {
         this.apiStatus = data;
         this.userPassword = '';
+        this.oldPassword = '';
         this.showChangePassword = false;
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;

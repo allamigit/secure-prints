@@ -5,6 +5,17 @@
         <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-12">
                 <div class="input-group">
+                    <div class="input-group-text">Year</div>
+                    <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
+                        <option value="0" selected></option>
+                        <option *ngFor="let item of yearList" value={{item}}>
+                            {{item}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
                     <div class="input-group-text">Start Date</div>
                     <input type="date" id="start-date" class="form-control" [value]="startDate" 
                             [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">

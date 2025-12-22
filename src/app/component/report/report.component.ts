@@ -22,8 +22,19 @@ export class ReportComponent {
   showReport: boolean = false;
   expenseAll: number = 0;
   expenseProcessed: number = 0;
+  yearList: number[] = [];
 
   constructor(private router: Router, private reportService: ReportService) { }
+
+  ngOnInit(): void {
+    let today = new Date();
+    let currentYear = today.getFullYear()
+    let i = 0;
+    for(let y = 2025; y <= currentYear; y++) {
+      this.yearList[i] = y;
+      i++;
+    }
+  }
 
   onStartDateEntry() {
     this.startDate = (document.getElementById('start-date') as HTMLInputElement).value;
@@ -31,6 +42,19 @@ export class ReportComponent {
 
   onEndDateEntry() {
     this.endDate = (document.getElementById('end-date') as HTMLInputElement).value;
+  }
+
+  selectYear(event: Event) {
+    let year = (event.target as HTMLSelectElement).value;
+    if(year != '0') {
+      this.startDate = `${year}-01-01`;
+      this.endDate = `${year}-12-31`;
+      this.clickGenerateReport();
+    } else {
+      this.startDate = '';
+      this.endDate = '';
+      window.location.reload();
+    }
   }
 
   clickGenerateReport() {
@@ -52,6 +76,8 @@ export class ReportComponent {
     this.showReport = false;
     this.expenseAll = 0;
     this.expenseProcessed = 0;
+    (document.getElementById('year') as HTMLInputElement).value = '0';
+    window.location.reload();
   }
 
 }

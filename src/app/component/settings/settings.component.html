@@ -52,12 +52,16 @@
                             <p></p>
                             <div class="row g-1 gap-3" *ngIf="showChangePassword && item.userName == currentUser">
                                 <div class="form-floating">
+                                    <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="oldPassword" minlength="8" maxlength="20" placeholder="Old Password">
+                                    <label for="floatingPassword">Old Password</label>
+                                </div>
+                                <div class="form-floating">
                                     <input type="password" class="form-control form-control-sm col-md-5" [(ngModel)]="userPassword" minlength="8" maxlength="20" placeholder="New Password (8-20 characters)">
                                     <label for="floatingPassword">New Password (8-20 characters)</label>
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                    <button type="reset" class="btn btn-light" *ngIf="userPassword.length > 7" (click)="clickCancelChangePassword()">Cancel</button>
-                                    <button type="button" class="btn btn-success" *ngIf="userPassword.length > 7" (click)="clickSavePassword(item.userPassword, userPassword)">Save Password</button>
+                                    <button type="reset" class="btn btn-light" (click)="clickCancelChangePassword()">Cancel</button>
+                                    <button type="button" class="btn btn-success" *ngIf="oldPassword != '' && userPassword.length > 7" (click)="clickSavePassword(oldPassword, userPassword)">Save Password</button>
                                 </div>
                             </div>
                         </div>

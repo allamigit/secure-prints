@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
   }
 
   clickLogout() {
+    window.location.reload();
     this.userService.userLogout().subscribe(data => this.apiStatus = data);
     this.isLoggedIn = false;
     localStorage.removeItem('name');

@@ -34,6 +34,7 @@ export class ExpenseComponent {
       apiStatus!: ApiStatus; 
       startDate: string = '';
       endDate: string = '';
+      vendor: string = '';
       selectedDate: string[] = [];
       paymentMethodName: string = '';
       alertType: string = '';
@@ -57,6 +58,7 @@ export class ExpenseComponent {
       reqPymtDate: string = '';
       reqPymtMethod: string = '';
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
+      yearList: number[] = [];
   
       expId: number | null = null;
       refNumber: string = '';
@@ -79,6 +81,14 @@ export class ExpenseComponent {
         this.expenseTypeList = data;
         this.expenseTypeList2 = this.expenseTypeList;
       });
+
+    let today = new Date();
+    let currentYear = today.getFullYear()
+    let i = 0;
+    for(let y = 2025; y <= currentYear; y++) {
+      this.yearList[i] = y;
+      i++;
+    }
   }
 
   ngAfterViewInit() {
@@ -126,6 +136,22 @@ export class ExpenseComponent {
 
   onKeywordEntry() {
     if(this.keyword == '') this.expenseTypeList2 = this.expenseTypeList;
+  }
+
+  onVendorFilterEntry() {
+    if(this.vendor == '' || this.expenseList.length == 0) {
+      this.expenseList = this.originalExpenseList;
+      this.clickFilterSwitch();
+    } else {
+      this.applyVendorNameFilter();
+    }
+  }
+
+  applyVendorNameFilter(): any[] {
+    this.expenseList = this.expenseList.filter(item =>
+      item.expenseVendorName.toLowerCase().includes(this.vendor.toLowerCase())
+    );
+    return this.expenseList;
   }
 
   hideAlert() {
@@ -183,12 +209,31 @@ export class ExpenseComponent {
     this.clickView();
   }
 
+  selectYear(event: Event) {
+    let year = (event.target as HTMLSelectElement).value;
+    if(year != '0') {
+      this.startDate = `${year}-01-01`;
+      this.endDate = `${year}-12-31`;
+      this.clickView();
+    } else {
+      this.startDate = '';
+      this.endDate = '';
+      window.location.reload();
+    }
+  }
+
   clickView() {
     if(this.startDate != '' && this.endDate == '') {
       this.endDate = this.startDate;
     } else if(this.startDate == '' && this.endDate != '') {
       this.startDate = this.endDate;
+    } else {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      this.startDate = `${yyyy}-01-01`;
+      this.endDate = `${yyyy}-12-31`;
     }
+    
     this.selectedDate = [];
     this.eProcessed = 0, this.ePending = 0, this.eRefund = 0, this.eReconciled = 0, this.eTotal = 0;
     this.expenseService.getAllExpenses(this.startDate, this.endDate, this.showNonReconciled)
@@ -215,8 +260,10 @@ export class ExpenseComponent {
   clickReset() {
     this.startDate = '';
     this.endDate = '';
+    this.vendor = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
-    this.clickView();
+    (document.getElementById('year') as HTMLInputElement).value = '0';
+    window.location.reload();
   }
 
   clickAddExpense() {

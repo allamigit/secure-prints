@@ -32,6 +32,7 @@ export class AppointmentComponent {
   showDetails: boolean = false;
   userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
   pollSub!: Subscription;
+  yearList: number[] = [];
 
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
 
@@ -39,6 +40,14 @@ export class AppointmentComponent {
     /*this.pollSub = interval(6000).subscribe(() => {
       if(this.appointmentList.length != 0) this.clickView();
     });*/
+
+    let today = new Date();
+    let currentYear = today.getFullYear()
+    let i = 0;
+    for(let y = 2025; y <= currentYear; y++) {
+      this.yearList[i] = y;
+      i++;
+    }
   }
 
   ngOnDestroy(): void {
@@ -91,12 +100,31 @@ export class AppointmentComponent {
     }
   }
 
+  selectYear(event: Event) {
+    let year = (event.target as HTMLSelectElement).value;
+    if(year != '0') {
+      this.startDate = `${year}-01-01`;
+      this.endDate = `${year}-12-31`;
+      this.clickView();
+    } else {
+      this.startDate = '';
+      this.endDate = '';
+      window.location.reload();
+    }
+  }
+
   clickView() {
     if(this.startDate != '' && this.endDate == '') {
       this.endDate = this.startDate;
     } else if(this.startDate == '' && this.endDate != '') {
       this.startDate = this.endDate;
+    } else {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      this.startDate = `${yyyy}-01-01`;
+      this.endDate = `${yyyy}-12-31`;
     }
+    
     this.appointmentInformationService.getAllAppointments(this.startDate, this.endDate)
       .subscribe(data => {
         this.appointmentList = [];
@@ -116,7 +144,8 @@ export class AppointmentComponent {
   clickReset() {
     this.startDate = '';
     this.endDate = '';
-    this.clickView();
+    (document.getElementById('year') as HTMLInputElement).value = '0';
+    window.location.reload();
   }
 
   selectComplete(item: any) {

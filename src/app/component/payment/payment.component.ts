@@ -39,6 +39,7 @@ export class PaymentComponent {
     pollSub!: Subscription;
     sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sReconciled: number = 0; sTotal: number = 0;
     bProcessed: number = 0; bPending: number = 0; bRefund: number = 0; bReconciled: number = 0; bTotal: number = 0;
+    yearList: number[] = [];
   
   constructor(private router: Router, private appointmentPaymentService: AppointmentPaymentService, private appUtilService: AppUtilService) { }
 
@@ -46,6 +47,14 @@ export class PaymentComponent {
     /*this.pollSub = interval(6000).subscribe(() => {
       if(this.paymentList.length != 0) this.clickView();
     });*/
+
+    let today = new Date();
+    let currentYear = today.getFullYear()
+    let i = 0;
+    for(let y = 2025; y <= currentYear; y++) {
+      this.yearList[i] = y;
+      i++;
+    }
   }
 
   ngOnDestroy(): void {
@@ -99,12 +108,31 @@ export class PaymentComponent {
     this.clickView();
   }
 
+  selectYear(event: Event) {
+    let year = (event.target as HTMLSelectElement).value;
+    if(year != '0') {
+      this.startDate = `${year}-01-01`;
+      this.endDate = `${year}-12-31`;
+      this.clickView();
+    } else {
+      this.startDate = '';
+      this.endDate = '';
+      window.location.reload();
+    }
+  }
+
   clickView() {
     if(this.startDate != '' && this.endDate == '') {
       this.endDate = this.startDate;
     } else if(this.startDate == '' && this.endDate != '') {
       this.startDate = this.endDate;
+    } else {
+      let today = new Date();
+      let yyyy = today.getFullYear();
+      this.startDate = `${yyyy}-01-01`;
+      this.endDate = `${yyyy}-12-31`;
     }
+    
     this.selectedDate = [];
     this.sProcessed = 0, this.sPending = 0, this.sRefund = 0, this.sReconciled = 0, this.sTotal = 0;
     this.bProcessed = 0, this.bPending = 0, this.bRefund = 0, this.bReconciled = 0, this.bTotal = 0;
@@ -143,7 +171,8 @@ export class PaymentComponent {
     this.startDate = '';
     this.endDate = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
-    this.clickView();
+    (document.getElementById('year') as HTMLInputElement).value = '0';
+    window.location.reload();
   }
 
   selectReconcile(appointmentId: string, idx: number) {

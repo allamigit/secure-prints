@@ -6,6 +6,17 @@
         <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-12">
                 <div class="input-group">
+                    <div class="input-group-text">Year</div>
+                    <select class="form-select col-md-3" id="year" (change)="selectYear($event)">
+                        <option value="0" selected></option>
+                        <option *ngFor="let item of yearList" value={{item}}>
+                            {{item}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
                     <div class="input-group-text">Start Date</div>
                     <input type="date" id="start-date" class="form-control" [value]="startDate" 
                             [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
@@ -40,6 +51,10 @@
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" [disabled]="!userFullAccess" (click)="clickAddExpense()">
                     Add Expense
                 </button>
+            </div>
+            <div class="col-12" [hidden]="expenseList.length == 0">
+                <input type="search" name="vendor" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="vendor"
+                    (input)="onVendorFilterEntry()" autocomplete="off" maxlength="30" placeholder="Vendor contains...">                                
             </div>
         </form>
 
