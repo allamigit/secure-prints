@@ -64,13 +64,13 @@
                     <td>Total BCI Amount</td>
                     <td>{{financialReport.revenueAll.bciFees|currency}}</td>
                     <td>
-                        Ohio AG Invoice: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
-                        {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{financialReport.revenueAll.totalNotInvoiced|currency}}
+                        Ohio AG Invoiced: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
+                        {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueAll.totalNotInvoiced < 0 ? -financialReport.revenueAll.totalNotInvoiced : financialReport.revenueAll.totalNotInvoiced)|currency}}
                     </td>
                     <td>{{financialReport.revenueProcessed.bciFees|currency}}</td>
                     <td>
-                        Ohio AG Invoice: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
-                        {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{financialReport.revenueProcessed.totalNotInvoiced|currency}}
+                        Ohio AG Invoiced: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
+                        {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueProcessed.totalNotInvoiced < 0 ? -financialReport.revenueProcessed.totalNotInvoiced : financialReport.revenueProcessed.totalNotInvoiced)|currency}}
                     </td>
                 </tr>
                 <tr>

@@ -291,6 +291,7 @@ export class ExpenseComponent {
           setTimeout(this.hideAlert, 4000);
         });
     } else {
+      window.scrollTo(0, 0);
       this.expenseService.updateExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;

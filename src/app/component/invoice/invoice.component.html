@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="input-group">
                     <div class="input-group-text">Year</div>
-                    <select class="form-select col-md-3" id="year" (change)="selectYear($event)">
+                    <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
                         <option value="0" selected></option>
                         <option *ngFor="let item of yearList" value={{item}}>
                             {{item}}
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" [disabled]="!userFullAccess" (click)="clickAddInvoice()">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" [hidden]="!userFullAccess" (click)="clickAddInvoice()">
                     Add Invoice
                 </button>
             </div>
@@ -100,7 +100,7 @@
                         <td>
                             <div class="input-group mb-0" [hidden]="item.invoiceReconcileDate != null || item.invoicePaymentDate == null">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
-                                    [disabled]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                    [hidden]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">

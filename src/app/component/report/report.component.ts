@@ -63,8 +63,8 @@ export class ReportComponent {
         this.financialReport = data; 
         this.startDate = this.financialReport.startDate;
         this.endDate = this.financialReport.endDate;
-        this.expenseAll = this.financialReport.revenueAll.bankFees + this.financialReport.revenueAll.totalExpense
-        this.expenseProcessed = this.financialReport.revenueProcessed.bankFees + this.financialReport.revenueProcessed.totalExpense
+        this.expenseAll = Math.abs(this.financialReport.revenueAll.bankFees) + Math.abs(this.financialReport.revenueAll.totalExpense);
+        this.expenseProcessed = Math.abs(this.financialReport.revenueProcessed.bankFees) + Math.abs(this.financialReport.revenueProcessed.totalExpense);
       });
     this.reportService.generateExpenseReport(this.startDate, this.endDate).subscribe(data => this.expenseFullReport = data);
     this.showReport = true;

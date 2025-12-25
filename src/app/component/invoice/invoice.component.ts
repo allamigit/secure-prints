@@ -288,6 +288,7 @@ export class InvoiceComponent {
           setTimeout(this.hideAlert, 4000);
         });
     } else {
+      window.scrollTo(0, 0);
       this.invoiceService.updateInvoiceDetails(this.invoice).subscribe(
         data => {
           this.apiStatus = data;

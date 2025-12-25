@@ -222,6 +222,7 @@ export class PaymentComponent {
   }
 
   clickSave(appointmentId: string, idx: number) {
+    window.scrollTo(0, 0);
     this.appointmentPaymentService.updatePaymentDetails(appointmentId, this.serviceAmount[idx], this.paymentMethodCode[idx], this.paymentComment[idx]).subscribe(
       data => {
         this.apiStatus = data;
