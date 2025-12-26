@@ -85,7 +85,7 @@ export class ExpenseComponent {
     let today = new Date();
     let currentYear = today.getFullYear()
     let i = 0;
-    for(let y = 2025; y <= currentYear; y++) {
+    for(let y = currentYear; y >= 2025; y--) {
       this.yearList[i] = y;
       i++;
     }
@@ -101,7 +101,7 @@ export class ExpenseComponent {
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
-    if (!/[0-9.-]/.test(event.key)) {
+    if (!/[0-9.]/.test(event.key)) {
       event.preventDefault();
     }
   }

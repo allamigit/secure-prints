@@ -157,7 +157,7 @@ export class RescheduleCancelComponent implements OnInit {
    */
   clickConfirm() {
     this.reset();
-
+    window.scrollTo(0, 0);
     this.appointmentInformationService.rescheduleAppointment(this.appointmentId, this.appointmentTimestamp)
       .subscribe(
         data => this.apiResponse = data,
@@ -179,7 +179,7 @@ export class RescheduleCancelComponent implements OnInit {
    */
   clickYes() {
     this.reset();
-
+    window.scrollTo(0, 0);
     this.appointmentInformationService.cancelAppointment(this.appointmentId)
       .subscribe(
         data => this.apiResponse = data,

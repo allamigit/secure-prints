@@ -59,14 +59,14 @@
             <table class="table table-hover">
                 <thead style="position: sticky; top: 0; background: white; z-index: 10">
                     <th>Appointment ID</th>
-                    <th>Cust. Full Name</th>
+                    <th>Customer <br>Full Name</th>
                     <th>Service Name</th>
-                    <th>Service Amt</th>
-                    <th>BCI Amt</th>
-                    <th>Payment Method</th>
-                    <th>Payment Status</th>
-                    <th>Payment Date</th>
-                    <th>Reconcile Date</th>
+                    <th>Service <br>Amount</th>
+                    <th>BCI <br>Amount</th>
+                    <th>Payment <br>Method</th>
+                    <th>Payment <br>Status</th>
+                    <th>Payment <br>Date</th>
+                    <th>Reconcile <br>Date</th>
                     <th>Actions</th>
                 </thead>
                 <tbody *ngFor="let item of paymentList.appointmentPayment; let i = index">
@@ -99,7 +99,7 @@
                         <td colspan="10">
                             <form class="row g-3">
                                 <div class="form-floating col-md-2">
-                                    <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="service-amount{{i}}" 
+                                    <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="service-amount{{i}}" inputmode="numeric"
                                         (keypress)="allowOnlyNumbers($event)" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess" [(ngModel)]="serviceAmount[i]" placeholder="Service Amount">
                                     <label>Service Amount</label>
                                 </div>

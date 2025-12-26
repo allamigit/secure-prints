@@ -37,135 +37,151 @@
             <div class="col-12">
                 <button type="button" class="btn btn-outline-primary" (click)="clickResetReport()" [hidden]="startDate == '' || endDate == ''">Reset Report</button>
             </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="exportReport()" [hidden]="startDate == '' || endDate == ''">Export to PDF</button>
+            </div>
         </form>
 
-        <!-- FINANCIAL REPORT -->
         <br>
-        <table class="table table-striped" *ngIf="showReport">
-            <thead>
-                <tr style="text-align: center; font-size: large">
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)" colspan="5">Revenue Report for the period from {{financialReport.startDate|date:'MM/dd/yyyy'}} to {{financialReport.endDate|date:'MM/dd/yyyy'}}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <th colspan="2">All Transactions (Pending & Processed)</th>
-                    <th colspan="2">Processed Transactions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Total Revenue</td>
-                    <td>{{financialReport.revenueAll.totalRevenue|currency}}</td>
-                    <td></td>
-                    <td>{{financialReport.revenueProcessed.totalRevenue|currency}}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Total BCI Amount</td>
-                    <td>{{financialReport.revenueAll.bciFees|currency}}</td>
-                    <td>
-                        Ohio AG Invoiced: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
-                        {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueAll.totalNotInvoiced < 0 ? -financialReport.revenueAll.totalNotInvoiced : financialReport.revenueAll.totalNotInvoiced)|currency}}
-                    </td>
-                    <td>{{financialReport.revenueProcessed.bciFees|currency}}</td>
-                    <td>
-                        Ohio AG Invoiced: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
-                        {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueProcessed.totalNotInvoiced < 0 ? -financialReport.revenueProcessed.totalNotInvoiced : financialReport.revenueProcessed.totalNotInvoiced)|currency}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Bank Fees and Credit Card Processing</td>
-                    <td>{{financialReport.revenueAll.bankFees|currency}}</td>
-                    <td></td>
-                    <td>{{financialReport.revenueProcessed.bankFees|currency}}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="color: blue">Gross Profit</td>
-                    <td style="color: blue">{{financialReport.revenueAll.grossProfit|currency}}</td>
-                    <td></td>
-                    <td style="color: blue">{{financialReport.revenueProcessed.grossProfit|currency}}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Total Expenses</td>
-                    <td>{{financialReport.revenueAll.totalExpense|currency}}</td>
-                    <td></td>
-                    <td>{{financialReport.revenueProcessed.totalExpense|currency}}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)">Net Profit</td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{financialReport.revenueAll.netProfit|currency}}</td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{financialReport.revenueProcessed.netProfit|currency}}</td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="table-revenue">
+            <!-- FINANCIAL REPORT -->
+            <table class="table table-striped" *ngIf="showReport">
+                <thead>
+                    <tr style="text-align: center; font-size: large">
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)" colspan="5">
+                            Revenue Report for the period from {{financialReport.startDate|date:'MM/dd/yyyy'}} to {{financialReport.endDate|date:'MM/dd/yyyy'}} 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <th colspan="2">All Transactions (Pending & Processed)</th>
+                        <th colspan="2">Processed Transactions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Revenue</td>
+                        <td>{{financialReport.revenueAll.totalRevenue|currency}}</td>
+                        <td></td>
+                        <td>{{financialReport.revenueProcessed.totalRevenue|currency}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total BCI Amount</td>
+                        <td>{{financialReport.revenueAll.bciFees|currency}}</td>
+                        <td>
+                            Ohio AG Invoiced: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
+                            {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueAll.totalNotInvoiced < 0 ? -financialReport.revenueAll.totalNotInvoiced : financialReport.revenueAll.totalNotInvoiced)|currency}}
+                        </td>
+                        <td>{{financialReport.revenueProcessed.bciFees|currency}}</td>
+                        <td>
+                            Ohio AG Invoiced: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
+                            {{financialReport.revenueAll.totalNotInvoiced > 0 ? 'Added from previous month:' : 'Will show on next invoice:'}} {{(financialReport.revenueProcessed.totalNotInvoiced < 0 ? -financialReport.revenueProcessed.totalNotInvoiced : financialReport.revenueProcessed.totalNotInvoiced)|currency}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Bank Fees and Credit Card Processing</td>
+                        <td>{{financialReport.revenueAll.bankFees|currency}}</td>
+                        <td></td>
+                        <td>{{financialReport.revenueProcessed.bankFees|currency}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="color: blue">Gross Profit</td>
+                        <td style="color: blue">{{financialReport.revenueAll.grossProfit|currency}}</td>
+                        <td></td>
+                        <td style="color: blue">{{financialReport.revenueProcessed.grossProfit|currency}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total Expenses</td>
+                        <td>{{financialReport.revenueAll.totalExpense|currency}}</td>
+                        <td></td>
+                        <td>{{financialReport.revenueProcessed.totalExpense|currency}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)">Net Profit</td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{financialReport.revenueAll.netProfit|currency}}</td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{financialReport.revenueProcessed.netProfit|currency}}</td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <!-- EXPENSE REPORT -->
         <br>
-        <table class="table table-striped" *ngIf="showReport">
-            <thead>
-                <tr style="text-align: center; font-size: large">
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)" colspan="3">Expenses Report for the period from {{expenseFullReport.startDate|date:'MM/dd/yyyy'}} to {{expenseFullReport.endDate|date:'MM/dd/yyyy'}}</td>
-                </tr>
-                <tr>
-                    <th>Expense Category</th>
-                    <th>Expense Subcategory</th>
-                    <th>All Transactions (Pending & Processed)</th>
-                </tr>
-            </thead>
-            <tbody *ngFor="let item of expenseFullReport.expenseReportAll">
-                <tr>
-                    <td>{{item.expenseCategory.categoryName}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr *ngFor="let sub of item.expenseSubcategoriesTotal">
-                    <td></td>
-                    <td>{{sub.subcategoryName}}</td>
-                    <td>{{sub.subcategoryTotal|currency}}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{expenseAll|currency}}</td>
-                </tr>
-            </tfoot>
-        </table>
+        <div id="table-expenses-all">
+            <!-- EXPENSE REPORT (ALL) -->
+            <table class="table table-striped" *ngIf="showReport">
+                <thead>
+                    <tr style="text-align: center; font-size: large">
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)" colspan="3">Expenses Report for the period from {{expenseFullReport.startDate|date:'MM/dd/yyyy'}} to {{expenseFullReport.endDate|date:'MM/dd/yyyy'}} (All Transactions)</td>
+                    </tr>
+                    <tr>
+                        <th>Expense Category</th>
+                        <th>Expense Subcategory</th>
+                        <th>All Transactions (Pending & Processed)</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let item of expenseFullReport.expenseReportAll">
+                    <tr>
+                        <td>{{item.expenseCategory.categoryName}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr *ngFor="let sub of item.expenseSubcategoriesTotal">
+                        <td></td>
+                        <td>{{sub.subcategoryName}}</td>
+                        <td>{{sub.subcategoryTotal|currency}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{expenseAll|currency}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
-        <table class="table table-striped" *ngIf="showReport">
-            <thead>
-                <tr>
-                    <th>Expense Category</th>
-                    <th>Expense Subcategory</th>
-                    <th>Processed Transactions</th>
-                </tr>
-            </thead>
-            <tbody *ngFor="let item of expenseFullReport.expenseReportProcessed">
-                <tr>
-                    <td>{{item.expenseCategory.categoryName}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr *ngFor="let sub of item.expenseSubcategoriesTotal">
-                    <td></td>
-                    <td>{{sub.subcategoryName}}</td>
-                    <td>{{sub.subcategoryTotal|currency}}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
-                    <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{expenseProcessed|currency}}</td>
-                </tr>
-            </tfoot>
-        </table>
+        <br>
+        <div id="table-expenses-processed">
+            <!-- EXPENSE REPORT (PROCESSED) -->
+            <table class="table table-striped" *ngIf="showReport">
+                <thead>
+                    <tr style="text-align: center; font-size: large">
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)" colspan="3">Expenses Report for the period from {{expenseFullReport.startDate|date:'MM/dd/yyyy'}} to {{expenseFullReport.endDate|date:'MM/dd/yyyy'}} (Processed Transactions)</td>
+                    </tr>
+                    <tr>
+                        <th>Expense Category</th>
+                        <th>Expense Subcategory</th>
+                        <th>Processed Transactions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let item of expenseFullReport.expenseReportProcessed">
+                    <tr>
+                        <td>{{item.expenseCategory.categoryName}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr *ngFor="let sub of item.expenseSubcategoriesTotal">
+                        <td></td>
+                        <td>{{sub.subcategoryName}}</td>
+                        <td>{{sub.subcategoryTotal|currency}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)"></td>
+                        <td style="background-color: #004A80; color: rgb(227, 229, 233)">{{expenseProcessed|currency}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
     </div>
 </div>

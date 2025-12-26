@@ -51,7 +51,7 @@ export class PaymentComponent {
     let today = new Date();
     let currentYear = today.getFullYear()
     let i = 0;
-    for(let y = 2025; y <= currentYear; y++) {
+    for(let y = currentYear; y >= 2025; y--) {
       this.yearList[i] = y;
       i++;
     }

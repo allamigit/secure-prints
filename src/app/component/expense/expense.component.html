@@ -91,13 +91,15 @@
                         <td>
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.expensePaymentStatusCode == 201 || !item.expenseUpdate"
-                                    [hidden]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                    [hidden]="!userFullAccess || !item.expenseUpdate || item.expensePaymentStatusCode == 201 || item.expenseReferenceNumber.startsWith('ApptID-')" 
+                                    [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.expenseUpdate || selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
                                     <li><a class="dropdown-item" [hidden]="item.expenseReconcileDate != null"
                                         (click)="selectReconcile(item.expenseId, i)">Reconcile</a></li>
-                                    <li><a class="dropdown-item" [hidden]="item.expenseDescription != null && item.expenseDescription.startsWith('Refund')" (click)="selectRefund(item.expenseId, i)">Refund</a></li>
+                                    <li><a class="dropdown-item" [hidden]="item.expenseDescription != null && item.expenseDescription.startsWith('Refund')" 
+                                        (click)="selectRefund(item.expenseId, i)">Refund</a></li>
                                 </ul>
                             </div>                        
                         </td>
@@ -147,7 +149,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="row g-3 {{!userFullAccess || pymtStatusCode == 204 ? 'disableDiv' : ''}}">
+                        <form class="row g-3 {{!userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund') ? 'disableDiv' : ''}}">
                             <div class="form-floating col-md-2">
                                 <input type="text" class="form-control form-control-sm col-md-5 {{reqRefNumber}}" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" 
                                     [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (input)="onRefNumberEntry()" maxlength="30" placeholder="Reference Number" required>
@@ -194,7 +196,7 @@
                                 <label>Expense Description</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="text" class="form-control form-control-sm col-md-5 {{reqExpAmount}}" autocomplete="off" name="expAmount" 
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqExpAmount}}" autocomplete="off" name="expAmount" inputmode="numeric" 
                                     (input)="onExpAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
                                 <label>Expense Amount</label>
                             </div>
@@ -230,7 +232,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess" (click)="clickSaveExpense()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund')" (click)="clickSaveExpense()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>

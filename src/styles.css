@@ -440,5 +440,11 @@ html, body {
   object-fit: contain;
 }
 
+.table th {
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 
 

@@ -179,7 +179,7 @@
                                 <label>Invoice Due Date</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvAmount}}" autocomplete="off" name="invAmount" 
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvAmount}}" autocomplete="off" name="invAmount" inputmode="numeric"  
                                     (input)="onInvoiceAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="invAmount" placeholder="Invoice Amount" required>
                                 <label>Invoice Amount</label>
                             </div>
