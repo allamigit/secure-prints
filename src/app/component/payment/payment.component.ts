@@ -35,6 +35,7 @@ export class PaymentComponent {
     paymentComment: string[] = [];
     showDetails: boolean = false;
     showNonReconciled: boolean = false;
+    showAll: boolean = true;
     userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
     pollSub!: Subscription;
     sProcessed: number = 0; sPending: number = 0; sRefund: number = 0; sReconciled: number = 0; sTotal: number = 0;
@@ -108,6 +109,15 @@ export class PaymentComponent {
     this.clickView();
   }
 
+  clickAllSwitch() {
+    if((document.getElementById('switch-check-all') as HTMLInputElement).checked) {
+      this.showAll = true;
+    } else {
+      this.showAll = false;
+    }
+    this.clickView();
+  }
+
   selectYear(event: Event) {
     let year = (event.target as HTMLSelectElement).value;
     if(year != '0') {
@@ -139,8 +149,11 @@ export class PaymentComponent {
     this.appointmentPaymentService.getAllPayments(this.startDate, this.endDate, this.showNonReconciled)
       .subscribe(data => {
         this.paymentList = data;
-        this.paymentList.appointmentPayment = this.paymentList.appointmentPayment.filter(item => item.paymentStatusCode != 203);
-        this.paymentList.appointmentInformation = this.paymentList.appointmentInformation.filter(item => item.appointmentStatusCode != 103);
+        this.originalPaymentList = this.paymentList;
+        if(!this.showAll) {
+          this.paymentList.appointmentPayment = this.paymentList.appointmentPayment.filter(item => item.paymentStatusCode != 203);
+          this.paymentList.appointmentInformation = this.paymentList.appointmentInformation.filter(item => item.appointmentStatusCode != 103);
+        }
         for(let i = 0; i < this.paymentList.appointmentPayment.length; i++) {
           this.serviceAmount[i] = this.paymentList.appointmentPayment[i].serviceAmount;
           this.paymentMethodCode[i] = this.paymentList.appointmentPayment[i].paymentMethodCode;
@@ -163,7 +176,6 @@ export class PaymentComponent {
           this.sTotal = this.sProcessed + this.sPending + this.sRefund;
           this.bTotal = this.bProcessed + this.bPending + this.bRefund;
         }  
-        this.originalPaymentList = this.paymentList;
       });    
   }
 
@@ -171,6 +183,7 @@ export class PaymentComponent {
     this.startDate = '';
     this.endDate = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
+    (document.getElementById('switch-check-all') as HTMLInputElement).checked = true;
     (document.getElementById('year') as HTMLInputElement).value = '0';
     window.location.reload();
   }

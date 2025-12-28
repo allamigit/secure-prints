@@ -38,17 +38,23 @@
                 </button>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12" [hidden]="appointmentList.length == 0">
+                <input type="search" name="fullName" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="fullName"
+                    (input)="onNameEntry()" autocomplete="off" maxlength="30" placeholder="Full Name contains...">                                
             </div>
             <div class="col-12">
                 <div class="form-check form-switch">
                     <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()" checked>
-                    <label class="form-check-label">Show active appointments</label>
+                    <label class="form-check-label">Active appointments</label>
                 </div>
-            </div>
-            <div class="col-12" [hidden]="appointmentList.length == 0">
-                <input type="search" name="fullName" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="fullName"
-                    (input)="onNameEntry()" autocomplete="off" maxlength="30" placeholder="Name contains...">                                
             </div>
         </form>
 

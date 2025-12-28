@@ -43,6 +43,7 @@ export class InvoiceComponent {
       saveButton: string = '';
       subcategoryName: string = 'BCI Service Fees';
       showNonReconciled: boolean = false;
+      showAll: boolean = true;
       invoiceModal: any;
       expenseTypeModal: any;
       keyword: string = '';
@@ -205,6 +206,15 @@ export class InvoiceComponent {
     this.clickView();
   }
 
+  clickAllSwitch() {
+    if((document.getElementById('switch-check-all') as HTMLInputElement).checked) {
+      this.showAll = true;
+    } else {
+      this.showAll = false;
+    }
+    this.clickView();
+  }
+
   selectYear(event: Event) {
     let year = (event.target as HTMLSelectElement).value;
     if(year != '0') {
@@ -235,7 +245,8 @@ export class InvoiceComponent {
     this.invoiceService.getAllInvoices(this.startDate, this.endDate, this.showNonReconciled)
       .subscribe(data => {
         this.invoiceList = data;
-        this.invoiceList = this.invoiceList.filter(item => item.invoicePaymentStatusCode != 203);
+        this.originalInvoiceList = this.invoiceList;
+        if(!this.showAll) this.invoiceList = this.invoiceList.filter(item => item.invoicePaymentStatusCode != 203);
         for(let i = 0; i < this.invoiceList.length; i++) {
           switch(this.invoiceList[i].invoicePaymentStatusCode) {
             case 201: this.ePending += this.invoiceList[i].invoiceAmount; 
@@ -247,7 +258,6 @@ export class InvoiceComponent {
           }
           this.eTotal = this.eProcessed + this.ePending;
         }  
-        this.originalInvoiceList = this.invoiceList;
       });    
   }
 
@@ -255,6 +265,7 @@ export class InvoiceComponent {
     this.startDate = '';
     this.endDate = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
+    (document.getElementById('switch-check-all') as HTMLInputElement).checked = true;
     (document.getElementById('year') as HTMLInputElement).value = '0';
     window.location.reload();
   }
@@ -396,7 +407,7 @@ export class InvoiceComponent {
       let mm = String(today.getMonth() + 1).padStart(2, '0');
       let dd = String(today.getDate()).padStart(2, '0');
       this.pymtDate = `${yyyy}-${mm}-${dd}`;
-      this.reqPymtMethod = 'is-invalid';
+      if(this.pymtMethodCode == 0) this.reqPymtMethod = 'is-invalid';
     }
   }
 
@@ -419,7 +430,8 @@ export class InvoiceComponent {
     if(diffDays < 7) dueFlag = '🟡';
     if(diffDays < 4) dueFlag = '🟠';
     if(diffDays <= 0) dueFlag = '🔴';
-    if(invoicePaymentStatusCode == 202) dueFlag = '📄';
+    if(invoicePaymentStatusCode == 202) dueFlag = '🧾';
+    if(invoicePaymentStatusCode == 203) dueFlag = '❌️';
     return dueFlag;
   }
 

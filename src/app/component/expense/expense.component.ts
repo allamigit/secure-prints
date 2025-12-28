@@ -43,6 +43,7 @@ export class ExpenseComponent {
       saveButton: string = '';
       subcategoryName: string = '';
       showNonReconciled: boolean = false;
+      showAll: boolean = true;
       expenseModal: any;
       expenseTypeModal: any;
       keyword: string = '';
@@ -209,6 +210,15 @@ export class ExpenseComponent {
     this.clickView();
   }
 
+  clickAllSwitch() {
+    if((document.getElementById('switch-check-all') as HTMLInputElement).checked) {
+      this.showAll = true;
+    } else {
+      this.showAll = false;
+    }
+    this.clickView();
+  }
+
   selectYear(event: Event) {
     let year = (event.target as HTMLSelectElement).value;
     if(year != '0') {
@@ -239,7 +249,8 @@ export class ExpenseComponent {
     this.expenseService.getAllExpenses(this.startDate, this.endDate, this.showNonReconciled)
       .subscribe(data => {
         this.expenseList = data;
-        this.expenseList = this.expenseList.filter(item => item.expensePaymentStatusCode != 203);
+        this.originalExpenseList = this.expenseList;
+        if(!this.showAll) this.expenseList = this.expenseList.filter(item => item.expensePaymentStatusCode != 203);
         for(let i = 0; i < this.expenseList.length; i++) {
           switch(this.expenseList[i].expensePaymentStatusCode) {
             case 201: this.ePending += this.expenseList[i].expenseAmount; 
@@ -253,7 +264,6 @@ export class ExpenseComponent {
           }
           this.eTotal = this.eProcessed + this.ePending + this.eRefund;
         }  
-        this.originalExpenseList = this.expenseList;
       });    
   }
 
@@ -262,6 +272,7 @@ export class ExpenseComponent {
     this.endDate = '';
     this.vendor = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
+    (document.getElementById('switch-check-all') as HTMLInputElement).checked = true;
     (document.getElementById('year') as HTMLInputElement).value = '0';
     window.location.reload();
   }
@@ -419,7 +430,7 @@ export class ExpenseComponent {
       let mm = String(today.getMonth() + 1).padStart(2, '0');
       let dd = String(today.getDate()).padStart(2, '0');
       this.pymtDate = `${yyyy}-${mm}-${dd}`;
-      this.reqPymtMethod = 'is-invalid';
+      if(this.pymtMethodCode == 0) this.reqPymtMethod = 'is-invalid';
     }
   }
 

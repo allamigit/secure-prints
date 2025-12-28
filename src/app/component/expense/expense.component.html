@@ -39,22 +39,34 @@
                 </button>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
-            </div>
-            <div class="col-12">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
-                    <label class="form-check-label">Show non-reconciled expenses</label>
-                </div>
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" [hidden]="!userFullAccess" (click)="clickAddExpense()">
                     Add Expense
                 </button>
             </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-12" [hidden]="expenseList.length == 0">
                 <input type="search" name="vendor" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="vendor"
                     (input)="onVendorFilterEntry()" autocomplete="off" maxlength="30" placeholder="Vendor contains...">                                
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
+                    <label class="form-check-label">Non-reconciled expenses</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-all" type="checkbox" checked (click)="clickAllSwitch()">
+                    <label class="form-check-label">All expenses</label>
+                </div>
             </div>
         </form>
 
@@ -91,7 +103,7 @@
                         <td>
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.expensePaymentStatusCode == 201 || !item.expenseUpdate"
-                                    [hidden]="!userFullAccess || !item.expenseUpdate || item.expensePaymentStatusCode == 201 || item.expenseReferenceNumber.startsWith('ApptID-')" 
+                                    [hidden]="!userFullAccess || !item.expenseUpdate || item.expensePaymentStatusCode == 201 || item.expensePaymentStatusCode == 203 || item.expenseReferenceNumber.startsWith('ApptID-')" 
                                     [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.expenseUpdate || selectedDate[i] == null">Choose...</button>
@@ -115,6 +127,8 @@
                             <p>T O T A L</p>  
                             <p>Reconciled</p>
                         </td>
+                        <td></td>
+                        <td></td>
                         <td class="text-left" style="color: rgb(126, 124, 124)">
                             <p style="color: white">-</p>
                             <p>{{eProcessed|currency}}</p>
@@ -123,8 +137,6 @@
                             <p>{{eTotal|currency}}</p>
                             <p>{{eReconciled|currency}}</p>
                         </td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -201,10 +213,11 @@
                                 <label>Expense Amount</label>
                             </div>
                             <div class="form-floating col-md-3">
-                                <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
+                                <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
                                     <option value="0" selected></option>
                                     <option value="201">Pending</option>
                                     <option value="202">Processed</option>
+                                    <option value="203" *ngIf="modalTitle.startsWith('Update')">Cancelled</option>
                                     <option value="204" [hidden]="pymtStatusCode != 204">Refunded</option>
                                 </select>
                                 <label>Payment Status</label>

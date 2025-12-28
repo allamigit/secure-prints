@@ -38,12 +38,24 @@
                 </button>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
             </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
             <div class="col-12">
                 <div class="form-check form-switch">
                     <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
-                    <label class="form-check-label">Show non-reconciled payments</label>
+                    <label class="form-check-label">Non-reconciled payments</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-all" type="checkbox" checked (click)="clickAllSwitch()">
+                    <label class="form-check-label">All payments</label>
                 </div>
             </div>
         </form>
@@ -83,7 +95,7 @@
                         <td>
                             <div class="input-group mb-0">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
-                                    [hidden]="item.paymentStatusCode == 201 || !item.paymentUpdate || !userFullAccess"
+                                    [hidden]="item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !item.paymentUpdate || !userFullAccess"
                                     [style]="selectedDate[i] == null || selectedDate[i] == '' ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="!item.paymentUpdate || selectedDate[i] == null">Choose...</button>
@@ -100,11 +112,11 @@
                             <form class="row g-3">
                                 <div class="form-floating col-md-2">
                                     <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="service-amount{{i}}" inputmode="numeric"
-                                        (keypress)="allowOnlyNumbers($event)" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess" [(ngModel)]="serviceAmount[i]" placeholder="Service Amount">
+                                        (keypress)="allowOnlyNumbers($event)" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" [(ngModel)]="serviceAmount[i]" placeholder="Service Amount">
                                     <label>Service Amount</label>
                                 </div>
                                 <div class="form-floating col-md-2">
-                                    <select class="form-select" style="font-size: small" name="pymt-method{{i}}" [(ngModel)]="paymentMethodCode[i]" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess">
+                                    <select class="form-select" style="font-size: small" name="pymt-method{{i}}" [(ngModel)]="paymentMethodCode[i]" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess">
                                         <option value="0"></option>
                                         <option value="301">Credit/Debit Card</option>
                                         <option value="302">Cash</option>
@@ -116,22 +128,23 @@
                                 </div>
                                 <div class="form-floating col-md-5">
                                     <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="payment-comment{{i}}" 
-                                        [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess" [(ngModel)]="paymentComment[i]" maxlength="100" placeholder="Payment Comment">
+                                        [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" [(ngModel)]="paymentComment[i]" maxlength="100" placeholder="Payment Comment">
                                     <label>Payment Comment</label>
                                 </div>
                                 <div class="form-floating col-md-2">
-                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess" (click)="clickSave(selectedAppointmentId, i)">Save</button>
+                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" (click)="clickSave(selectedAppointmentId, i)">Save</button>
                                 </div>
                             </form>
+
                             <p></p>
-                            <form class="row g-3" *ngIf="item.paymentReconcileDate != null">
+                            <form class="row g-3" *ngIf="item.paymentReconcileDate != null || item.paymentStatusCode != 203">
                                 <div class="form-floating col-md-2">
                                     <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcile-date{{i}}" [style]="paymentReconcileDate[i] == null || paymentReconcileDate[i] == '' ? 'color: white' : 'color: black'" 
-                                        [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess" [(ngModel)]="paymentReconcileDate[i]" (change)="onReconcileDateEntry(i)" placeholder="Reconcile Date">
+                                        [(ngModel)]="paymentReconcileDate[i]" (change)="onReconcileDateEntry(i)" placeholder="Reconcile Date">
                                     <label>Reconcile Date</label>
                                 </div>
                                 <div class="form-floating col-md-2">
-                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || !userFullAccess || paymentReconcileDate[i] == ''" (click)="selectReconcile(item.appointmentId, i)">Update</button>
+                                    <button type="button" class="btn btn-success" (click)="selectReconcile(item.appointmentId, i)">Update</button>
                                 </div>
                             </form>
                         </td>
@@ -147,6 +160,8 @@
                             <p>T O T A L</p>  
                             <p>Reconciled</p>
                         </td>
+                        <td></td>
+                        <td></td>
                         <td class="text-left" style="color: rgb(126, 124, 124)">
                             <p style="color: white">-</p>
                             <p>{{sProcessed|currency}}</p>
@@ -163,8 +178,6 @@
                             <p>{{bTotal|currency}}</p>
                             <p>{{bReconciled|currency}}</p>
                         </td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

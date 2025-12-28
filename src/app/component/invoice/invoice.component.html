@@ -39,18 +39,30 @@
                 </button>
             </div>
             <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">Reset</button>
-            </div>
-            <div class="col-12">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
-                    <label class="form-check-label">Show non-reconciled expenses</label>
-                </div>
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#invoice-modal" [hidden]="!userFullAccess" (click)="clickAddInvoice()">
                     Add Invoice
                 </button>
+            </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
+                    <label class="form-check-label">Non-reconciled invoices</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-all" type="checkbox" checked (click)="clickAllSwitch()">
+                    <label class="form-check-label">All invoices</label>
+                </div>
             </div>
         </form>
 
@@ -62,7 +74,8 @@
         <p></p>
 
         <form class="row row-cols-lg-auto g-4 align-items-center" *ngIf="invoiceList.length > 0">
-            <div class="col-12">📄 Paid Invoice</div>
+            <div class="col-12">🧾 Paid Invoice</div>
+            <div class="col-12">❌️ Cancelled Invoice</div>
             <div class="col-12">🟢 Payment not due</div>
             <div class="col-12">🟡 Payment due within 4 to 6 days</div>
             <div class="col-12">🟠 Payment due within 1 to 3 days</div>
@@ -100,7 +113,7 @@
                         <td>
                             <div class="input-group mb-0" [hidden]="item.invoiceReconcileDate != null || item.invoicePaymentDate == null">
                                 <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
-                                    [hidden]="!userFullAccess" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                    [hidden]="!userFullAccess || item.invoicePaymentStatusCode == 203" [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
                                     aria-expanded="false" [hidden]="selectedDate[i] == null">Choose...</button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
@@ -123,6 +136,8 @@
                             <p>T O T A L</p>  
                             <p>Reconciled</p>
                         </td>
+                        <td></td>
+                        <td></td>
                         <td class="text-left" style="color: rgb(126, 124, 124)">
                             <p style="color: white">-</p>
                             <p>{{eProcessed|currency}}</p>
@@ -130,8 +145,6 @@
                             <p>{{eTotal|currency}}</p>
                             <p>{{eReconciled|currency}}</p>
                         </td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -210,6 +223,7 @@
                                     <option value="0" selected></option>
                                     <option value="201">Pending</option>
                                     <option value="202">Processed</option>
+                                    <option value="203" *ngIf="modalTitle.startsWith('Update')">Cancelled</option>
                                 </select>
                                 <label>Payment Status</label>
                             </div>
