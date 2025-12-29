@@ -223,7 +223,7 @@
                                     <option value="0" selected></option>
                                     <option value="201">Pending</option>
                                     <option value="202">Processed</option>
-                                    <option value="203" *ngIf="modalTitle.startsWith('Update')">Cancelled</option>
+                                    <option value="203" [hidden]="!modalTitle.startsWith('Update')">Cancelled</option>
                                 </select>
                                 <label>Payment Status</label>
                             </div>

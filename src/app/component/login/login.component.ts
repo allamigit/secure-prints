@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '@services/user.service';
 import { ApiStatus } from '@models/ApiStatus';
-import { ApiResponse } from '@models/ApiResponse';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +16,6 @@ import { ApiResponse } from '@models/ApiResponse';
 export class LoginComponent {
 
   apiStatus?: ApiStatus;
-  apiResponse?: ApiResponse;
   userName: string = '';
   userPassword: string = '';
   newPassword: string = '';
@@ -57,18 +55,23 @@ export class LoginComponent {
     this.userService.userLogin(this.userName, this.userPassword)
       .subscribe(
         data => {
-          this.apiResponse = data;
+          this.apiStatus = data;
           this.errorMessage = '';
           this.isValidLogin = true;
           if(this.userPassword != 'user1234') {
-            localStorage.setItem('name', this.apiResponse.apiResponseEntity.userFullName);
-            localStorage.setItem('user', this.apiResponse.apiResponseEntity.userName);
-            localStorage.setItem('rx', this.apiResponse.apiResponseEntity.userFullAccess.toString());
+            this.userService.getUserDetails(this.userName).subscribe(
+              user => {
+                window.location.reload();
+                localStorage.setItem('name', user.userFullName);
+                localStorage.setItem('user', user.userName);
+                localStorage.setItem('rx', user.userFullAccess.toString());
+              }
+            )        
             this.router.navigate(['/home']); 
           }
         }, 
         error => {
-          this.apiStatus = error.error?.apiStatus;
+          this.apiStatus = error.error;
           this.errorMessage = this.apiStatus?.responseMessage;
           this.isValidLogin = false;
         });

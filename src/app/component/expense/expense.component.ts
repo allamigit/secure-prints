@@ -298,7 +298,7 @@ export class ExpenseComponent {
           this.apiStatus = error.error;
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
-          this.responseMessage = error.error.responseMessage;
+          this.responseMessage = this.apiStatus.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
     } else {
@@ -315,7 +315,7 @@ export class ExpenseComponent {
           this.apiStatus = error.error;
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
-          this.responseMessage = error.error.responseMessage;
+          this.responseMessage = this.apiStatus.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
     }
@@ -334,7 +334,7 @@ export class ExpenseComponent {
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
-          this.responseMessage = error.error.responseMessage;
+          this.responseMessage = this.apiStatus.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
         
@@ -356,7 +356,7 @@ export class ExpenseComponent {
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
-          this.responseMessage = error.error.responseMessage;
+          this.responseMessage = this.apiStatus.responseMessage;
           setTimeout(this.hideAlert, 4000);
         });
   }

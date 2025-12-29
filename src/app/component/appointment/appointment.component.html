@@ -137,7 +137,7 @@
                             <div class="form-div" *ngIf="showDetails">
                                 <div class="card">
                                     <div class="card-body">
-                                        <button class="btn btn-secondary btn-sm" style="background-color: #004A80">Appointment ID: <span>{{item.appointmentResponse.appointmentId}}</span></button>
+                                        <button class="btn btn-secondary btn-sm" style="background-color: #004A80" (click)="clickAppointmentId(item)">Appointment ID: <span>{{item.appointmentResponse.appointmentId}}</span></button>
                                         <p class="info-color-1">Email Address: <span class="info-color-2">{{item.appointmentInformation.customerEmail}}</span></p>
                                         <p class="info-color-1">Phone Number: <span class="info-color-2">{{item.appointmentInformation.customerPhone}}</span></p>
                                         <p class="info-color-1">Service Type: <span class="info-color-2">{{item.appointmentResponse.serviceName}}</span></p>

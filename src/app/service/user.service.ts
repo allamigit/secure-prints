@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 import { ApiStatus } from '@models/ApiStatus';
-import { ApiResponse } from '@models/ApiResponse';
 import { User } from '@models/User';
 
 @Injectable({
@@ -18,9 +17,9 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  userLogin(userName: string, userPassword: string): Observable<ApiResponse> {
+  userLogin(userName: string, userPassword: string): Observable<ApiStatus> {
     this.requestUrl = environment.apiUrl + 'user/login?userName=' + userName + '&userPassword=' + userPassword;
-    return this.http.post<ApiResponse>(this.requestUrl, {}, { withCredentials: true });
+    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
   }
 
   userLogout(): Observable<ApiStatus> {

@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     }); 
   }
   
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.companyService.getCompanyDetails(1).subscribe(data => this.company = data);
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
