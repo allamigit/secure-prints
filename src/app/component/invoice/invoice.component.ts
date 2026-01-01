@@ -233,7 +233,7 @@ export class InvoiceComponent {
       this.endDate = this.startDate;
     } else if(this.startDate == '' && this.endDate != '') {
       this.startDate = this.endDate;
-    } else {
+    } else if(this.startDate == '' && this.endDate == '') {
       let today = new Date();
       let yyyy = today.getFullYear();
       this.startDate = `${yyyy}-01-01`;

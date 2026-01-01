@@ -44,7 +44,7 @@ export class AppointmentComponent {
     let today = new Date();
     let currentYear = today.getFullYear()
     let i = 0;
-    for(let y = 2025; y <= currentYear; y++) {
+    for(let y = currentYear; y >= 2025; y--) {
       this.yearList[i] = y;
       i++;
     }
@@ -118,7 +118,7 @@ export class AppointmentComponent {
       this.endDate = this.startDate;
     } else if(this.startDate == '' && this.endDate != '') {
       this.startDate = this.endDate;
-    } else {
+    } else if(this.startDate == '' && this.endDate == '') {
       let today = new Date();
       let yyyy = today.getFullYear();
       this.startDate = `${yyyy}-01-01`;

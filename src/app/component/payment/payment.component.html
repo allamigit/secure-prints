@@ -8,9 +8,11 @@
                     <div class="input-group-text">Year</div>
                     <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
                         <option value="0" selected></option>
-                        <option *ngFor="let item of yearList" value={{item}}>
+                        <!--<option *ngFor="let item of yearList" value={{item}}>
                             {{item}}
-                        </option>
+                        </option>-->
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
                     </select>
                 </div>
             </div>
