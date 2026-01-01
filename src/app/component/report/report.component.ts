@@ -5,8 +5,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ReportService } from '@services/report.service';
 import { FinancialReport } from '@models/FinancialReport';
 import { ExpenseFullReport } from '@models/ExpenseFullReport';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+//import jsPDF from 'jspdf';
+//import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-report',
@@ -82,6 +82,8 @@ export class ReportComponent {
   }
 
   async exportReport() {
+    const { default: html2canvas } = await import('html2canvas');
+    const { jsPDF } = await import('jspdf');
 
     const tableIds = [
       'table-revenue',
