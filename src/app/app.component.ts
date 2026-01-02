@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     this.isLoggedIn = false;
     localStorage.removeItem('name');
     localStorage.removeItem('user');
-    localStorage.setItem('rx', 'true');
+    localStorage.removeItem('rx');
     this.router.navigate(['/home']);
   }
 
