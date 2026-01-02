@@ -250,6 +250,7 @@ export class ExpenseComponent {
       .subscribe(data => {
         this.expenseList = data;
         this.originalExpenseList = this.expenseList;
+        if(this.vendor != '') this.expenseList = this.applyVendorNameFilter();
         if(!this.showAll) this.expenseList = this.expenseList.filter(item => item.expensePaymentStatusCode != 203);
         for(let i = 0; i < this.expenseList.length; i++) {
           switch(this.expenseList[i].expensePaymentStatusCode) {
