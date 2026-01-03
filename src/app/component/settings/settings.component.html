@@ -119,6 +119,10 @@
                         <h6>Company Information</h6>
                     </div>
                     <div class="card-body">
+                        <!-- ALERT MESSAGE -->
+                        <div id="company-alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" placeholder="Company Name" maxlength="60">
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" placeholder="Address Line 1" maxlength="100">
                         <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" placeholder="Address Line 2" maxlength="100">
@@ -153,7 +157,7 @@
                     </div>
                     <div class="card-body">
                         <!-- ALERT MESSAGE -->
-                        <div id="alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                        <div id="reason-alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
                             {{responseMessage}}
                         </div>
                         <div class="d-grid gap-2 justify-content-md-left">

@@ -100,8 +100,13 @@ export class SettingsComponent {
     if(this.alertType == 'alert alert-success') window.location.reload();
   }
 
-  hideAlert() {
-    (document.getElementById('alert') as HTMLInputElement).hidden = true;
+  hideCompanyAlert() {
+    (document.getElementById('company-alert') as HTMLInputElement).hidden = true;
+    window.location.reload();
+  }
+
+  hideReasonAlert() {
+    (document.getElementById('reason-alert') as HTMLInputElement).hidden = true;
   }
 
   selectUser() {
@@ -133,8 +138,18 @@ export class SettingsComponent {
     this.companyService.updateCompanyDetails(this.company).subscribe(
       data => {
         this.apiStatus = data;
-        window.location.reload();
-    });    
+        this.alertType = 'alert alert-success';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('company-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideCompanyAlert, 3500);
+      },
+      error => {
+        this.apiStatus = error.error;
+        this.alertType = 'alert alert-danger';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('company-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideCompanyAlert, 3500);
+      });
   }
 
   clickAddUser() {
@@ -158,7 +173,7 @@ export class SettingsComponent {
         this.alertType = 'alert alert-danger';
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('add-user-alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAddUserAlert, 4000);
+        setTimeout(this.hideAddUserAlert, 3500);
       });
   }
 
@@ -182,7 +197,14 @@ export class SettingsComponent {
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
         setTimeout(this.hideUserAlert, 3500);
-    });
+      },
+      error => {
+        this.apiStatus = error.error;
+        this.alertType = 'alert alert-danger';
+        this.responseMessage = this.apiStatus.responseMessage;
+        (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideUserAlert, 3500);
+      });
   }
 
   clickChangePassword() {
@@ -213,7 +235,7 @@ export class SettingsComponent {
         this.alertType = 'alert alert-danger';
         this.responseMessage = this.apiStatus.responseMessage;
         (document.getElementById('user-alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideUserAlert, 4000);
+        setTimeout(this.hideUserAlert, 3500);
     });
   }
 
@@ -235,8 +257,8 @@ export class SettingsComponent {
         this.apiStatus = data;
         this.alertType = 'alert alert-success';
         this.responseMessage = this.apiStatus.responseMessage;
-        (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        (document.getElementById('reason-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideReasonAlert, 4000);
       });
   }
 
@@ -249,8 +271,8 @@ export class SettingsComponent {
         this.responseMessage = this.apiStatus.responseMessage;
         this.loadingButton = false;
         this.fileName = '';
-        (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        (document.getElementById('reason-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideReasonAlert, 4000);
       },
       error => {
         this.apiStatus = error.error;
@@ -258,8 +280,8 @@ export class SettingsComponent {
         this.responseMessage = this.apiStatus.responseMessage;
         this.loadingButton = false;
         this.fileName = '';
-        (document.getElementById('alert') as HTMLInputElement).hidden = false;
-        setTimeout(this.hideAlert, 4000);
+        (document.getElementById('reason-alert') as HTMLInputElement).hidden = false;
+        setTimeout(this.hideReasonAlert, 4000);
       });
   }
 
