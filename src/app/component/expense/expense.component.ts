@@ -26,6 +26,8 @@ export class ExpenseComponent {
       originalExpenseList: Expense[] = [];
       expenseList: Expense[] = [];
       expense!: Expense;
+      expenseStored: any;
+      expenseCaptured: any;
       expnseTypName!: ExpenseTypeName;
       expenseType: any;
       expenseTypeList: ExpenseType[] = [];
@@ -60,6 +62,7 @@ export class ExpenseComponent {
       reqPymtMethod: string = '';
       eProcessed: number = 0; ePending: number = 0; eRefund: number = 0; eReconciled: number = 0; eTotal: number = 0;
       yearList: number[] = [];
+      changed: boolean = false;
   
       expId: number | null = null;
       refNumber: string = '';
@@ -157,6 +160,10 @@ export class ExpenseComponent {
 
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
+  }
+
+  hideAlertModal() {
+    (document.getElementById('alert-modal') as HTMLInputElement).hidden = true;
   }
 
   getPaymentMethodName(code: number) {
@@ -291,36 +298,36 @@ export class ExpenseComponent {
         data => {
           this.apiStatus = data;
           this.clickView();
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         }, error => {
           this.apiStatus = error.error;
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         });
     } else {
-      window.scrollTo(0, 0);
       this.expenseService.updateExpenseDetails(this.expense).subscribe(
         data => {
           this.apiStatus = data;
+          this.expenseStored = this.expenseCaptured;
           this.clickView();
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         }, error => {
           this.apiStatus = error.error;
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         });
     }
-    this.resetFields();
+    //this.resetFields();
   }
 
   selectReconcile(expenseId: any, idx: number) {
@@ -333,6 +340,7 @@ export class ExpenseComponent {
         error => {
           this.apiStatus = error.error;
           this.clickView();
+          window.scrollTo(0, 0);
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
@@ -342,6 +350,7 @@ export class ExpenseComponent {
   }
 
   selectRefund(expenseId: any, idx: number) {
+    window.scrollTo(0, 0);
     this.expenseService.refundExpense(expenseId, this.selectedDate[idx])
       .subscribe(
         data => {
@@ -365,6 +374,8 @@ export class ExpenseComponent {
   clickReferenceNumber(item: Expense) {
     this.modalTitle = 'Update Expense';
     this.saveButton = 'Save Changes';
+    this.expenseStored = item;
+
     this.expId = item.expenseId;
     this.refNumber = item.expenseReferenceNumber;
     this.refDate = item.expenseReferenceDate;
@@ -492,6 +503,9 @@ export class ExpenseComponent {
     this.expense.expensePaymentDate = this.pymtDate;
     this.expense.expensePaymentMethodCode = this.pymtMethodCode;
     this.expense.expenseReconcileDate = this.reconcileDate;
+
+    this.expenseCaptured = this.expense;
+    this.changed = Object.keys(this.expenseStored).every(key => this.expenseStored[key] == this.expenseCaptured[key]);
   }
 
   validaeRequiedFields(): boolean {
@@ -503,7 +517,7 @@ export class ExpenseComponent {
     if(this.expAmount == 0) this.reqExpAmount = 'is-invalid'; else this.reqExpAmount = '';
     if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
 
-    return this.refNumber != '' && this.refDate != '' && this.vendorName != '' && this.catCode != 0 && 
+    return !this.changed && this.refNumber != '' && this.refDate != '' && this.vendorName != '' && this.catCode != 0 && 
            this.subcatCode != 0 && this.expAmount != 0 && this.pymtStatusCode != 0 && this.reqPymtDate == '' && this.reqPymtMethod == '';
   }
 

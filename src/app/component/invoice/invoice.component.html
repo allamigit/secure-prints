@@ -75,7 +75,7 @@
 
         <form class="row row-cols-lg-auto g-4 align-items-center" *ngIf="invoiceList.length > 0">
             <div class="col-12">🧾 Paid Invoice</div>
-            <div class="col-12">❌️ Cancelled Invoice</div>
+            <div class="col-12">❌️ Cancelled Payment</div>
             <div class="col-12">🟢 Payment not due</div>
             <div class="col-12">🟡 Payment due within 4 to 6 days</div>
             <div class="col-12">🟠 Payment due within 1 to 3 days</div>
@@ -164,12 +164,18 @@
         <!-- INVOICE MODAL -->
         <div class="modal fade" tabindex="-1" id="invoice-modal">
             <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
+                <div class="modal-content" (mouseover)="assignFields()">
                     <div class="modal-header">
                         <h5 class="modal-title">{{modalTitle}}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- ALERT MESSAGE -->
+                        <div id="alert-modal" class={{alertType}} role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
+                        <p></p>
+
                         <form class="row g-3 {{!userFullAccess ? 'disableDiv' : ''}}">
                             <div class="form-floating col-md-2">
                                 <input type="text" class="form-control form-control-sm col-md-5 {{reqInvNumber}}" autocomplete="off" name="invNumber" [(ngModel)]="invNumber" 
@@ -192,7 +198,7 @@
                                 <label>Invoice Due Date</label>
                             </div>
                             <div class="form-floating col-md-2">
-                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvAmount}}" autocomplete="off" name="invAmount" inputmode="numeric"  
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqInvAmount}}" autocomplete="off" name="invAmount" inputmode="numeric" 
                                     (input)="onInvoiceAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="invAmount" placeholder="Invoice Amount" required>
                                 <label>Invoice Amount</label>
                             </div>
@@ -255,7 +261,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess" (click)="clickSaveInvoice()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" [disabled]="!validaeRequiedFields() || !userFullAccess" (click)="clickSaveInvoice()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>

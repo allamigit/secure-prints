@@ -155,12 +155,18 @@
         <!-- EXPENSE MODAL -->
         <div class="modal fade" tabindex="-1" id="expense-modal">
             <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
+                <div class="modal-content" (mouseover)="assignFields()">
                     <div class="modal-header">
                         <h5 class="modal-title">{{modalTitle}}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- ALERT MESSAGE -->
+                        <div id="alert-modal" class={{alertType}} role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
+                        <p></p>
+
                         <form class="row g-3 {{!userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund') ? 'disableDiv' : ''}}">
                             <div class="form-floating col-md-2">
                                 <input type="text" class="form-control form-control-sm col-md-5 {{reqRefNumber}}" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" 
@@ -245,7 +251,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!validaeRequiedFields() || !userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund')" (click)="clickSaveExpense()">{{saveButton}}</button>
+                        <button type="button" class="btn btn-success" [disabled]="!validaeRequiedFields() || !userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund')" (click)="clickSaveExpense()">{{saveButton}}</button>
                     </div>
                 </div>
             </div>

@@ -27,6 +27,8 @@ export class InvoiceComponent {
       originalInvoiceList: Invoice[] = [];
       invoiceList: Invoice[] = [];
       invoice!: Invoice;
+      invoiceStored: any;
+      invoiceCaptured: any;
       expnseTypName!: ExpenseTypeName;
       expenseType: any;
       expenseTypeList: ExpenseType[] = [];
@@ -61,6 +63,7 @@ export class InvoiceComponent {
       reqPymtMethod: string = '';
       eProcessed: number = 0; ePending: number = 0; eReconciled: number = 0; eTotal: number = 0;
       yearList: number[] = [];
+      changed: boolean = false;
   
       invId: number | null = null;
       invNumber: string = '';
@@ -153,6 +156,10 @@ export class InvoiceComponent {
 
   hideAlert() {
     (document.getElementById('alert') as HTMLInputElement).hidden = true;
+  }
+
+  hideAlertModal() {
+    (document.getElementById('alert-modal') as HTMLInputElement).hidden = true;
   }
 
   getPaymentMethodName(code: number) {
@@ -287,36 +294,36 @@ export class InvoiceComponent {
         data => {
           this.apiStatus = data;
           this.clickView();
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         }, error => {
           this.apiStatus = error.error;
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         });
     } else {
-      window.scrollTo(0, 0);
       this.invoiceService.updateInvoiceDetails(this.invoice).subscribe(
         data => {
           this.apiStatus = data;
+          this.invoiceStored = this.invoiceCaptured;
           this.clickView();
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         }, error => {
           this.apiStatus = error.error;
-          (document.getElementById('alert') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
-          setTimeout(this.hideAlert, 4000);
+          setTimeout(this.hideAlertModal, 4000);
         });
     }
-    this.resetFields();
+    //this.resetFields();
   }
 
   selectReconcile(invoiceId: any, idx: number) {
@@ -329,6 +336,7 @@ export class InvoiceComponent {
         error => {
           this.apiStatus = error.error;
           this.clickView();
+          window.scrollTo(0, 0);
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiStatus.responseMessage;
@@ -340,6 +348,8 @@ export class InvoiceComponent {
   clickInvoiceNumber(item: Invoice) {
     this.modalTitle = 'Update Invoice';
     this.saveButton = 'Save Changes';
+    this.invoiceStored = item;
+
     this.invId = item.invoiceId;
     this.invNumber = item.invoiceNumber;
     this.payeeName = item.invoicePayeeName;
@@ -485,6 +495,9 @@ export class InvoiceComponent {
     this.invoice.invoicePaymentMethodCode = this.pymtMethodCode;
     this.invoice.invoiceComments = this.invComments;
     this.invoice.invoiceReconcileDate = this.reconcileDate;
+    
+    this.invoiceCaptured = this.invoice; 
+    this.changed = Object.keys(this.invoiceStored).every(key => this.invoiceStored[key] == this.invoiceCaptured[key]);
   }
 
   validaeRequiedFields(): boolean {
@@ -497,7 +510,7 @@ export class InvoiceComponent {
     if(this.invAmount == 0) this.reqInvAmount = 'is-invalid'; else this.reqInvAmount = '';
     if(this.pymtStatusCode == 0) this.reqPymtStatus = 'is-invalid'; else this.reqPymtStatus = '';
 
-    return this.invNumber != '' && this.payeeName != '' && this.invDate != '' && this.invDueDate != '' && this.catCode != 0 && 
+    return !this.changed && this.invNumber != '' && this.payeeName != '' && this.invDate != '' && this.invDueDate != '' && this.catCode != 0 && 
            this.subcatCode != 0 && this.invAmount != 0 && this.pymtStatusCode != 0 && this.reqPymtDate == '' && this.reqPymtMethod == '';
   }
 

@@ -67,16 +67,16 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Total BCI Amount</td>
+                        <td>Total BCI Amount (collected from customer)</td>
                         <td>{{financialReport.revenueAll.bciFees|currency}}</td>
                         <td>
                             Ohio AG Invoiced: {{financialReport.revenueAll.totalInvoiced|currency}} <br>
-                            {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{(financialReport.revenueAll.totalNotInvoiced < 0 ? -financialReport.revenueAll.totalNotInvoiced : financialReport.revenueAll.totalNotInvoiced)|currency}}
+                            {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Missing customer payment:'}} {{(financialReport.revenueAll.totalNotInvoiced < 0 ? -financialReport.revenueAll.totalNotInvoiced : financialReport.revenueAll.totalNotInvoiced)|currency}}
                         </td>
                         <td>{{financialReport.revenueProcessed.bciFees|currency}}</td>
                         <td>
                             Ohio AG Invoiced: {{financialReport.revenueProcessed.totalInvoiced|currency}} <br>
-                            {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Added from previous month:'}} {{(financialReport.revenueProcessed.totalNotInvoiced < 0 ? -financialReport.revenueProcessed.totalNotInvoiced : financialReport.revenueProcessed.totalNotInvoiced)|currency}}
+                            {{financialReport.revenueAll.totalNotInvoiced < 0 ? 'Will show on next invoice:' : 'Missing customer payment:'}} {{(financialReport.revenueProcessed.totalNotInvoiced < 0 ? -financialReport.revenueProcessed.totalNotInvoiced : financialReport.revenueProcessed.totalNotInvoiced)|currency}}
                         </td>
                     </tr>
                     <tr>
