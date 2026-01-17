@@ -147,7 +147,16 @@
                                         <p class="info-color-1" *ngIf="item.appointmentResponse.fbiReasonDescription != null">FBI Reason Description: <span class="info-color-2">{{item.appointmentResponse.fbiReasonDescription}}</span></p>
                                         <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{item.appointmentResponse.appointmentTimestamp}}</span></p>
                                         <p class="info-color-1">Appointment Status: <span class="info-color-2">{{item.appointmentResponse.appointmentStatus}} on {{item.appointmentResponse.statusTimestamp}}</span></p>
-                                        <p class="info-color-1">Created by: <span class="info-color-2">{{item.appointmentInformation.userIpAddress}}</span></p>
+                                        
+                                        <!-- DEV -->
+                                        <!--<p class="info-color-1">Created by: <span class="info-color-2">
+                                            {{item.appointmentInformation.userIpAddress == 'admin' ? 'ADMIN' : 'CUSTOMER'}}
+                                        </span></p>-->
+
+                                        <!-- PROD -->
+                                        <p class="info-color-1">Created by: <span class="info-color-2">
+                                            {{item.appointmentInformation.userIpAddress}}
+                                        </span></p>
                                     </div>
                                 </div>
                             </div>

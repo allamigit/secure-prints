@@ -294,10 +294,11 @@ export class InvoiceComponent {
         data => {
           this.apiStatus = data;
           this.clickView();
-          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlertModal, 4000);
+          setTimeout(this.hideAlert, 3500);
+          this.invoiceModal.hide();
         }, error => {
           this.apiStatus = error.error;
           (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
@@ -497,7 +498,11 @@ export class InvoiceComponent {
     this.invoice.invoiceReconcileDate = this.reconcileDate;
     
     this.invoiceCaptured = this.invoice; 
-    this.changed = Object.keys(this.invoiceStored).every(key => this.invoiceStored[key] == this.invoiceCaptured[key]);
+    if(this.modalTitle == 'Add New Invoice') {
+      this.changed = false;
+    } else {
+      this.changed = Object.keys(this.invoiceStored).every(key => this.invoiceStored[key] == this.invoiceCaptured[key]);
+    }
   }
 
   validaeRequiedFields(): boolean {

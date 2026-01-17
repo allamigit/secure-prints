@@ -298,10 +298,11 @@ export class ExpenseComponent {
         data => {
           this.apiStatus = data;
           this.clickView();
-          (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
+          (document.getElementById('alert') as HTMLInputElement).hidden = false;
           this.alertType = 'msg-success';
           this.responseMessage = data.responseMessage;
-          setTimeout(this.hideAlertModal, 4000);
+          setTimeout(this.hideAlert, 3500);
+          this.expenseModal.hide();
         }, error => {
           this.apiStatus = error.error;
           (document.getElementById('alert-modal') as HTMLInputElement).hidden = false;
@@ -505,7 +506,11 @@ export class ExpenseComponent {
     this.expense.expenseReconcileDate = this.reconcileDate;
 
     this.expenseCaptured = this.expense;
-    this.changed = Object.keys(this.expenseStored).every(key => this.expenseStored[key] == this.expenseCaptured[key]);
+    if(this.modalTitle == 'Add New Expense') {
+      this.changed = false;
+    } else {
+      this.changed = Object.keys(this.expenseStored).every(key => this.expenseStored[key] == this.expenseCaptured[key]);
+    }
   }
 
   validaeRequiedFields(): boolean {
