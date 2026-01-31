@@ -45,7 +45,7 @@ export class InvoiceComponent {
       saveButton: string = '';
       subcategoryName: string = 'BCI Service Fees';
       showNonReconciled: boolean = false;
-      showAll: boolean = true;
+      showAll: boolean = false;
       invoiceModal: any;
       expenseTypeModal: any;
       keyword: string = '';

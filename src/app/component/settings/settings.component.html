@@ -5,20 +5,57 @@
         
         <ul class="nav nav-tabs" id="settings-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true" (click)="selectUser()">User</button>
+                <button class="nav-link active" id="company-tab" data-bs-toggle="tab" data-bs-target="#company-tab-pane" type="button" role="tab" aria-selected="true" (click)="selectCompany()">Company</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="company-tab" data-bs-toggle="tab" data-bs-target="#company-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false" (click)="selectCompany()">Company</button>
+                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-tab-pane" type="button" role="tab" aria-selected="false" (click)="selectUser()">User</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reason-tab" data-bs-toggle="tab" data-bs-target="#reason-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Reason List</button>
+                <button class="nav-link" id="reason-tab" data-bs-toggle="tab" data-bs-target="#reason-tab-pane" type="button" role="tab" aria-selected="false">Reason List</button>
             </li>
         </ul>
         <p></p>
 
         <div class="tab-content" id="settings-tab-content">
+            <!-- COMPANY INFORMATION -->
+            <div class="tab-pane fade show active" id="company-tab-pane" role="tabpanel" aria-labelledby="company-tab" tabindex="0">
+                <div class="card col-md-4">
+                    <div class="card-header">
+                        <h6>Company Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- ALERT MESSAGE -->
+                        <div id="company-alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" placeholder="Company Name" maxlength="60">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" placeholder="Address Line 1" maxlength="100">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" placeholder="Address Line 2" maxlength="100">
+                        <input type="tel" class="form-control form-control-sm" [(ngModel)]="companyPhone" inputmode="numeric" 
+                            (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" placeholder="Phone" minlength="14" maxlength="14">
+                        <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" placeholder="Email" maxlength="60">
+                        <p></p>
+                        <label><b>Company Holiday</b></label>
+                        <div class="input-group">
+                            <div class="input-group-text" style="font-size: small">Start Date</div>
+                            <input type="date" id="start-date" class="form-control form-control-sm" [value]="startDate" [(ngModel)]="startDate"  
+                                [style]="startDate == null || startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-text" style="font-size: small">End Date&nbsp;</div>
+                            <input type="date" id="end-date" class="form-control form-control-sm" [value]="endDate" [(ngModel)]="endDate"  
+                                [style]="endDate == null || endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                        </div>
+                        <p></p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- USER INFORMATION -->
-            <div class="tab-pane fade show active" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
+            <div class="tab-pane fade" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
                 <div class="row g-1 gap-3">
                     <div class="card col-md-3" *ngFor="let item of userList; let i = index">
                         <div class="card-header">
@@ -110,43 +147,6 @@
                     </div>
 
                 </div>                
-            </div>
-
-            <!-- COMPANY INFORMATION -->
-            <div class="tab-pane fade" id="company-tab-pane" role="tabpanel" aria-labelledby="company-tab" tabindex="0">
-                <div class="card col-md-4">
-                    <div class="card-header">
-                        <h6>Company Information</h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- ALERT MESSAGE -->
-                        <div id="company-alert" class={{alertType}} style="font-size: meduim; text-align: center" role="alert" hidden>
-                            {{responseMessage}}
-                        </div>
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyName" placeholder="Company Name" maxlength="60">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress1" placeholder="Address Line 1" maxlength="100">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="companyAddress2" placeholder="Address Line 2" maxlength="100">
-                        <input type="tel" class="form-control form-control-sm" [(ngModel)]="companyPhone" inputmode="numeric" 
-                            (keypress)="allowOnlyNumbers($event)" [value]="formattedPhone" (input)="onPhoneEntry($event)" placeholder="Phone" minlength="14" maxlength="14">
-                        <input id="company-email" type="email" class="form-control form-control-sm" [(ngModel)]="companyEmail" placeholder="Email" maxlength="60">
-                        <p></p>
-                        <label><b>Company Holiday</b></label>
-                        <div class="input-group">
-                            <div class="input-group-text" style="font-size: small">Start Date</div>
-                            <input type="date" id="start-date" class="form-control form-control-sm" [value]="startDate" [(ngModel)]="startDate"  
-                                [style]="startDate == null || startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
-                        </div>
-                        <div class="input-group">
-                            <div class="input-group-text" style="font-size: small">End Date&nbsp;</div>
-                            <input type="date" id="end-date" class="form-control form-control-sm" [value]="endDate" [(ngModel)]="endDate"  
-                                [style]="endDate == null || endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
-                        </div>
-                        <p></p>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="button" class="btn btn-success" (click)="clickSaveCompany()">Save</button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- REASON LIST -->

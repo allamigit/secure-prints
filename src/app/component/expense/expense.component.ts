@@ -45,7 +45,7 @@ export class ExpenseComponent {
       saveButton: string = '';
       subcategoryName: string = '';
       showNonReconciled: boolean = false;
-      showAll: boolean = true;
+      showAll: boolean = false;
       expenseModal: any;
       expenseTypeModal: any;
       keyword: string = '';

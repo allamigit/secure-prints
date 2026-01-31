@@ -56,6 +56,7 @@ export class SettingsComponent {
 
   ngOnInit(): void {
     this.selectUser();
+    this.selectCompany();
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
