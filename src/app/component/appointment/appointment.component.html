@@ -1,0 +1,163 @@
+
+<div class="page-wrapper">
+    <p class="title-top-md-2-1">Appointment Information</p>
+    <div class="container text-md-start">
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Year</div>
+                    <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
+                        <option value="0" selected></option>
+                        <option *ngFor="let item of yearList" value={{item}}>
+                            {{item}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Start Date</div>
+                    <input type="date" id="start-date" class="form-control" [value]="startDate" 
+                            [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">End Date</div>
+                    <input type="date" id="end-date" class="form-control" [value]="endDate" 
+                            [style]="endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
+                    View Report
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{appointmentList.length}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12" [hidden]="appointmentList.length == 0">
+                <input type="search" name="fullName" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="fullName"
+                    (input)="onNameEntry()" autocomplete="off" maxlength="30" placeholder="Full Name contains...">                                
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()" checked>
+                    <label class="form-check-label">Active appointments</label>
+                </div>
+            </div>
+        </form>
+
+        <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
+        <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
+            <table class="table table-hover">
+                <thead style="position: sticky; top: 0; background: white; z-index: 10">
+                    <th>Appointment ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Service Type</th>
+                    <th>Appointment Time</th>
+                    <th>Appointment Status</th>
+                    <th>Status Date</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody *ngFor="let item of applyNameFilter(); let i = index">
+                    <tr>
+                        <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentInformation.appointmentId}}</small></th>
+                        <td (click)="reset()"><small>{{item.appointmentInformation.customerFirstName}} {{item.appointmentInformation.customerLastName}}</small></td>
+                        <td (click)="reset()"><small>{{item.appointmentResponse.serviceName}}</small></td>
+                        <td (click)="reset()"><small>{{item.appointmentResponse.appointmentTimestamp}}</small></td>
+                        <td (click)="reset()"><small>{{item.appointmentResponse.appointmentStatus}}</small></td>
+                        <td (click)="reset()"><small>{{getStatusDate(item.appointmentResponse.statusTimestamp)}}</small></td>
+                        <td>
+                            <div class="dropdown" role="group">
+                                <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" 
+                                        [hidden]="item.appointmentInformation.appointmentStatusCode == 103 || item.appointmentInformation.appointmentStatusCode == 104 || !userFullAccess">
+                                    Choose...
+                                </button>
+                                <ul class="dropdown-menu" style="cursor: pointer">
+                                    <li><a class="dropdown-item" [hidden]="!item.appointmentResponse.canComplete" 
+                                            (click)="selectComplete(item)">Complete</a></li>
+                                    <li><a class="dropdown-item" (click)="selectReschedule(item)">Reschedule</a></li>
+                                    <li><a class="dropdown-item" (click)="selectCancel(item)">Cancel</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="item.appointmentInformation.appointmentId == selectedAppointmentId">
+                        <td colspan="7">
+                            <div class="row g-3" *ngIf="showPaymentMethod">
+                                <label>Payment Method</label>
+                                <div class="col-auto">
+                                    <select class="form-select-sm" (change)="selectPaymentMethod($event)">
+                                        <option value=""></option>
+                                        <option value="Card">Credit/Debit Card</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Zelle">Zelle</option>
+                                        <option value="Check">Check</option>
+                                        <option value="DD">Direct Deposit</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary btn-sm mb-3" [disabled]="!paymentMethodName" (click)="clickComplete()">Complete</button>
+                                </div>
+                            </div>
+                            <div class="form-div" *ngIf="showDetails">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <button class="btn btn-secondary btn-sm" style="background-color: #004A80" (click)="clickAppointmentId(item)">Appointment ID: <span>{{item.appointmentResponse.appointmentId}}</span></button>
+                                        <p class="info-color-1">Email Address: <span class="info-color-2">{{item.appointmentInformation.customerEmail}}</span></p>
+                                        <p class="info-color-1">Phone Number: <span class="info-color-2">{{item.appointmentInformation.customerPhone}}</span></p>
+                                        <p class="info-color-1">Service Type: <span class="info-color-2">{{item.appointmentResponse.serviceName}}</span></p>
+                                        <p class="info-color-1" *ngIf="item.appointmentResponse.bciReasonCode != ''">BCI Reason Code: <span class="info-color-2">{{item.appointmentResponse.bciReasonCode}}</span></p>
+                                        <p class="info-color-1" *ngIf="item.appointmentResponse.bciReasonDescription != null">BCI Reason Description: <span class="info-color-2">{{item.appointmentResponse.bciReasonDescription}}</span></p>
+                                        <p class="info-color-1" *ngIf="item.appointmentResponse.fbiReasonCode != ''">FBI Reason Code: <span class="info-color-2">{{item.appointmentResponse.fbiReasonCode}}</span></p>
+                                        <p class="info-color-1" *ngIf="item.appointmentResponse.fbiReasonDescription != null">FBI Reason Description: <span class="info-color-2">{{item.appointmentResponse.fbiReasonDescription}}</span></p>
+                                        <p class="info-color-1">Appointment Date and Time: <span class="info-color-2">{{item.appointmentResponse.appointmentTimestamp}}</span></p>
+                                        <p class="info-color-1">Appointment Status: <span class="info-color-2">{{item.appointmentResponse.appointmentStatus}} on {{item.appointmentResponse.statusTimestamp}}</span></p>
+                                        <p class="info-color-1">Status History:</p>
+                                        <p class="info-color-1" *ngFor="let statusHistory of item.appointmentResponse.statusHistory">
+                                             󠀠 󠀠 󠀠≫ <span class="info-color-2">{{statusHistory}}</span>
+                                        </p>
+                                        
+                                        <!-- DEV -->
+                                        <!--<p class="info-color-1">Created by: <span class="info-color-2">
+                                            {{item.appointmentInformation.userIpAddress == 'admin' ? 'ADMIN' : 'CUSTOMER'}}
+                                        </span></p>-->
+
+                                        <!-- PROD -->
+                                        <p class="info-color-1">Created by: <span class="info-color-2">
+                                            {{item.appointmentInformation.userIpAddress}}
+                                        </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="appointmentList.length == 0">
+                    <tr>
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="7">
+                            There is no report data to view
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+</div>

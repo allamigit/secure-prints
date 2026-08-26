@@ -3,7 +3,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
+    "paths": {
+    "@models/*": ["./src/app/model/*"],
+    "@services/*": ["./src/app/service/*"],
+    "@environments/*": ["./src/environments/*"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

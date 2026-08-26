@@ -1,0 +1,197 @@
+
+<div class="page-wrapper">
+    <p class="title-top-md-2-1">Payment Information</p>
+    <div class="container text-md-start">
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Year</div>
+                    <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
+                        <option value="0" selected></option>
+                        <!--<option *ngFor="let item of yearList" value={{item}}>
+                            {{item}}
+                        </option>-->
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Start Date</div>
+                    <input type="date" id="start-date" class="form-control" [value]="startDate" 
+                            [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">End Date</div>
+                    <input type="date" id="end-date" class="form-control" [value]="endDate" 
+                            [style]="endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
+                    View Report
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{paymentList ? paymentList.appointmentPayment.length : 0}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
+                    <label class="form-check-label">Non-reconciled payments</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-all" type="checkbox" (click)="clickAllSwitch()">
+                    <label class="form-check-label">Cancelled payments</label>
+                </div>
+            </div>
+        </form>
+
+        <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
+        <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
+            <table class="table table-hover">
+                <thead style="position: sticky; top: 0; background: white; z-index: 10">
+                    <th>Appointment ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Service Name</th>
+                    <th>Service <br>Amount</th>
+                    <th>BCI <br>Amount</th>
+                    <th>Payment <br>Method</th>
+                    <th>Payment <br>Status</th>
+                    <th>Payment <br>Date</th>
+                    <th>Reconcile <br>Date</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody *ngFor="let item of paymentList.appointmentPayment; let i = index">
+                    <tr>
+                        <th style="cursor: pointer" (click)="clickAppointmentId(item)"><small>{{item.appointmentId}}</small><span *ngIf="item?.paymentComment?.startsWith('Refund')"> 🪪</span></th>
+                        <td (click)="reset()"><small>{{paymentList.appointmentInformation[i].customerFirstName}} {{paymentList.appointmentInformation[i].customerLastName}}</small></td>
+                        <td (click)="reset()"><small>{{getServiceName(paymentList.appointmentInformation[i].serviceCode)}}</small></td>
+                        <td (click)="reset()"><small>{{item.serviceAmount|currency}}</small></td>
+                        <td (click)="reset()"><small>{{item.bciAmount|currency}}</small></td>
+                        <td (click)="reset()"><small>{{getPaymentMethodName(item.paymentMethodCode)}}</small></td>
+                        <td (click)="reset()"><small>{{getPaymentStatusName(item.paymentStatusCode)}}</small></td>
+                        <td (click)="reset()"><small>{{item.paymentDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td (click)="reset()"><small>{{item.paymentReconcileDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td>
+                            <div class="input-group mb-0">
+                                <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" 
+                                    [hidden]="item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !item.paymentUpdate || !userFullAccess"
+                                    [style]="selectedDate[i] == null || selectedDate[i] == '' ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                                    aria-expanded="false" [hidden]="!item.paymentUpdate || selectedDate[i] == null">Choose...</button>
+                                <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
+                                    <li><a class="dropdown-item" [hidden]="item.paymentReconcileDate != null"
+                                        (click)="selectReconcile(item.appointmentId, i)">Reconcile</a></li>
+                                    <li><a class="dropdown-item" [hidden]="item.paymentComment != null && item.paymentComment.startsWith('Refund')" (click)="selectRefund(item.appointmentId, i)">Refund</a></li>
+                                </ul>
+                            </div>                        
+                        </td>
+                    </tr>
+                    <tr *ngIf="showDetails && item.appointmentId == selectedAppointmentId">
+                        <td colspan="10">
+                            <form class="row g-3">
+                                <div class="form-floating col-md-2">
+                                    <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="service-amount{{i}}" inputmode="numeric"
+                                        (keypress)="allowOnlyNumbers($event)" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" [(ngModel)]="serviceAmount[i]" placeholder="Service Amount">
+                                    <label>Service Amount</label>
+                                </div>
+                                <div class="form-floating col-md-2">
+                                    <select class="form-select" style="font-size: small" name="pymt-method{{i}}" [(ngModel)]="paymentMethodCode[i]" [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess">
+                                        <option value="0"></option>
+                                        <option value="301">Credit/Debit Card</option>
+                                        <option value="302">Cash</option>
+                                        <option value="303">Zelle</option>
+                                        <option value="304">Check</option>
+                                        <option value="305">Direct Deposit</option>
+                                    </select>
+                                    <label>Payment Method</label>
+                                </div>
+                                <div class="form-floating col-md-5">
+                                    <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="payment-comment{{i}}" 
+                                        [disabled]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" [(ngModel)]="paymentComment[i]" maxlength="100" placeholder="Payment Comment">
+                                    <label>Payment Comment</label>
+                                </div>
+                                <div class="form-floating col-md-2">
+                                    <button type="button" class="btn btn-success" [hidden]="item.paymentComment.startsWith('Refund') || item.paymentStatusCode == 201 || item.paymentStatusCode == 203 || !userFullAccess" (click)="clickSave(selectedAppointmentId, i)">Save</button>
+                                </div>
+                            </form>
+
+                            <p></p>
+                            <form class="row g-3" *ngIf="item.paymentReconcileDate != null || (item.paymentStatusCode != 201 && item.paymentStatusCode != 203)">
+                                <div class="form-floating col-md-2">
+                                    <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcile-date{{i}}" [style]="paymentReconcileDate[i] == null || paymentReconcileDate[i] == '' ? 'color: white' : 'color: black'" 
+                                        [(ngModel)]="paymentReconcileDate[i]" (change)="onReconcileDateEntry(i)" placeholder="Reconcile Date">
+                                    <label>Reconcile Date</label>
+                                </div>
+                                <div class="form-floating col-md-2">
+                                    <button type="button" class="btn btn-success" (click)="selectReconcile(item.appointmentId, i)">Update</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr *ngIf="paymentList.appointmentPayment.length > 0">
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p>Report Summary:</p>
+                            <p>&emsp;Processed</p>
+                            <p>&emsp;Pending</p>
+                            <p>&emsp;Refund</p>
+                            <p>T O T A L</p>  
+                            <p>Reconciled</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p style="color: white">-</p>
+                            <p>{{sProcessed|currency}}</p>
+                            <p>{{sPending|currency}}</p>
+                            <p>{{sRefund|currency}}</p>
+                            <p>{{sTotal|currency}}</p>
+                            <p>{{sReconciled|currency}}</p>
+                        </td>
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p style="color: white">-</p>
+                            <p>{{bProcessed|currency}}</p>
+                            <p>{{bPending|currency}}</p>
+                            <p>{{bRefund|currency}}</p>
+                            <p>{{bTotal|currency}}</p>
+                            <p>{{bReconciled|currency}}</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr [hidden]="!paymentList || paymentList.appointmentPayment.length == 0 ? false : true">
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="10">
+                            There is no report data to view
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+
+    </div>
+</div>

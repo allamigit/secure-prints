@@ -1,0 +1,309 @@
+
+<div class="page-wrapper">
+    <p class="title-top-md-2-1">Expense Information</p>
+    <div class="container text-md-start">
+        
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Year</div>
+                    <select class="form-select col-md-3" id="year" style="min-width: 85px" (change)="selectYear($event)">
+                        <option value="0" selected></option>
+                        <option *ngFor="let item of yearList" value={{item}}>
+                            {{item}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">Start Date</div>
+                    <input type="date" id="start-date" class="form-control" [value]="startDate" 
+                            [style]="startDate == '' ? 'color: white' : 'color: black'" (input)="onStartDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text">End Date</div>
+                    <input type="date" id="end-date" class="form-control" [value]="endDate" 
+                            [style]="endDate == '' ? 'color: white' : 'color: black'" (input)="onEndDateEntry()">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-primary position-relative" (click)="clickView()">
+                    View Report
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{expenseList.length}}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-outline-primary" (click)="clickReset()" [hidden]="startDate == '' || endDate == ''">
+                    Reset
+                </button>
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#expense-modal" [hidden]="!userFullAccess" (click)="clickAddExpense()">
+                    Add Expense
+                </button>
+            </div>
+        </form>
+
+        <p></p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12" [hidden]="expenseList.length == 0">
+                <input type="search" name="vendor" class="form-control" style="background-color: rgb(243, 243, 216)" [(ngModel)]="vendor"
+                    (input)="onVendorFilterEntry()" autocomplete="off" maxlength="30" placeholder="Vendor Name contains...">                                
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check" type="checkbox" (click)="clickFilterSwitch()">
+                    <label class="form-check-label">Non-reconciled expenses</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-all" type="checkbox" (click)="clickAllSwitch()">
+                    <label class="form-check-label">Cancelled expenses</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="switch-check-cc" type="checkbox" (click)="clickCCSwitch()">
+                    <label class="form-check-label">CC Reader expenses</label>
+                </div>
+            </div>
+        </form>
+
+        <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
+        <form class="g- table-responsive" style="height: 690px; overflow-y: auto;">
+            <table class="table table-hover">
+                <thead style="position: sticky; top: 0; background: white; z-index: 10">
+                    <th>Reference #</th>
+                    <th>Reference Date</th>
+                    <th>Vendor Name</th>
+                    <th>Expense Amount</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>Payment Date</th>
+                    <th>Reconcile Date</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody *ngFor="let item of expenseList; let i = index">
+                    <tr>
+                        <th style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#expense-modal" (click)="clickReferenceNumber(item)"><small>{{item.expenseReferenceNumber}}</small><span *ngIf="item?.expenseDescription?.startsWith('Refund')"> 🪪</span></th>
+                        <td><small>{{item.expenseReferenceDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.expenseVendorName}}</small></td>
+                        <td><small>{{item.expenseAmount|currency}}</small></td>
+                        <td><small>{{getPaymentMethodName(item.expensePaymentMethodCode)}}</small></td>
+                        <td><small>{{getPaymentStatusName(item.expensePaymentStatusCode)}}</small></td>
+                        <td><small>{{item.expensePaymentDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td><small>{{item.expenseReconcileDate|date:'MM/dd/yyyy'}}</small></td>
+                        <td>
+                            <div class="input-group mb-0">
+                                <input type="date" name="selected-date{{i}}" class="form-control form-control-sm" [(ngModel)]="selectedDate[i]" [hidden]="item.expensePaymentStatusCode == 201 || !item.expenseUpdate"
+                                    [hidden]="!userFullAccess || !item.expenseUpdate || item.expensePaymentStatusCode == 201 || item.expensePaymentStatusCode == 203 || item.expenseReferenceNumber.startsWith('ApptID-')" 
+                                    [style]="selectedDate[i] == null ? 'color: white' : 'color: black'" (input)="onSelectedDateEntry(i)">
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                                    aria-expanded="false" [hidden]="!item.expenseUpdate || selectedDate[i] == null">Choose...</button>
+                                <ul class="dropdown-menu dropdown-menu-end" style="cursor: pointer">
+                                    <li><a class="dropdown-item" [hidden]="item.expenseReconcileDate != null"
+                                        (click)="selectReconcile(item.expenseId, i)">Reconcile</a></li>
+                                    <li><a class="dropdown-item" [hidden]="item.expenseDescription != null && item.expenseDescription.startsWith('Refund')" 
+                                        (click)="selectRefund(item.expenseId, i)">Refund</a></li>
+                                </ul>
+                            </div>                        
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr *ngIf="expenseList.length > 0">
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p>Report Summary:</p>
+                            <p>&emsp;Processed</p>
+                            <p>&emsp;Pending</p>
+                            <p>&emsp;Refund</p>
+                            <p>T O T A L</p>  
+                            <p>Reconciled</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-left" style="color: rgb(126, 124, 124)">
+                            <p style="color: white">-</p>
+                            <p>{{eProcessed|currency}}</p>
+                            <p>{{ePending|currency}}</p>
+                            <p>{{eRefund|currency}}</p>
+                            <p>{{eTotal|currency}}</p>
+                            <p>{{eReconciled|currency}}</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr *ngIf="expenseList.length == 0">
+                        <td class="text-center" style="color: rgb(126, 124, 124)" colspan="9">
+                            There is no report data to view
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+
+        <!-- EXPENSE MODAL -->
+        <div class="modal fade" tabindex="-1" id="expense-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content" (mouseover)="assignFields()">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{modalTitle}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetFields()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- ALERT MESSAGE -->
+                        <div id="alert-modal" class={{alertType}} role="alert" hidden>
+                            {{responseMessage}}
+                        </div>
+                        <p></p>
+
+                        <form class="row g-3 {{!userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund') ? 'disableDiv' : ''}}">
+                            <div class="form-floating col-md-2">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqRefNumber}}" autocomplete="off" name="refNumber" [(ngModel)]="refNumber" 
+                                    [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (input)="onRefNumberEntry()" maxlength="30" placeholder="Reference Number" required>
+                                <label>Reference Number</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqRefDate}}" autocomplete="off" name="refDate" [style]="refDate == null || refDate == '' ? 'color: white' : 'color: black'" 
+                                    [(ngModel)]="refDate" (input)="onRefDateEntry()" placeholder="Reference Date" required>
+                                <label>Reference Date</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqVendorName}}" autocomplete="off" name="vendorName" [(ngModel)]="vendorName" 
+                                    (input)="onVendorNameEntry()" maxlength="80" placeholder="Vendor Name" required>
+                                <label>Vendor Name</label>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqCategory}}" id="exp-category" (change)="selectExpenseCategory($event)">
+                                    <option value="0" selected></option>
+                                    <option *ngFor="let item of expenseTypeList" value={{item.expenseCategory.categoryCode}}>
+                                        {{item.expenseCategory.categoryName}}
+                                    </option>
+                                </select>
+                                <label>Expense Category</label>
+                            </div>
+                            <div class="form-floating col-md-1">
+                                <button type="button" class="btn btn-outline-light" (click)="openExpenseTypeModal()">ℹ️</button>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <select class="form-select col-md-3 {{reqSubcategory}}" id="exp-subcategory" [hidden]="subcategoryName != ''"
+                                    (change)="selectExpenseSubcategory($event)">
+                                    <option value="0" selected></option>
+                                    <option *ngFor="let item of expenseSubcategoryList" value={{item.subcategoryCode}}>
+                                        {{item.subcategoryName}}
+                                    </option>
+                                </select>
+                                <select class="form-select col-md-3 {{reqSubcategory}}" *ngIf="subcategoryName != ''" (mouseover)="showSubcategoryName()">
+                                    <option>{{subcategoryName}}</option>
+                                </select>
+                                <label>Expense Subcategory</label>
+                            </div>
+                            <div class="form-floating col-md-4">
+                                <input type="text" class="form-control form-control-sm col-md-5" autocomplete="off" name="expDescription" [(ngModel)]="expDescription" 
+                                    [disabled]="refNumber.startsWith('ApptID-')" maxlength="100" placeholder="Expense Description">
+                                <label>Expense Description</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="text" class="form-control form-control-sm col-md-5 {{reqExpAmount}}" autocomplete="off" name="expAmount" inputmode="numeric" 
+                                    (input)="onExpAmountEntry()" (keypress)="allowOnlyNumbers($event)" [(ngModel)]="expAmount" placeholder="Expense Amount" required>
+                                <label>Expense Amount</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <select class="form-select col-md-11 {{reqPymtStatus}}" id="pymt-status" [disabled]="refNumber.startsWith('ApptID-') || pymtStatusCode == 204" (change)="selectPaymentStatus($event)">
+                                    <option value="0" selected></option>
+                                    <option value="201">Pending</option>
+                                    <option value="202">Processed</option>
+                                    <option value="203" [hidden]="!modalTitle.startsWith('Update')">Cancelled</option>
+                                    <option value="204" [hidden]="pymtStatusCode != 204">Refunded</option>
+                                </select>
+                                <label>Payment Status</label>
+                            </div>
+                            <div class="form-floating col-md-3">
+                                <select class="form-select col-md-11 {{reqPymtMethod}}" id="pymt-method" [disabled]="pymtStatusCode == 201" (change)="selectPaymentMethod($event)">
+                                    <option value="0" selected></option>
+                                    <option value="301">Credit/Debit Card</option>
+                                    <option value="302">Cash</option>
+                                    <option value="303">Zelle</option>
+                                    <option value="304">Check</option>
+                                    <option value="305">Direct Deposit</option>
+                                </select>   
+                                <label>Payment Method</label>                         
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5 {{reqPymtDate}}" [disabled]="pymtStatusCode == 201" (change)="checkPaymentDate($event)" autocomplete="off" name="pymtDate" [style]="pymtDate == null || pymtDate == ''? 'color: white' : 'color: black'" [(ngModel)]="pymtDate" placeholder="Payment Date">
+                                <label>Payment Date</label>
+                            </div>
+                            <div class="form-floating col-md-2">
+                                <input type="date" class="form-control form-control-sm col-md-5" [disabled]="pymtStatusCode == 201 || pymtDate == null || pymtDate == ''" autocomplete="off" name="reconcileDate" [style]="reconcileDate == null || reconcileDate == '' ? 'color: white' : 'color: black'" [disabled]="refNumber.startsWith('ApptID-')" [(ngModel)]="reconcileDate" placeholder="Reconcile Date">
+                                <label>Reconcile Date</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="resetFields()">Cancel</button>
+                        <button type="button" class="btn btn-success" [disabled]="!validaeRequiedFields() || !userFullAccess || pymtStatusCode == 204 || expDescription.startsWith('Refund')" (click)="clickSaveExpense()">{{saveButton}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPENSE TYPE MODAL -->
+        <div class="modal fade" tabindex="-1" id="expense-type-modal">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Expense Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="openExpenseModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <input type="search" name="keyword" class="form-control" style="background-color: rgb(243, 243, 216)" 
+                                    [(ngModel)]="keyword" (input)="onKeywordEntry()" (keydown.enter)="clickSearchKeyword()" autocomplete="off" maxlength="50" placeholder="Search Keyword...">                                
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-outline" (click)="clickSearchKeyword()">🔎</button>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div style="max-height: 400px; overflow-y: auto">
+                            <ul>
+                                <li *ngFor="let item of expenseTypeList2" style="color: darkblue; font-weight: bold">
+                                    {{item.expenseCategory.categoryName}}
+                                    <ul>
+                                        <li *ngFor="let sub of item.expenseSubcategories; let i = index" style="cursor: pointer; color: black; font-weight: lighter" 
+                                            [ngStyle]="{'background-color': item.expenseSubcategories[i].subcategoryName == subcategoryName ? 'lightblue' : 'white'}"
+                                            (click)="clickSubcategoryName(sub.subcategoryName)">
+                                            <b>{{sub.subcategoryName}}:</b> {{sub.subcategoryDescription}}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="openExpenseModal()">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="subcategoryName == ''" (click)="clickSelectExpenseType()">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
