@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '@services/user.service';
 import { ApiStatus } from '@models/ApiStatus';
+import { UserLogin } from '@models/UserLogin';
+import { ChangePassword } from '@models/ChangePassword';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +18,8 @@ import { ApiStatus } from '@models/ApiStatus';
 export class LoginComponent {
 
   apiStatus?: ApiStatus;
+  userLogin!: UserLogin;
+  changePassword!: ChangePassword;
   userName: string = '';
   userPassword: string = '';
   newPassword: string = '';
@@ -52,7 +56,10 @@ export class LoginComponent {
   }
 
   clickLogin() {
-    this.userService.userLogin(this.userName, this.userPassword)
+    this.userLogin = new UserLogin();
+    this.userLogin.userName = this.userName;
+    this.userLogin.userPassword = this.userPassword;
+    this.userService.userLogin(this.userLogin)
       .subscribe(
         data => {
           this.apiStatus = data;
@@ -78,7 +85,10 @@ export class LoginComponent {
   }
 
   clickSaveNewPassword() {
-    this.userService.changeUserPassword(this.userPassword, this.newPassword).subscribe(
+    this.changePassword = new ChangePassword();
+    this.changePassword.oldPassword = this.userPassword;
+    this.changePassword.newPassword = this.newPassword;
+    this.userService.changeUserPassword(this.changePassword).subscribe(
       data => {
         this.apiStatus = data;
         this.userPassword = this.newPassword;

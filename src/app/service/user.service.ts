@@ -5,6 +5,9 @@ import { environment } from '@environments/environment';
 import { Observable } from 'rxjs';
 import { ApiStatus } from '@models/ApiStatus';
 import { User } from '@models/User';
+import { UserLogin } from '@models/UserLogin';
+import { ChangePassword } from '@models/ChangePassword';
+import { ResetPassword } from '@models/ResetPassword';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +20,9 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  userLogin(userName: string, userPassword: string): Observable<ApiStatus> {
-    this.requestUrl = environment.apiUrl + 'user/login?userName=' + userName + '&userPassword=' + userPassword;
-    return this.http.post<ApiStatus>(this.requestUrl, {}, { withCredentials: true });
+  userLogin(userLogin: UserLogin): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'user/login';
+    return this.http.post<ApiStatus>(this.requestUrl, userLogin, { withCredentials: true });
   }
 
   userLogout(): Observable<ApiStatus> {
@@ -37,14 +40,14 @@ export class UserService {
     return this.http.post<ApiStatus>(this.requestUrl, user, { withCredentials: true });  
   }
 
-  changeUserPassword(oldPassword: string, newPassword: string): Observable<ApiStatus> {
-    this.requestUrl = environment.apiUrl + 'user/change-password?oldPassword=' + oldPassword + '&newPassword=' + newPassword;
-    return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
+  changeUserPassword(changePassword: ChangePassword): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'user/change-password';
+    return this.http.patch<ApiStatus>(this.requestUrl, changePassword, { withCredentials: true });
   }
 
-  resetUserPassword(userName: string, newPassword: string): Observable<ApiStatus> {
-    this.requestUrl = environment.apiUrl + 'user/reset-password?userName=' + userName + '&newPassword=' + newPassword;
-    return this.http.patch<ApiStatus>(this.requestUrl, ApiStatus, { withCredentials: true });
+  resetUserPassword(resetPassword: ResetPassword): Observable<ApiStatus> {
+    this.requestUrl = environment.apiUrl + 'user/reset-password';
+    return this.http.patch<ApiStatus>(this.requestUrl, resetPassword, { withCredentials: true });
   }
 
   updateUserDetails(user: User): Observable<ApiStatus> {

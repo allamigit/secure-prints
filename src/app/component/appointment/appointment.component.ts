@@ -6,7 +6,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AppointmentInformationService } from '@services/appointment-information.service';
 import { Appointment } from '@models/Appointment';
 import { ApiResponse } from '@models/ApiResponse';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-appointment',
@@ -28,7 +28,6 @@ export class AppointmentComponent {
   alertType: string = '';
   responseMessage: string = '';
   showPaymentMethod: boolean = false;
-  showConfirmation: boolean = false;
   showDetails: boolean = false;
   userFullAccess: boolean = localStorage.getItem('rx')?.toString() == 'true' ? true : false;
   pollSub!: Subscription;
@@ -37,10 +36,6 @@ export class AppointmentComponent {
   constructor(private router: Router, private appointmentInformationService: AppointmentInformationService) { }
 
   ngOnInit(): void {
-    /*this.pollSub = interval(6000).subscribe(() => {
-      if(this.appointmentList.length != 0) this.clickView();
-    });*/
-
     let today = new Date();
     let currentYear = today.getFullYear()
     let i = 0;
@@ -180,7 +175,6 @@ export class AppointmentComponent {
           this.alertType = 'msg-success';
           this.responseMessage = this.apiResponse.apiStatus.responseMessage;
           this.showPaymentMethod = false;
-          this.showConfirmation = true;
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           setTimeout(this.hideAlert, 3500);
@@ -190,7 +184,6 @@ export class AppointmentComponent {
           this.alertType = 'msg-fail';
           this.responseMessage = this.apiResponse.apiStatus.responseMessage;
           this.showPaymentMethod = false;
-          this.showConfirmation = true;
           this.clickView();
           (document.getElementById('alert') as HTMLInputElement).hidden = false;
           setTimeout(this.hideAlert, 3500);
@@ -198,13 +191,11 @@ export class AppointmentComponent {
   }
 
   clickAppointmentId(item: any) {
-    this.showConfirmation = false;
     if(item.appointmentInformation.appointmentId == this.selectedAppointmentId) this.showDetails = !this.showDetails; else this.showDetails = true;
     if(!this.showDetails) this.selectedAppointmentId = ''; else this.selectedAppointmentId = item.appointmentInformation.appointmentId;
   }
 
   reset() {
-    this.showConfirmation = false;
     this.showDetails = false;
     this.selectedAppointmentId = '';
     this.clickView();

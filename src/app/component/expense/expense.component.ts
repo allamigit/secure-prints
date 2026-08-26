@@ -46,6 +46,7 @@ export class ExpenseComponent {
       subcategoryName: string = '';
       showNonReconciled: boolean = false;
       showAll: boolean = false;
+      showCC: boolean = true;
       expenseModal: any;
       expenseTypeModal: any;
       keyword: string = '';
@@ -93,6 +94,8 @@ export class ExpenseComponent {
       this.yearList[i] = y;
       i++;
     }
+
+    (document.getElementById('switch-check-cc') as HTMLInputElement).checked = true;
   }
 
   ngAfterViewInit() {
@@ -226,6 +229,15 @@ export class ExpenseComponent {
     this.clickView();
   }
 
+  clickCCSwitch() {
+    if((document.getElementById('switch-check-cc') as HTMLInputElement).checked) {
+      this.showCC = true;
+    } else {
+      this.showCC = false;
+    }
+    this.clickView();
+  }
+
   selectYear(event: Event) {
     let year = (event.target as HTMLSelectElement).value;
     if(year != '0') {
@@ -259,6 +271,7 @@ export class ExpenseComponent {
         this.originalExpenseList = this.expenseList;
         if(this.vendor != '') this.expenseList = this.applyVendorNameFilter();
         if(!this.showAll) this.expenseList = this.expenseList.filter(item => item.expensePaymentStatusCode != 203);
+        if(!this.showCC) this.expenseList = this.expenseList.filter(item => !item.expenseReferenceNumber.startsWith("ApptID-"));
         for(let i = 0; i < this.expenseList.length; i++) {
           switch(this.expenseList[i].expensePaymentStatusCode) {
             case 201: this.ePending += this.expenseList[i].expenseAmount; 
@@ -281,6 +294,7 @@ export class ExpenseComponent {
     this.vendor = '';
     (document.getElementById('switch-check') as HTMLInputElement).checked = false;
     (document.getElementById('switch-check-all') as HTMLInputElement).checked = true;
+    (document.getElementById('switch-check-cc') as HTMLInputElement).checked = true;
     (document.getElementById('year') as HTMLInputElement).value = '0';
     window.location.reload();
   }

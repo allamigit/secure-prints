@@ -139,7 +139,7 @@
                             </form>
 
                             <p></p>
-                            <form class="row g-3" *ngIf="item.paymentReconcileDate != null || item.paymentStatusCode != 203">
+                            <form class="row g-3" *ngIf="item.paymentReconcileDate != null || (item.paymentStatusCode != 201 && item.paymentStatusCode != 203)">
                                 <div class="form-floating col-md-2">
                                     <input type="date" class="form-control form-control-sm col-md-5" autocomplete="off" name="reconcile-date{{i}}" [style]="paymentReconcileDate[i] == null || paymentReconcileDate[i] == '' ? 'color: white' : 'color: black'" 
                                         [(ngModel)]="paymentReconcileDate[i]" (change)="onReconcileDateEntry(i)" placeholder="Reconcile Date">

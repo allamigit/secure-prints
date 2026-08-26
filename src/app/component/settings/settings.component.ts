@@ -10,6 +10,8 @@ import { Company } from '@models/Company';
 import { User } from '@models/User';
 import { Reason } from '@models/Reason';
 import { ApiStatus } from '@models/ApiStatus';
+import { ChangePassword } from '@models/ChangePassword';
+import { ResetPassword } from '@models/ResetPassword';
 
 @Component({
   selector: 'app-settings',
@@ -23,6 +25,8 @@ export class SettingsComponent {
   user!: User;
   company!: Company;
   reason!: Reason;
+  changePassword!: ChangePassword;
+  resetPassword!: ResetPassword;
   userList: User[] = [];
   currentUser: string | null = localStorage.getItem('user');
   apiStatus!: ApiStatus;
@@ -220,7 +224,10 @@ export class SettingsComponent {
 
   clickSavePassword(oldPassword: string, newPassword: string) {
     this.userName = localStorage.getItem('user')?.toString();
-    this.userService.changeUserPassword(oldPassword, newPassword).subscribe(
+    this.changePassword = new ChangePassword();
+    this.changePassword.oldPassword = oldPassword;
+    this.changePassword.newPassword = newPassword;
+    this.userService.changeUserPassword(this.changePassword).subscribe(
       data => {
         this.apiStatus = data;
         this.userPassword = '';
@@ -242,7 +249,10 @@ export class SettingsComponent {
 
   clickResetPassword(username: string) {
     this.userName = username;
-    this.userService.resetUserPassword(username, 'user1234').subscribe(
+    this.resetPassword = new ResetPassword();
+    this.resetPassword.userName = username;
+    this.resetPassword.newPassword = 'user1234';
+    this.userService.resetUserPassword(this.resetPassword).subscribe(
       data => {
         this.apiStatus = data;
         this.alertType = 'alert alert-success';
