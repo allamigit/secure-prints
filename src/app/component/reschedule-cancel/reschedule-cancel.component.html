@@ -100,6 +100,13 @@
             </div>
         </div>
 
+        <p></p>
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class={{alertType}} role="alert" hidden>
+            {{responseMessage}}
+        </div>
+        <p></p>
+
         <!-- Appointment Confirmation -->
         <div class="form-div" *ngIf="showConfirmation">
             <p class="title-top-md-2-1">{{confirmation}} Appointment Confirmation</p>
