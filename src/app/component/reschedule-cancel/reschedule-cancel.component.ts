@@ -31,6 +31,8 @@ export class RescheduleCancelComponent implements OnInit {
   fbiReasonCode: string = '';
   fbiReasonDescription: string = '';
   confirmation: string = '';
+  alertType: string = '';
+  responseMessage: string = '';
 
   admin: boolean = false;
   notFound: boolean = false;
@@ -69,6 +71,10 @@ export class RescheduleCancelComponent implements OnInit {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
     }
+  }
+
+  hideAlert() {
+    (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
 
   onFirstNameEntry() {
@@ -118,8 +124,8 @@ export class RescheduleCancelComponent implements OnInit {
       this.appointmentInformationService.findAppointmentByCustomerName(this.customerFirstName, this.customerLastName)
         .subscribe(data => {
           this.appointmentId = data;
-            this.notFound = this.appointmentId == null ? true : false;
-            this.showAction = !this.notFound;
+          this.notFound = this.appointmentId == null ? true : false;
+          this.showAction = !this.notFound;
         });
     }
   }
@@ -156,13 +162,22 @@ export class RescheduleCancelComponent implements OnInit {
    * Confirm Reschedule Appointment
    */
   clickConfirm() {
-    this.reset();
-    window.scrollTo(0, 0);
     this.appointmentInformationService.rescheduleAppointment(this.appointmentId, this.appointmentTimestamp)
-      .subscribe(
-        data => this.apiResponse = data,
-        error => this.apiResponse = error.error
-      );
+        .subscribe(
+            data => {
+              this.reset();
+              window.scrollTo(0, 0);
+              this.apiResponse = data;
+            }, 
+            error => {
+              (document.getElementById('alert') as HTMLInputElement).hidden = false;
+              this.alertType = 'msg-fail';
+              this.apiResponse = error.error;
+              this.apiStatus = this.apiResponse.apiStatus;
+              this.responseMessage = this.apiStatus.responseMessage;
+              setTimeout(this.hideAlert, 6000);
+            }
+        );
   }
 
   /**

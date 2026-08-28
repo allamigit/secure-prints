@@ -12,6 +12,7 @@ export class AppointmentInformation {
     fbiReasonCode: string;
     fbiReasonDescription: string;
     appointmentTimestamp: string;
+    cancelledAppointmentTimestamp: string;
     appointmentStatusCode: number;
     orderTimestamp: string;
     resheduleTimestamp: string;
@@ -31,6 +32,7 @@ export class AppointmentInformation {
         this.fbiReasonCode = '';
         this.fbiReasonDescription = '';
         this.appointmentTimestamp = '';
+        this.cancelledAppointmentTimestamp = '';
         this.appointmentStatusCode = 0;
         this.orderTimestamp = '';
         this.resheduleTimestamp = '';

@@ -8,6 +8,7 @@ import { Reason } from '@models/Reason';
 import { AppointmentTime } from '@models/AppointmentTime';
 import { AppointmentRequest } from '@models/AppointmentRequest';
 import { ApiResponse } from '@models/ApiResponse';
+import { ApiStatus } from '@models/ApiStatus';
 import { ReasonService } from '@services/reason.service';
 import { AppointmentInformationService } from '@services/appointment-information.service';
 
@@ -34,6 +35,7 @@ export class ScheduleComponent {
   timeList: AppointmentTime[] = [];
   appointmentRequest!: AppointmentRequest;
   apiResponse!: ApiResponse;
+  apiStatus!: ApiStatus;
   appointmentDate: string = '';
   appointmentTimestamp: string = '';
   bciReasonCode: string = '';
@@ -55,6 +57,8 @@ export class ScheduleComponent {
   step3: boolean = false;
   step4: boolean = false;
   step5: boolean = false;
+  alertType: string = '';
+  responseMessage: string = '';
 
   constructor(private router: Router, private reasonService: ReasonService, private appointmentInformationService: AppointmentInformationService) {
     this.router.events.subscribe((event) => {
@@ -71,6 +75,10 @@ export class ScheduleComponent {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
     }
+  }
+
+  hideAlert() {
+    (document.getElementById('alert') as HTMLInputElement).hidden = true;
   }
 
   onPhoneEntry(event: Event) {
@@ -223,7 +231,6 @@ export class ScheduleComponent {
       this.step3 = false;
       this.step4 = false;
       this.step5 = true;
-      window.scrollTo(0, 0);
 
       if(!this.fname && !this.lname && !this.cmail && this.isEmailValid && !this.cphone) {
       this.appointmentRequest = new AppointmentRequest();
@@ -241,9 +248,24 @@ export class ScheduleComponent {
 
       this.appointmentInformationService.scheduleAppointment(this.appointmentRequest)
           .subscribe(
-              data => this.apiResponse = data, 
-              error => this.apiResponse = error.error
-          );
+              data => {
+                window.scrollTo(0, 0);
+                this.apiResponse = data;
+              }, 
+              error => {
+                this.step1 = true;
+                this.step2 = true;
+                this.step3 = true;
+                this.step4 = true;
+                this.step5 = false;
+                (document.getElementById('alert') as HTMLInputElement).hidden = false;
+                this.alertType = 'msg-fail';
+                this.apiResponse = error.error;
+                this.apiStatus = this.apiResponse.apiStatus;
+                this.responseMessage = this.apiStatus.responseMessage;
+                setTimeout(this.hideAlert, 6000);
+              }
+         );
     }
   }
 
