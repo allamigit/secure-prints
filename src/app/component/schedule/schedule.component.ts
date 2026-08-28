@@ -38,6 +38,7 @@ export class ScheduleComponent {
   apiStatus!: ApiStatus;
   appointmentDate: string = '';
   appointmentTimestamp: string = '';
+  failedAppointmentTimestamp: string = '';
   bciReasonCode: string = '';
   bciReasonDescription: string = '';
   fbiReasonCode: string = '';
@@ -190,6 +191,7 @@ export class ScheduleComponent {
    */
   selectAppointmentDate() {
     this.appointmentTimestamp = '';
+    this.failedAppointmentTimestamp = '';
     this.appointmentDate = (document.getElementById('appointment-date') as HTMLInputElement).value;
     if(this.appointmentDate != '') {
       this.appointmentInformationService.generateAppointmentTimes(this.appointmentDate).subscribe(data => this.timeList = data);
@@ -263,6 +265,7 @@ export class ScheduleComponent {
                 this.apiResponse = error.error;
                 this.apiStatus = this.apiResponse.apiStatus;
                 this.responseMessage = this.apiStatus.responseMessage;
+                this.failedAppointmentTimestamp = this.appointmentTimestamp;
                 setTimeout(this.hideAlert, 6000);
               }
          );
@@ -277,6 +280,7 @@ export class ScheduleComponent {
     this.serviceName = '';
     this.appointmentDate = '';
     this.appointmentTimestamp = '';
+    this.failedAppointmentTimestamp = '';
     this.bciReasonCode = '';
     this.bciReasonDescription = '';
     this.fbiReasonCode = '';
