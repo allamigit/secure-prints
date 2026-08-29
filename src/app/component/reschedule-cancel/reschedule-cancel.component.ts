@@ -206,6 +206,8 @@ export class RescheduleCancelComponent implements OnInit {
   }
 
   reset() {
+    this.fname = false;
+    this.lname = false;
     this.notFound = false;
     this.showAction = false;
     this.showReschedule = false;
