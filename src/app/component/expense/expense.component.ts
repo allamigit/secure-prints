@@ -280,7 +280,7 @@ export class ExpenseComponent {
                       break;
             case 204: this.eRefund += this.expenseList[i].expenseAmount; 
           }
-          if(this.expenseList[i].expenseReconcileDate != null) {
+          if(this.expenseList[i].expenseReconcileDate != null || this.expenseList[i].expenseReferenceNumber.startsWith("ApptID-")) {
             this.eReconciled += this.expenseList[i].expenseAmount; 
           }
           this.eTotal = this.eProcessed + this.ePending + this.eRefund;

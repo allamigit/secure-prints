@@ -112,12 +112,14 @@
                         <div class="row" *ngIf="appointmentDate != '' && step3">
                             <div class="col-10">
                                 <div class="d-flex flex-wrap gap-2 justify-content-start">
-                                    <button class="btn btn-outline-primary" style="width: 100px;" *ngFor="let item of timeList" 
-                                    [ngClass]="{
-                                                'btn-outline-primary': appointmentTimestamp != item.appointmentTimestamp,
-                                                'btn-primary': appointmentTimestamp == item.appointmentTimestamp
-                                            }"
-                                            (click)="selectAppointmentTime(item)">{{item.appointmentTimeLabel}}
+                                    <button class="btn btn-outline-primary" style="width: 100px;" *ngFor="let item of timeList; let i = index" 
+                                        [ngClass]="{
+                                                    'btn-outline-primary': appointmentTimestamp != item.appointmentTimestamp,
+                                                    'btn-primary': appointmentTimestamp == item.appointmentTimestamp,
+                                                    'btn-outline-danger': failedAppointmentTimestamp == item.appointmentTimestamp                                        
+                                                   }"
+                                        [disabled]="failedAppointmentTimestamp == item.appointmentTimestamp"
+                                        (click)="selectAppointmentTime(item)">{{item.appointmentTimeLabel}}
                                     </button>
                                 </div>
                             </div>

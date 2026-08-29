@@ -26,6 +26,7 @@ export class RescheduleCancelComponent implements OnInit {
   apiStatus!: ApiStatus;
   appointmentDate: string = '';
   appointmentTimestamp: string = '';
+  failedAppointmentTimestamp: string = '';
   bciReasonCode: string = '';
   bciReasonDescription: string = '';
   fbiReasonCode: string = '';
@@ -144,6 +145,7 @@ export class RescheduleCancelComponent implements OnInit {
    */
   selectAppointmentDate() {
     this.appointmentTimestamp = '';
+    this.failedAppointmentTimestamp = '';
     this.appointmentDate = (document.getElementById('appointment-date') as HTMLInputElement).value;
     if(this.appointmentDate != '') {
       this.appointmentInformationService.generateAppointmentTimes(this.appointmentDate).subscribe(data => this.timeList = data);
@@ -175,6 +177,7 @@ export class RescheduleCancelComponent implements OnInit {
               this.apiResponse = error.error;
               this.apiStatus = this.apiResponse.apiStatus;
               this.responseMessage = this.apiStatus.responseMessage;
+              this.failedAppointmentTimestamp = this.appointmentTimestamp;
               setTimeout(this.hideAlert, 6000);
             }
         );
@@ -203,6 +206,8 @@ export class RescheduleCancelComponent implements OnInit {
   }
 
   reset() {
+    this.fname = false;
+    this.lname = false;
     this.notFound = false;
     this.showAction = false;
     this.showReschedule = false;

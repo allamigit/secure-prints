@@ -5,7 +5,7 @@
     <div class="container text-md-start">
         <div class="form-div" *ngIf="!admin">
             <div class="row g-3">
-                <label style="font-size: large">You can find your appointment by Appointment ID or by full name</label>
+                <label style="font-size: large">You can find your appointment by Appointment ID or by first and last name</label>
                 <div class="col-auto">
                     <!-- Enter Appointment ID -->
                     <div class="input-group">
@@ -44,10 +44,19 @@
                     <button type="button" class="btn btn-primary mb-3" (click)="clickSearch()">Search</button>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-outline-danger mb-3" *ngIf="notFound" (click)="reload()">❌ Appointment Not Found</button>
+                    <button type="button" class="btn btn-outline-primary mb-3" (click)="reload()">Reset</button>
                 </div>
             </div>
-            
+
+            <div class="form-div" style="width: auto">
+                <div class="col-auto">
+                    <label class="form-label" style="color: red" *ngIf="notFound">❌ Appointment not found</label>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label" style="color: green" *ngIf="showAction">✅ Appointment found, click on an action below</label>
+                </div>
+            </div>
+
             <div class="row g-2" style="width: auto" *ngIf="showAction">
                 <div class="col-auto">
                     <label class="info-color-1"><b>Action:</b></label>
@@ -74,11 +83,13 @@
                 <div class="col-7">
                     <div class="d-flex flex-wrap gap-2 justify-content-start" style="width: 150%">
                         <button class="btn btn-outline-primary" style="width: 100px;" *ngFor="let item of timeList" 
-                        [ngClass]="{
-                                    'btn-outline-primary': appointmentTimestamp != item.appointmentTimestamp,
-                                    'btn-primary': appointmentTimestamp == item.appointmentTimestamp
-                                    }"
-                                (click)="selectAppointmentTime(item)">{{item.appointmentTimeLabel}}
+                            [ngClass]="{
+                                        'btn-outline-primary': appointmentTimestamp != item.appointmentTimestamp,
+                                        'btn-primary': appointmentTimestamp == item.appointmentTimestamp,
+                                        'btn-outline-danger': failedAppointmentTimestamp == item.appointmentTimestamp                                        
+                                        }"
+                            [disabled]="failedAppointmentTimestamp == item.appointmentTimestamp"
+                            (click)="selectAppointmentTime(item)">{{item.appointmentTimeLabel}}
                         </button>
                     </div>
                 </div>
